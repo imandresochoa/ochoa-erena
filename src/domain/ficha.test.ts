@@ -3,8 +3,39 @@ import { family } from "@/data/family";
 import {
   ANDRES_NOTICE_EMAIL,
   fichaFromPerson,
+  leftoverLinks,
 } from "@/domain/ficha";
 import { asPersonId, type Person } from "@/domain/types";
+
+const FRANCISCO_HREF =
+  "http://abretelibro.blogspot.com/2014/09/empecemos-por-el-comienzo.html";
+
+const FRANCISCO_SOURCE = {
+  label: "Javier Ochoa Palop, Jaén 1961",
+  href: FRANCISCO_HREF,
+  kind: "web" as const,
+  mark: "H" as const,
+};
+
+const ANTONIO_LINKS = [
+  { label: "Geneanet aerec5", href: "https://gw.geneanet.org/aerec5" },
+  { label: "Bitácora In ictu oculi", href: "http://antonioerena.blogspot.com/2019/01/" },
+];
+
+const ANTONIO_SOURCES = [
+  {
+    label: "Geneanet aerec5",
+    href: "https://gw.geneanet.org/aerec5",
+    kind: "geneanet" as const,
+    mark: "AEC" as const,
+  },
+  {
+    label: "Bitácora In ictu oculi",
+    href: "http://antonioerena.blogspot.com/2019/01/",
+    kind: "web" as const,
+    mark: "AEC" as const,
+  },
+];
 
 function person(partial: Partial<Person> & Pick<Person, "displayName">): Person {
   return {
@@ -17,6 +48,7 @@ function person(partial: Partial<Person> & Pick<Person, "displayName">): Person 
     place: partial.place,
     summary: partial.summary ?? "",
     links: partial.links ?? [],
+    sources: partial.sources ?? [],
   };
 }
 
@@ -44,6 +76,7 @@ describe("fichaFromPerson", () => {
     expect(ficha.lifeLine).not.toContain("1995");
     expect(ficha.summary).toBe(andres!.summary);
     expect(ficha.links).toEqual([]);
+    expect(ficha.sources).toEqual([]);
     expect(ficha.files).toEqual([]);
     expect(ficha.noticeMailto).toBeNull();
   });
@@ -52,6 +85,7 @@ describe("fichaFromPerson", () => {
     const ficha = fichaFromPerson(person({ displayName: "Josefa Sáez de Eguilaz García de Vicuña" }));
     expect(ficha.summary).toBeNull();
     expect(ficha.links).toEqual([]);
+    expect(ficha.sources).toEqual([]);
     expect(ficha.files).toEqual([]);
   });
 
@@ -101,5 +135,73 @@ describe("fichaFromPerson", () => {
     expect(ficha.links).toEqual(francisco!.links);
     expect(ficha.files).toEqual([]);
     expect(ficha.noticeMailto).toBeNull();
+  });
+
+  it("forwards person sources as-is and never invents a citation", () => {
+    const ficha = fichaFromPerson(
+      person({
+        displayName: "Antonio Erena Camacho",
+        links: ANTONIO_LINKS,
+        sources: ANTONIO_SOURCES,
+      }),
+    );
+    expect(ficha.sources).toEqual(ANTONIO_SOURCES);
+    expect(ficha.links).toEqual(ANTONIO_LINKS);
+  });
+
+  it("keeps empty sources empty", () => {
+    expect(
+      fichaFromPerson(person({ displayName: "Andrés Martín Ochoa Erena" })).sources,
+    ).toEqual([]);
+  });
+
+  it("opens a notice from empty summary and empty links even when sources exist", () => {
+    const ficha = fichaFromPerson(
+      person({
+        displayName: "Heliodoro Palop Padrón",
+        place: "Jaén",
+        sources: [FRANCISCO_SOURCE],
+      }),
+    );
+    expect(ficha.noticeMailto).toContain(`mailto:${ANDRES_NOTICE_EMAIL}`);
+    expect(ficha.links).toEqual([]);
+    expect(ficha.sources).toEqual([FRANCISCO_SOURCE]);
+  });
+
+  it("forwards Francisco's snapshot web source and keeps his full links", () => {
+    const francisco = family.people.find(
+      (item) => item.id === "francisco-javier-ochoa-palop",
+    );
+    expect(francisco).toBeDefined();
+    const ficha = fichaFromPerson(francisco!);
+    expect(ficha.sources).toEqual([FRANCISCO_SOURCE]);
+    expect(ficha.links).toEqual(francisco!.links);
+    expect(ficha.links[0]?.href).toBe(FRANCISCO_HREF);
+  });
+});
+
+describe("leftoverLinks", () => {
+  it("returns nothing when every link href is already a citation", () => {
+    expect(leftoverLinks(ANTONIO_LINKS, ANTONIO_SOURCES)).toEqual([]);
+    expect(
+      leftoverLinks(
+        [{ label: FRANCISCO_SOURCE.label, href: FRANCISCO_HREF }],
+        [FRANCISCO_SOURCE],
+      ),
+    ).toEqual([]);
+  });
+
+  it("keeps links whose href is missing or not in sources", () => {
+    const unlabeled = { label: "Geneanet aerec5" };
+    const extra = ANTONIO_LINKS[0];
+    const cited = { label: FRANCISCO_SOURCE.label, href: FRANCISCO_HREF };
+    expect(leftoverLinks([cited, unlabeled, extra], [FRANCISCO_SOURCE])).toEqual([
+      unlabeled,
+      extra,
+    ]);
+  });
+
+  it("returns every link when sources are empty", () => {
+    expect(leftoverLinks(ANTONIO_LINKS, [])).toEqual(ANTONIO_LINKS);
   });
 });
