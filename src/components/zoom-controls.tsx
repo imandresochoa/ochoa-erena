@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   stepZoom,
   ZOOM_MAX,
@@ -15,19 +15,29 @@ type Props = {
 
 export function ZoomControls({ zoom, onZoom }: Props) {
   const [pressed, setPressed] = useState(false);
+  const hide = useRef<number>(0);
+
+  function showPercent() {
+    window.clearTimeout(hide.current);
+    setPressed(true);
+  }
+
+  function hidePercent() {
+    window.clearTimeout(hide.current);
+    hide.current = window.setTimeout(() => setPressed(false), 700);
+  }
 
   const press = {
-    onPointerDown: () => setPressed(true),
-    onPointerUp: () => setPressed(false),
-    onPointerLeave: () => setPressed(false),
-    onPointerCancel: () => setPressed(false),
+    onPointerDown: showPercent,
+    onPointerUp: hidePercent,
+    onPointerCancel: hidePercent,
   };
 
   return (
-    <div className="flex flex-col items-end gap-6">
+    <div className="flex flex-col items-end gap-4">
       <button
         type="button"
-        className="chrome-ctl"
+        className="chrome-ctl min-w-[14px]"
         aria-label="Acercar"
         disabled={zoom >= ZOOM_MAX}
         onClick={() => onZoom(stepZoom(zoom, 1))}
@@ -42,7 +52,7 @@ export function ZoomControls({ zoom, onZoom }: Props) {
       ) : null}
       <button
         type="button"
-        className="chrome-ctl"
+        className="chrome-ctl min-w-[14px]"
         aria-label="Alejar"
         disabled={zoom <= ZOOM_MIN}
         onClick={() => onZoom(stepZoom(zoom, -1))}

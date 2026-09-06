@@ -132,7 +132,8 @@ button.chrome-ctl {
 }
 
 button.chrome-ctl:disabled {
-  opacity: 0.35;
+  color: var(--color-line);
+  border-bottom-color: var(--color-line);
 }
 
 button.chrome-ctl::after {
