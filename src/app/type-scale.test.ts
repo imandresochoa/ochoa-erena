@@ -20,6 +20,23 @@ function classOf(src: string, marker: string) {
   return tmpl?.[1] ?? "";
 }
 
+const KIN_TITLES = [
+  ["parents", "Padres"],
+  ["children", "Hijos"],
+  ["siblings", "Hermanos"],
+] as const;
+
+function kinTitleMarker(src: string, group: string, label: string) {
+  const literal = `>${label}<`;
+  return src.includes(literal) ? literal : `{FICHA_KIN_LABELS.${group}}`;
+}
+
+function nextTitleStart(src: string, from: number, titles: readonly string[]) {
+  const found = titles.map((title) => src.indexOf(title, from)).filter((at) => at > -1);
+  expect(found.length).toBeGreaterThan(0);
+  return src.lastIndexOf("<", Math.min(...found));
+}
+
 describe("title type scale", () => {
   const css = read("./globals.css");
   const layout = read("./layout.tsx");
@@ -98,6 +115,41 @@ describe("title type scale", () => {
     );
     expect(sourceRows.length).toBeGreaterThan(0);
     expect(sourceRows).not.toMatch(/\btype-title\b/);
+  });
+
+  it("marks person-panel kin titles Padres, Hijos, and Hermanos with type-title", () => {
+    const imports = (panel.match(/^import .*$/gm) ?? []).join("\n");
+    expect(imports).toMatch(/from "@\/domain\/ficha-kin"/);
+    for (const [group, label] of KIN_TITLES) {
+      const marker = kinTitleMarker(panel, group, label);
+      expect(panel.indexOf(marker)).toBeGreaterThan(-1);
+      expect(classOf(panel, marker).split(/\s+/)).toContain("type-title");
+    }
+  });
+
+  it("places the kin lists after the header and before Fuentes", () => {
+    const header = panel.indexOf(">{ficha.lifeLine}<");
+    const fuentes = panel.indexOf(">Fuentes<");
+    const [padres, hijos, hermanos] = KIN_TITLES.map(([group, label]) =>
+      panel.indexOf(kinTitleMarker(panel, group, label)),
+    );
+    expect(padres).toBeGreaterThan(header);
+    expect(hijos).toBeGreaterThan(padres);
+    expect(hermanos).toBeGreaterThan(hijos);
+    expect(hermanos).toBeLessThan(fuentes);
+  });
+
+  it("does not mark person-panel kin name rows as title", () => {
+    const markers = KIN_TITLES.map(([group, label]) => kinTitleMarker(panel, group, label));
+    const nextTitles = [[markers[1]], [markers[2]], [">Resumen<", ">Fuentes<"]];
+    for (const [index, marker] of markers.entries()) {
+      const at = panel.indexOf(marker);
+      expect(at).toBeGreaterThan(-1);
+      const from = at + marker.length;
+      const rows = panel.slice(from, nextTitleStart(panel, from, nextTitles[index]));
+      expect(rows.length).toBeGreaterThan(0);
+      expect(rows).not.toMatch(/\btype-title\b/);
+    }
   });
 
   it("does not mark welcome introduction as title", () => {
