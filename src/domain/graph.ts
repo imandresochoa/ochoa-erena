@@ -1,5 +1,6 @@
 import {
   asPersonId,
+  DEFAULT_FOCUS_ID,
   type Certainty,
   type Edge,
   type FamilyGraph,
@@ -124,6 +125,40 @@ export function visiblePeople(
   return visible;
 }
 
+export function canvasVisible(
+  graph: FamilyGraph,
+  focusId: PersonId,
+  expandedIds: readonly PersonId[],
+): Set<PersonId> {
+  const visible = visiblePeople(graph, DEFAULT_FOCUS_ID, expandedIds);
+  visible.add(focusId);
+  for (const child of childrenOf(graph, focusId)) {
+    visible.add(child);
+  }
+  const spouse = spouseOf(graph, focusId);
+  if (spouse) {
+    visible.add(spouse);
+  }
+  return visible;
+}
+
+export function expansionsToReveal(
+  graph: FamilyGraph,
+  targetId: PersonId,
+): PersonId[] {
+  const spine = visiblePeople(graph, DEFAULT_FOCUS_ID, []);
+  if (spine.has(targetId)) {
+    return [];
+  }
+  const revealers: PersonId[] = [];
+  for (const sibling of siblingsOf(graph, targetId)) {
+    if (spine.has(sibling) && !revealers.includes(sibling)) {
+      revealers.push(sibling);
+    }
+  }
+  return revealers;
+}
+
 export function hasExpandableSiblings(
   graph: FamilyGraph,
   id: PersonId,
@@ -172,7 +207,7 @@ export function expandControl(
   id: PersonId,
   expandedIds: readonly PersonId[],
 ): ExpandControl | null {
-  const visible = visiblePeople(graph, focusId, expandedIds);
+  const visible = canvasVisible(graph, focusId, expandedIds);
   const side = siblingExpandSide(graph, focusId, id, visible);
   if (expandedIds.includes(id)) {
     return { kind: "minus", side };

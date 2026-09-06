@@ -20,7 +20,7 @@ import {
   plusOrigin,
 } from "@/domain/expand-motion";
 import { expandControl, requirePerson } from "@/domain/graph";
-import { layoutPedigree } from "@/domain/layout";
+import { layoutHouseCanvas } from "@/domain/layout";
 import {
   addPan,
   classifyPointer,
@@ -77,7 +77,7 @@ export function TreeCanvas({
     y: number;
   } | null>(null);
   const packed = useMemo(
-    () => layoutPedigree(family, focusId, expandedIds),
+    () => layoutHouseCanvas(family, focusId, expandedIds),
     [focusId, expandedIds],
   );
   const view = useRef<{

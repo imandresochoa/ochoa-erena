@@ -1,4 +1,14 @@
-import { PAN_TAP_PX, type PersonId, type PointerKind, type Vec } from "./types";
+import { expansionsToReveal } from "./graph";
+import { layoutHouseCanvas } from "./layout";
+import {
+  NODE_HEIGHT,
+  PAN_TAP_PX,
+  type FamilyGraph,
+  type PedigreeLayout,
+  type PersonId,
+  type PointerKind,
+  type Vec,
+} from "./types";
 
 export type TreeView = {
   focusId: PersonId;
@@ -74,23 +84,74 @@ export function isRestored(expandedIds: readonly string[], pan: Vec): boolean {
   return expandedIds.length === 0 && pan.x === 0 && pan.y === 0;
 }
 
-export function needsRestaurar(expandedIds: readonly string[]): boolean {
-  return expandedIds.length > 0;
+export function needsRestaurar(
+  expandedIds: readonly string[],
+  requiredIds: readonly string[] = [],
+): boolean {
+  return expandedIds.some((id) => !requiredIds.includes(id));
 }
 
 export function restorePan(): Vec {
   return { x: 0, y: 0 };
 }
 
-export function focusPerson(view: TreeView, id: PersonId): TreeView {
+export function framePerson(
+  layout: PedigreeLayout,
+  id: PersonId,
+  zoom: number,
+): Vec {
+  const node = layout.nodes.find((item) => item.id === id);
+  if (!node) {
+    return restorePan();
+  }
+  const cx = node.x + node.width / 2;
+  const cy = node.y + node.height / 2;
+  const x = -zoom * cx;
+  const y = NODE_HEIGHT / 2 - zoom * cy;
+  return {
+    x: x === 0 ? 0 : x,
+    y: y === 0 ? 0 : y,
+  };
+}
+
+function mergeExpanded(
+  current: readonly PersonId[],
+  extra: readonly PersonId[],
+): PersonId[] {
+  const merged = [...current];
+  for (const id of extra) {
+    if (!merged.includes(id)) {
+      merged.push(id);
+    }
+  }
+  return merged;
+}
+
+export function focusPerson(
+  view: TreeView,
+  id: PersonId,
+  graph: FamilyGraph,
+): TreeView {
   const same = id === view.focusId;
+  const expandedIds = mergeExpanded(view.expandedIds, expansionsToReveal(graph, id));
+  const layout = layoutHouseCanvas(graph, id, expandedIds);
   return {
     focusId: id,
     selectedId: same ? view.selectedId : null,
-    expandedIds: same ? view.expandedIds : [],
-    pan: restorePan(),
+    expandedIds,
+    pan: framePerson(layout, id, view.zoom),
     entering: false,
     zoom: view.zoom,
+  };
+}
+
+export function restoreFocusView(view: TreeView, graph: FamilyGraph): TreeView {
+  const expandedIds = expansionsToReveal(graph, view.focusId);
+  const layout = layoutHouseCanvas(graph, view.focusId, expandedIds);
+  return {
+    ...view,
+    expandedIds,
+    pan: framePerson(layout, view.focusId, view.zoom),
   };
 }
 

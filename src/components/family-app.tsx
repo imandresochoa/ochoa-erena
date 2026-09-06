@@ -11,7 +11,7 @@ import { TreeCanvas } from "@/components/tree-canvas";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { ZoomControls } from "@/components/zoom-controls";
 import { family } from "@/data/family";
-import { requirePerson } from "@/domain/graph";
+import { expansionsToReveal, requirePerson } from "@/domain/graph";
 import { DEFAULT_FOCUS_NAME, type Person } from "@/domain/types";
 import {
   closeFicha,
@@ -19,7 +19,7 @@ import {
   focusPerson,
   needsRestaurar,
   openFicha,
-  restorePan,
+  restoreFocusView,
   toggleExpand,
   type TreeView,
 } from "@/domain/view";
@@ -51,14 +51,22 @@ export function FamilyApp() {
   }, []);
 
   const enter = useCallback((person: Person) => {
+    const next = focusPerson(
+      {
+        focusId: person.id,
+        selectedId: null,
+        expandedIds: [],
+        pan: { x: 0, y: 0 },
+        entering: true,
+        zoom: DEFAULT_ZOOM,
+      },
+      person.id,
+      family,
+    );
     setScreen({
       kind: "tree",
-      focusId: person.id,
-      selectedId: null,
-      expandedIds: [],
-      pan: { x: 0, y: 0 },
+      ...next,
       entering: true,
-      zoom: DEFAULT_ZOOM,
     });
     window.setTimeout(() => {
       setScreen((current) =>
@@ -101,7 +109,10 @@ export function FamilyApp() {
 
   const focus = requirePerson(family, screen.focusId);
   const selected = screen.selectedId ? requirePerson(family, screen.selectedId) : null;
-  const dirty = needsRestaurar(screen.expandedIds);
+  const dirty = needsRestaurar(
+    screen.expandedIds,
+    expansionsToReveal(family, screen.focusId),
+  );
 
   return (
     <div className="relative h-dvh w-full bg-[var(--color-canvas)]">
@@ -139,7 +150,7 @@ export function FamilyApp() {
             onPick={(person) =>
               setScreen((current) =>
                 current.kind === "tree"
-                  ? { ...current, ...focusPerson(current, person.id) }
+                  ? { ...current, ...focusPerson(current, person.id, family) }
                   : current,
               )
             }
@@ -162,7 +173,7 @@ export function FamilyApp() {
             onRestore={() =>
               setScreen((current) =>
                 current.kind === "tree"
-                  ? { ...current, expandedIds: [], pan: restorePan() }
+                  ? { ...current, ...restoreFocusView(current, family) }
                   : current,
               )
             }

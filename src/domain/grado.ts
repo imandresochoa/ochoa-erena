@@ -6,10 +6,8 @@ import {
   siblingsOf,
   spouseOf,
 } from "./graph";
-import { asPersonId, type FamilyGraph, type Person, type PersonId } from "./types";
+import { DEFAULT_FOCUS_ID, type FamilyGraph, type Person, type PersonId } from "./types";
 import { type Sex, sexOfPerson } from "./vinculo";
-
-const DEFAULT_FOCUS_ID = asPersonId("andres-martin-ochoa-erena");
 
 type Hop = "U" | "D" | "S" | "H";
 
