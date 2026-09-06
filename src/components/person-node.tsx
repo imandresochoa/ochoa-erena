@@ -23,6 +23,7 @@ export function PersonNode({
   placed,
   selected,
   expand,
+  coarsePointer,
   fresh,
   origin,
   panned,
@@ -55,7 +56,7 @@ export function PersonNode({
           type="button"
           data-expand="true"
           data-side={expand.side}
-          data-on="true"
+          data-on={coarsePointer ? "true" : "false"}
           aria-label={
             expand.kind === "minus"
               ? `Ocultar la rama de ${person.displayName}`
