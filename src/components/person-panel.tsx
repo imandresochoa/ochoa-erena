@@ -75,14 +75,32 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
               {grado}
             </motion.p>
           ) : null}
-          {ficha.lifeLine ? (
-            <p className="type-title text-[var(--color-muted-ink)]">{ficha.lifeLine}</p>
-          ) : null}
         </div>
-        {ficha.summary ? (
-          <div className="flex flex-col gap-1">
-            <p className="type-title text-[var(--color-ink)]">Resumen</p>
-            <p className="text-[var(--color-muted-ink)]">{ficha.summary}</p>
+        {ficha.lifeProse || ficha.summary ? (
+          <div className="flex flex-col gap-3">
+            {ficha.lifeProse ? (
+              <motion.p
+                className="text-[var(--color-muted-ink)]"
+                initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
+                transition={{
+                  duration: reduce ? 0.16 : 0.24,
+                  ease: EASE_OUT,
+                }}
+              >{ficha.lifeProse}</motion.p>
+            ) : null}
+            {ficha.summary ? (
+              <motion.p
+                className="text-[var(--color-muted-ink)]"
+                initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
+                transition={{
+                  duration: reduce ? 0.16 : 0.24,
+                  delay: reduce || !ficha.lifeProse ? 0 : 0.04,
+                  ease: EASE_OUT,
+                }}
+              >{ficha.summary}</motion.p>
+            ) : null}
           </div>
         ) : null}
         {ficha.sources.length > 0 ? (

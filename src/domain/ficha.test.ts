@@ -52,8 +52,12 @@ function person(partial: Partial<Person> & Pick<Person, "displayName">): Person 
   };
 }
 
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 describe("fichaFromPerson", () => {
-  it("joins only place and dated marks that already exist", () => {
+  it("writes place and dated marks as ES Spain sentences, not a joined dump", () => {
     const ficha = fichaFromPerson(
       person({
         displayName: "Pedro Palop Fuentes",
@@ -62,7 +66,8 @@ describe("fichaFromPerson", () => {
         death: { year: 1989, approx: false, text: "Córdoba, 1989" },
       }),
     );
-    expect(ficha.lifeLine).toBe("Lucena · Lucena, 1915 · Córdoba, 1989");
+    expect(ficha.lifeProse).toBe("De Lucena. Nació en Lucena, 1915. Murió en Córdoba, 1989.");
+    expect(ficha.lifeProse).not.toContain(" · ");
   });
 
   it("keeps Andrés on the snapshot place and refuses the Figma mock date", () => {
@@ -72,8 +77,8 @@ describe("fichaFromPerson", () => {
     expect(andres).toBeDefined();
     const ficha = fichaFromPerson(andres!);
     expect(ficha.displayName).toBe("Andrés Martín Ochoa Erena");
-    expect(ficha.lifeLine).toBe("Jaén");
-    expect(ficha.lifeLine).not.toContain("1995");
+    expect(ficha.lifeProse).toBe("De Jaén.");
+    expect(ficha.lifeProse).not.toContain("1995");
     expect(ficha.summary).toBe(andres!.summary);
     expect(ficha.links).toEqual([]);
     expect(ficha.sources).toEqual([]);
@@ -81,12 +86,76 @@ describe("fichaFromPerson", () => {
     expect(ficha.noticeMailto).toBeNull();
   });
 
-  it("omits empty summary, links, and files", () => {
+  it("omits empty summary, links, files, and life prose", () => {
     const ficha = fichaFromPerson(person({ displayName: "Josefa Sáez de Eguilaz García de Vicuña" }));
     expect(ficha.summary).toBeNull();
+    expect(ficha.lifeProse).toBeNull();
     expect(ficha.links).toEqual([]);
     expect(ficha.sources).toEqual([]);
     expect(ficha.files).toEqual([]);
+  });
+
+  it("wraps approximate and year-only marks without rewriting the stored text", () => {
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Francisco Javier Ochoa Palop",
+          place: "Jaén",
+          birth: { year: 1961, approx: true, text: "~1961, Jaén" },
+        }),
+      ).lifeProse,
+    ).toBe("De Jaén. Nació ~1961, Jaén.");
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Rafael Ochoa Hidalgo",
+          death: { year: 2015, approx: false, text: "2015" },
+        }),
+      ).lifeProse,
+    ).toBe("Murió 2015.");
+  });
+
+  it("keeps baptism and muerte notes as stored, without inventing nació or murió", () => {
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Martín María Ochoa de Eguiyara Antia",
+          place: "Vitoria-Gasteiz",
+          birth: { year: 1874, approx: false, text: "baut. 1874-10-12, San Pedro, Vitoria" },
+          death: { year: 1926, approx: true, text: "muerte ~1926 [TO]" },
+        }),
+      ).lifeProse,
+    ).toBe("De Vitoria-Gasteiz. Baut. 1874-10-12, San Pedro, Vitoria. Muerte ~1926 [TO].");
+  });
+
+  it("builds every snapshot life prose from place and date texts only, in that order", () => {
+    for (const item of family.people) {
+      const prose = fichaFromPerson(item).lifeProse;
+      const fragments = [item.place, item.birth?.text, item.death?.text].filter(
+        (part): part is string => Boolean(part),
+      );
+      if (fragments.length === 0) {
+        expect(prose).toBeNull();
+        continue;
+      }
+      expect(prose).toBeTruthy();
+      const folded = prose!.toLocaleLowerCase("es-ES");
+      let rest = prose!;
+      const hits: number[] = [];
+      for (const fragment of fragments) {
+        const needle = fragment.replace(/\.+$/, "");
+        const at = folded.indexOf(needle.toLocaleLowerCase("es-ES"));
+        expect(at).toBeGreaterThan(-1);
+        hits.push(at);
+        rest = rest.replace(new RegExp(escapeRegExp(needle), "i"), "");
+      }
+      for (let index = 1; index < hits.length; index += 1) {
+        expect(hits[index]).toBeGreaterThan(hits[index - 1]);
+      }
+      expect(rest.replace(/\s+/g, " ").trim()).toMatch(
+        /^(?:De\.?|Nació en\.?|Nació\.?|Murió en\.?|Murió\.?|[. ]+)*$/,
+      );
+    }
   });
 
   it("opens a notice mail when the ficha has only a name and optional place", () => {
