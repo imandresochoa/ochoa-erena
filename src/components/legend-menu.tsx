@@ -12,6 +12,11 @@ function Sample({ id }: { id: (typeof LEGEND_ITEMS)[number]["id"] }) {
   if (id === "line-solid") {
     return <span className="inline-block h-px w-5 bg-[var(--color-line)]" />;
   }
+  if (id === "line-dotted") {
+    return (
+      <span className="inline-block h-px w-5 border-t border-dotted border-[var(--color-line)]" />
+    );
+  }
   return (
     <span className="inline-block h-px w-5 border-t border-dashed border-[var(--color-line)]" />
   );

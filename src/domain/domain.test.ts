@@ -357,13 +357,15 @@ describe("zoom", () => {
 });
 
 describe("legend", () => {
-  it("lists only confirmed and hypothesis vínculos", () => {
-    expect(LEGEND_ITEMS.map((item) => item.label)).toEqual([
-      "vínculo confirmado",
-      "hipótesis",
+  it("lists confirmed, hypothesis, and temporal gap vínculos", () => {
+    expect(LEGEND_ITEMS).toEqual([
+      { id: "line-solid", label: "vínculo confirmado" },
+      { id: "line-dashed", label: "hipótesis" },
+      { id: "line-dotted", label: "salto temporal" },
     ]);
   });
 });
+
 
 describe("welcome", () => {
   it("keeps the house introduction", () => {
