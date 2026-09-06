@@ -1,4 +1,5 @@
 import { childrenOf, parentsOf, siblingsOf, spouseEdge, spouseOf, visiblePeople } from "./graph";
+import { vinculoLabel } from "./vinculo";
 import {
   BRANCH_GUTTER,
   NODE_HEIGHT,
@@ -289,6 +290,243 @@ function packSequence(
   return placed;
 }
 
+function boundsCenter(nodes: readonly PlacedNode[]): number {
+  const minX = Math.min(...nodes.map((node) => node.x));
+  const maxX = Math.max(...nodes.map((node) => node.x + node.width));
+  return (minX + maxX) / 2;
+}
+
+function parentKey(
+  graph: FamilyGraph,
+  id: PersonId,
+  placed: Map<PersonId, PlacedNode>,
+): string {
+  return parentsOf(graph, id)
+    .filter((parent) => placed.has(parent))
+    .sort()
+    .join("|");
+}
+
+function ancestorCone(
+  graph: FamilyGraph,
+  seeds: readonly PersonId[],
+  house: Set<PersonId>,
+): Set<PersonId> {
+  const cone = new Set<PersonId>(seeds);
+  const queue = [...seeds];
+  while (queue.length > 0) {
+    const current = queue.pop();
+    if (!current) {
+      break;
+    }
+    for (const parent of parentsOf(graph, current)) {
+      if (!house.has(parent) || cone.has(parent)) {
+        continue;
+      }
+      cone.add(parent);
+      queue.push(parent);
+    }
+  }
+  return cone;
+}
+
+function resolveRow(
+  placed: Map<PersonId, PlacedNode>,
+  generation: number,
+  graph: FamilyGraph,
+): void {
+  const row = [...placed.values()]
+    .filter((node) => node.generation === generation)
+    .sort((a, b) => a.x - b.x || a.id.localeCompare(b.id));
+  for (let i = 1; i < row.length; i += 1) {
+    const prev = placed.get(row[i - 1].id);
+    const curr = placed.get(row[i].id);
+    if (!prev || !curr) {
+      continue;
+    }
+    const gap = spouseEdge(graph, prev.id, curr.id) ? PAIR_GAP : SIBLING_GAP;
+    const minX = prev.x + prev.width + gap;
+    if (curr.x >= minX) {
+      continue;
+    }
+    const dx = minX - curr.x;
+    for (let j = i; j < row.length; j += 1) {
+      const node = placed.get(row[j].id);
+      if (node) {
+        placed.set(node.id, { ...node, x: node.x + dx });
+      }
+    }
+  }
+}
+
+function recenterParentUnits(
+  graph: FamilyGraph,
+  house: Set<PersonId>,
+  placed: Map<PersonId, PlacedNode>,
+  childGeneration: number,
+): void {
+  const groups = new Map<string, PersonId[]>();
+  for (const node of placed.values()) {
+    if (node.generation !== childGeneration || !house.has(node.id)) {
+      continue;
+    }
+    const key = parentKey(graph, node.id, placed);
+    if (!key) {
+      continue;
+    }
+    const list = groups.get(key) ?? [];
+    list.push(node.id);
+    groups.set(key, list);
+  }
+  for (const [key, childIds] of groups) {
+    const parentIds = key.split("|") as PersonId[];
+    const parentNodes = parentIds
+      .map((id) => placed.get(id))
+      .filter((node): node is PlacedNode => Boolean(node));
+    const childNodes = childIds
+      .map((id) => placed.get(id))
+      .filter((node): node is PlacedNode => Boolean(node));
+    if (parentNodes.length === 0 || childNodes.length === 0) {
+      continue;
+    }
+    const dx = boundsCenter(childNodes) - boundsCenter(parentNodes);
+    if (Math.abs(dx) < 0.5) {
+      continue;
+    }
+    for (const id of ancestorCone(graph, parentIds, house)) {
+      const node = placed.get(id);
+      if (node) {
+        placed.set(id, { ...node, x: node.x + dx });
+      }
+    }
+  }
+}
+
+function placeHouse(
+  graph: FamilyGraph,
+  house: Set<PersonId>,
+  gens: Map<PersonId, number>,
+  byId: Map<PersonId, Person>,
+  focusId: PersonId,
+): PlacedNode[] {
+  const placed = new Map<PersonId, PlacedNode>();
+  const generations = [...new Set([...house].map((id) => gens.get(id) ?? 0))].sort(
+    (a, b) => a - b,
+  );
+  for (const generation of generations) {
+    const ids = [...house].filter((id) => (gens.get(id) ?? 0) === generation);
+    const ordered = rowOrder(graph, ids, focusId);
+    const groups = new Map<string, PersonId[]>();
+    for (const id of ordered) {
+      const key = parentKey(graph, id, placed);
+      const list = groups.get(key) ?? [];
+      list.push(id);
+      groups.set(key, list);
+    }
+    for (const [key, groupIds] of groups) {
+      if (!key) {
+        continue;
+      }
+      const parentNodes = (key.split("|") as PersonId[])
+        .map((id) => placed.get(id))
+        .filter((node): node is PlacedNode => Boolean(node));
+      if (parentNodes.length === 0) {
+        continue;
+      }
+      const packed = packSequence(groupIds, byId, graph, generation);
+      for (const node of centerAlign(packed, boundsCenter(parentNodes))) {
+        placed.set(node.id, node);
+      }
+    }
+    for (const id of ordered) {
+      if (placed.has(id)) {
+        continue;
+      }
+      const person = byId.get(id);
+      if (!person) {
+        continue;
+      }
+      const width = measureNodeWidth(person.displayName);
+      const spouse = spouseOf(graph, id);
+      const spouseNode = spouse ? placed.get(spouse) : undefined;
+      let x = 0;
+      if (spouse && spouseNode) {
+        const before = ordered.indexOf(id) < ordered.indexOf(spouse);
+        x = before
+          ? spouseNode.x - PAIR_GAP - width
+          : spouseNode.x + spouseNode.width + PAIR_GAP;
+      } else {
+        const idx = ordered.indexOf(id);
+        let prev: PlacedNode | undefined;
+        for (let i = idx - 1; i >= 0; i -= 1) {
+          const node = placed.get(ordered[i]);
+          if (node) {
+            prev = node;
+            break;
+          }
+        }
+        let next: PlacedNode | undefined;
+        for (let i = idx + 1; i < ordered.length; i += 1) {
+          const node = placed.get(ordered[i]);
+          if (node) {
+            next = node;
+            break;
+          }
+        }
+        if (prev) {
+          const gap = spouseEdge(graph, prev.id, id) ? PAIR_GAP : SIBLING_GAP;
+          x = prev.x + prev.width + gap;
+        } else if (next) {
+          const gap = spouseEdge(graph, id, next.id) ? PAIR_GAP : SIBLING_GAP;
+          x = next.x - gap - width;
+        }
+      }
+      placed.set(id, {
+        id,
+        x,
+        y: generation * ROW_GAP,
+        width,
+        height: NODE_HEIGHT,
+        generation,
+      });
+    }
+    resolveRow(placed, generation, graph);
+    recenterParentUnits(graph, house, placed, generation);
+  }
+  return [...placed.values()];
+}
+
+function spouseLane(a: PlacedNode, b: PlacedNode): string {
+  const left = a.x <= b.x ? a : b;
+  const right = a.x <= b.x ? b : a;
+  const y = left.y + left.height / 2;
+  const x1 = left.x + left.width;
+  const x2 = right.x;
+  if (x2 - x1 >= 8 && Math.abs(left.y - right.y) < 1) {
+    return `M ${x1} ${y} L ${x2} ${y}`;
+  }
+  return orthogonalLane(nodeCenter(left), nodeCenter(right));
+}
+
+function siblingLane(a: PlacedNode, b: PlacedNode): string {
+  const left = a.x <= b.x ? a : b;
+  const right = a.x <= b.x ? b : a;
+  const y = Math.min(left.y, right.y) - 12;
+  const from = nodeCenter(left);
+  const to = nodeCenter(right);
+  return `M ${from.x} ${left.y} L ${from.x} ${y} L ${to.x} ${y} L ${to.x} ${right.y}`;
+}
+
+function sharedPlacedParents(
+  graph: FamilyGraph,
+  a: PersonId,
+  b: PersonId,
+  nodeMap: Map<PersonId, PlacedNode>,
+): PersonId[] {
+  const parents = new Set(parentsOf(graph, a).filter((id) => nodeMap.has(id)));
+  return parentsOf(graph, b).filter((id) => parents.has(id));
+}
+
 function shiftNodes(nodes: PlacedNode[], dx: number): PlacedNode[] {
   return nodes.map((node) => ({ ...node, x: node.x + dx }));
 }
@@ -347,37 +585,55 @@ export function layoutPedigree(
       )
     : new Set<PersonId>();
 
-  const rows = new Map<number, PersonId[]>();
-  for (const id of visible) {
-    const g = gens.get(id) ?? 0;
-    const row = rows.get(g) ?? [];
-    row.push(id);
-    rows.set(g, row);
-  }
-
-  const nodes: PlacedNode[] = [];
   const byId = new Map(graph.people.map((person) => [person.id, person]));
   const gutterLeft = -BRANCH_GUTTER / 2;
   const gutterRight = BRANCH_GUTTER / 2;
 
-  for (const [generation, ids] of rows) {
-    const ordered = rowOrder(graph, ids, focusId);
-    const paternalIds = ordered.filter((id) => paternal.has(id));
-    const maternalIds = ordered.filter((id) => maternal.has(id) && !paternal.has(id));
-    const restIds = ordered.filter((id) => !paternal.has(id) && !maternal.has(id));
-
-    const paternalNodes = rightAlign(
-      packSequence(paternalIds, byId, graph, generation),
-      gutterLeft,
-      );
-    const maternalNodes = leftAlign(
-      packSequence(maternalIds, byId, graph, generation),
-      gutterRight,
-    );
-    const restNodes = centerAlign(packSequence(restIds, byId, graph, generation), 0);
-    nodes.push(...paternalNodes, ...maternalNodes, ...restNodes);
+  let paternalNodes = rightAlign(
+    placeHouse(graph, paternal, gens, byId, focusId),
+    gutterLeft,
+  );
+  let maternalNodes = leftAlign(
+    placeHouse(graph, maternal, gens, byId, focusId),
+    gutterRight,
+  );
+  if (paternalNodes.length > 0 && maternalNodes.length > 0) {
+    const paternalRight = Math.max(...paternalNodes.map((node) => node.x + node.width));
+    const maternalLeft = Math.min(...maternalNodes.map((node) => node.x));
+    const gap = maternalLeft - paternalRight;
+    if (gap < BRANCH_GUTTER) {
+      const extra = BRANCH_GUTTER - gap;
+      paternalNodes = shiftNodes(paternalNodes, -Math.ceil(extra / 2));
+      maternalNodes = shiftNodes(maternalNodes, Math.floor(extra / 2));
+    }
   }
 
+  const placed = new Map<PersonId, PlacedNode>();
+  for (const node of [...paternalNodes, ...maternalNodes]) {
+    placed.set(node.id, node);
+  }
+
+  const restByGen = new Map<number, PersonId[]>();
+  for (const id of visible) {
+    if (placed.has(id)) {
+      continue;
+    }
+    const generation = gens.get(id) ?? 0;
+    const row = restByGen.get(generation) ?? [];
+    row.push(id);
+    restByGen.set(generation, row);
+  }
+  for (const [generation, ids] of restByGen) {
+    const restNodes = centerAlign(
+      packSequence(rowOrder(graph, ids, focusId), byId, graph, generation),
+      0,
+    );
+    for (const node of restNodes) {
+      placed.set(node.id, node);
+    }
+  }
+
+  const nodes = [...placed.values()];
   const nodeMap = new Map(nodes.map((node) => [node.id, node]));
   const connectors: Connector[] = [];
   const seen = new Set<string>();
@@ -402,25 +658,41 @@ export function layoutPedigree(
         fromId: parent.id,
         toId: node.id,
         d: orthogonalLane(nodeCenter(parent), nodeCenter(node)),
+        label: vinculoLabel(graph, "parent", parent.id, node.id),
       });
     }
   }
 
   for (const edge of graph.edges) {
-    if (edge.kind !== "spouse" && edge.kind !== "sibling") {
-      continue;
-    }
     const a = nodeMap.get(edge.from);
     const b = nodeMap.get(edge.to);
     if (!a || !b) {
       continue;
     }
+    if (edge.kind === "spouse") {
+      connectors.push({
+        kind: "spouse",
+        certainty: edge.certainty,
+        fromId: edge.from,
+        toId: edge.to,
+        d: spouseLane(a, b),
+        label: vinculoLabel(graph, "spouse", edge.from, edge.to),
+      });
+      continue;
+    }
+    if (edge.kind !== "sibling") {
+      continue;
+    }
+    if (sharedPlacedParents(graph, edge.from, edge.to, nodeMap).length > 0) {
+      continue;
+    }
     connectors.push({
-      kind: "spouse",
+      kind: "sibling",
       certainty: edge.certainty,
       fromId: edge.from,
       toId: edge.to,
-      d: orthogonalLane(nodeCenter(a), nodeCenter(b)),
+      d: siblingLane(a, b),
+      label: vinculoLabel(graph, "sibling", edge.from, edge.to),
     });
   }
 

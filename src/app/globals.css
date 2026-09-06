@@ -181,6 +181,16 @@ button.chrome-ctl::after {
   outline: none;
 }
 
+.vinculo-tip {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
 .plus-cut {
   position: absolute;
   top: 50%;
@@ -261,8 +271,10 @@ button.chrome-ctl::after {
 
 @media (prefers-reduced-motion: reduce) {
   .fog-edge[data-entering="true"],
-  .legend-menu {
+  .legend-menu,
+  .vinculo-tip {
     animation: none;
+    transition: none;
   }
 
   .person-node:hover .node-corner:not([data-on="true"]),
