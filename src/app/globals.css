@@ -299,6 +299,13 @@ button.ghost-btn.ficha-back {
   }
 }
 
+@media (hover: none), (pointer: coarse) {
+  .node-plus {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .node-chip:hover,
   .ghost-btn:hover {

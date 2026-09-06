@@ -342,6 +342,20 @@ function parentKey(
     .join("|");
 }
 
+function restParentKey(
+  graph: FamilyGraph,
+  id: PersonId,
+  row: readonly PersonId[],
+  placed: Map<PersonId, PlacedNode>,
+): string {
+  const own = parentKey(graph, id, placed);
+  if (own) {
+    return own;
+  }
+  const spouse = spouseOf(graph, id);
+  return spouse && row.includes(spouse) ? parentKey(graph, spouse, placed) : "";
+}
+
 function ancestorCone(
   graph: FamilyGraph,
   seeds: readonly PersonId[],
@@ -592,6 +606,43 @@ function centerAlign(nodes: PlacedNode[], centerX: number): PlacedNode[] {
   return shiftNodes(nodes, centerX - (minX + maxX) / 2);
 }
 
+function settleInRow(
+  group: PlacedNode[],
+  placed: Map<PersonId, PlacedNode>,
+  generation: number,
+  centerX: number,
+): PlacedNode[] {
+  if (group.length === 0) {
+    return [];
+  }
+  const width =
+    Math.max(...group.map((node) => node.x + node.width)) -
+    Math.min(...group.map((node) => node.x));
+  const obstacles = [...placed.values()]
+    .filter((node) => node.generation === generation)
+    .sort((a, b) => a.x - b.x);
+  let best = centerX;
+  let bestDistance = Infinity;
+  const consider = (lo: number, hi: number) => {
+    if (hi - lo < width) {
+      return;
+    }
+    const center = Math.min(Math.max(centerX, lo + width / 2), hi - width / 2);
+    const distance = Math.abs(center - centerX);
+    if (distance < bestDistance) {
+      best = center;
+      bestDistance = distance;
+    }
+  };
+  let lo = -Infinity;
+  for (const node of obstacles) {
+    consider(lo, node.x - SIBLING_GAP);
+    lo = Math.max(lo, node.x + node.width + SIBLING_GAP);
+  }
+  consider(lo, Infinity);
+  return centerAlign(group, best);
+}
+
 function pinFocusOrigin(nodes: PlacedNode[], focusId: PersonId): PlacedNode[] {
   const focus = nodes.find((node) => node.id === focusId);
   if (!focus) {
@@ -708,13 +759,38 @@ export function layoutPedigree(
     row.push(id);
     restByGen.set(generation, row);
   }
-  for (const [generation, ids] of restByGen) {
-    const packed = packSequence(rowOrder(graph, ids, focusId), byId, graph, generation);
-    const restNodes = ids.includes(focusId)
-      ? pinFocusOrigin(packed, focusId)
-      : centerAlign(packed, 0);
-    for (const node of restNodes) {
-      placed.set(node.id, node);
+  const restGenerations = [...restByGen.keys()].sort((a, b) => a - b);
+  for (const generation of restGenerations) {
+    const ids = restByGen.get(generation) ?? [];
+    const ordered = rowOrder(graph, ids, focusId);
+    const anchorRow = ids.includes(focusId);
+    const groups = new Map<string, PersonId[]>();
+    for (const id of ordered) {
+      const key = anchorRow ? "" : restParentKey(graph, id, ordered, placed);
+      const list = groups.get(key) ?? [];
+      list.push(id);
+      groups.set(key, list);
+    }
+    const unparented = groups.get("") ?? [];
+    if (unparented.length > 0) {
+      const packed = packSequence(unparented, byId, graph, generation);
+      const restNodes = anchorRow ? pinFocusOrigin(packed, focusId) : centerAlign(packed, 0);
+      for (const node of restNodes) {
+        placed.set(node.id, node);
+      }
+    }
+    for (const [key, groupIds] of groups) {
+      if (!key) {
+        continue;
+      }
+      const parentNodes = (key.split("|") as PersonId[])
+        .map((id) => placed.get(id))
+        .filter((node): node is PlacedNode => Boolean(node));
+      const centerX = parentNodes.length > 0 ? boundsCenter(parentNodes) : 0;
+      const packed = packSequence(groupIds, byId, graph, generation);
+      for (const node of settleInRow(packed, placed, generation, centerX)) {
+        placed.set(node.id, node);
+      }
     }
   }
 
