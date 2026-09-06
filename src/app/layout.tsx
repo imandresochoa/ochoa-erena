@@ -5,7 +5,6 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -24,7 +23,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="es" className={`${inter.variable} h-full antialiased`}>
       <head>
         <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@400&display=swap"
+          href="https://api.fontshare.com/v2/css?f[]=satoshi@1&display=swap"
           rel="stylesheet"
         />
       </head>
