@@ -88,11 +88,15 @@ export function PersonNode({
         }}
       >
         <span
-          className="node-corner pointer-events-none absolute -top-[5px] -right-[5px] h-[10.5px] w-[10.5px] border-t border-r border-[var(--color-ink)]"
+          className={`node-corner pointer-events-none absolute -top-[5px] -right-[5px] h-[10.5px] w-[10.5px] border-t border-r ${
+            selected ? "border-[var(--color-canvas)]" : "border-[var(--color-ink)]"
+          }`}
           data-on={selected ? "true" : "false"}
         />
         <span
-          className="node-corner pointer-events-none absolute -bottom-[5px] -left-[5px] h-[10.5px] w-[10.5px] border-b border-l border-[var(--color-ink)]"
+          className={`node-corner pointer-events-none absolute -bottom-[5px] -left-[5px] h-[10.5px] w-[10.5px] border-b border-l ${
+            selected ? "border-[var(--color-canvas)]" : "border-[var(--color-ink)]"
+          }`}
           data-on={selected ? "true" : "false"}
         />
         {person.displayName}
