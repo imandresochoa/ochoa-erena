@@ -20,6 +20,14 @@
           "label": "Javier Ochoa Palop, Jaén 1961",
           "href": "http://abretelibro.blogspot.com/2014/09/empecemos-por-el-comienzo.html"
         }
+      ],
+      "sources": [
+        {
+          "label": "Javier Ochoa Palop, Jaén 1961",
+          "href": "http://abretelibro.blogspot.com/2014/09/empecemos-por-el-comienzo.html",
+          "kind": "web",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -42,6 +50,14 @@
           "label": "BOE-B-1999-310266",
           "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-1999-310266"
         }
+      ],
+      "sources": [
+        {
+          "label": "BOE-B-1999-310266",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-1999-310266",
+          "kind": "boe",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -52,6 +68,20 @@
       "links": [
         { "label": "Geneanet aerec5", "href": "https://gw.geneanet.org/aerec5" },
         { "label": "Bitácora In ictu oculi", "href": "http://antonioerena.blogspot.com/2019/01/" }
+      ],
+      "sources": [
+        {
+          "label": "Geneanet aerec5",
+          "href": "https://gw.geneanet.org/aerec5",
+          "kind": "geneanet",
+          "mark": "AEC"
+        },
+        {
+          "label": "Bitácora In ictu oculi",
+          "href": "http://antonioerena.blogspot.com/2019/01/",
+          "kind": "web",
+          "mark": "AEC"
+        }
       ]
     },
     {
@@ -85,6 +115,20 @@
           "label": "Alférez provisional, BVM",
           "href": "https://bibliotecavirtual.defensa.gob.es/BVMDefensa/es/catalogo_imagenes/imagen.do?path=1113137"
         }
+      ],
+      "sources": [
+        {
+          "label": "Presidentes del Real Jaén",
+          "href": "http://seguidorrealjaen.blogspot.com/p/goles.html",
+          "kind": "web",
+          "mark": "H"
+        },
+        {
+          "label": "Alférez provisional, BVM",
+          "href": "https://bibliotecavirtual.defensa.gob.es/BVMDefensa/es/catalogo_imagenes/imagen.do?path=1113137",
+          "kind": "bvm",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -97,6 +141,14 @@
       "summary": "Abuela paterna. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos.",
       "links": [
         { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
+      ],
+      "sources": [
+        {
+          "label": "Pedro Palop, Cordobapedia",
+          "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop",
+          "kind": "web",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -113,6 +165,20 @@
           "label": "BOE-A-1975-20929, Obejo",
           "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1975-20929"
         }
+      ],
+      "sources": [
+        {
+          "label": "BOE-A-1973-43637, Ceuta",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1973-43637",
+          "kind": "boe",
+          "mark": "H"
+        },
+        {
+          "label": "BOE-A-1975-20929, Obejo",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1975-20929",
+          "kind": "boe",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -125,6 +191,14 @@
       "summary": "Hermano de Matilde Palop Fuentes. Latinista, pregonero, académico de la RAC desde 1958. Averroes y esperanto: solo oral. Lucena frente a Lopera: hipótesis. Padres no asignados.",
       "links": [
         { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
+      ],
+      "sources": [
+        {
+          "label": "Pedro Palop, Cordobapedia",
+          "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop",
+          "kind": "web",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -136,6 +210,14 @@
         {
           "label": "AHUS, Escuela Normal 1929",
           "href": "https://ahus.us.es/index.php/ochoa-hidalgo-rafael"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHUS, Escuela Normal 1929",
+          "href": "https://ahus.us.es/index.php/ochoa-hidalgo-rafael",
+          "kind": "ahus",
+          "mark": "H"
         }
       ]
     },
@@ -158,6 +240,14 @@
         {
           "label": "Andrés Erena López, veterinario",
           "href": "https://www.guiaveterinarios.com/pro/andres-erena-lopez-torredonjimeno-3974993/"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Andrés Erena López, veterinario",
+          "href": "https://www.guiaveterinarios.com/pro/andres-erena-lopez-torredonjimeno-3974993/",
+          "kind": "web",
+          "mark": "H"
         }
       ]
     },
@@ -226,6 +316,14 @@
           "label": "AHDV 61790",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=61790"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 61790",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=61790",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -246,6 +344,14 @@
           "label": "AHDV 135757",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135757"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 135757",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135757",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -265,6 +371,14 @@
         {
           "label": "AHDV 69059",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=69059"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 69059",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=69059",
+          "kind": "ahdv",
+          "mark": "H"
         }
       ]
     },
@@ -292,6 +406,14 @@
         {
           "label": "PARES DNSD E0020546",
           "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/show/12457735"
+        }
+      ],
+      "sources": [
+        {
+          "label": "PARES DNSD E0020546",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/show/12457735",
+          "kind": "pares",
+          "mark": "H"
         }
       ]
     },
@@ -355,6 +477,14 @@
           "label": "AHDV 13023",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=13023"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 13023",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=13023",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -376,6 +506,14 @@
           "label": "AHDV 29971",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29971"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 29971",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29971",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -389,6 +527,14 @@
         {
           "label": "AHDV 12723",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=12723"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 12723",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=12723",
+          "kind": "ahdv",
+          "mark": "H"
         }
       ]
     },
@@ -411,6 +557,14 @@
           "label": "AHDV 7758",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=7758"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 7758",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=7758",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -424,6 +578,14 @@
         {
           "label": "AHDV 8055",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=8055"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 8055",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=8055",
+          "kind": "ahdv",
+          "mark": "H"
         }
       ]
     },
@@ -460,6 +622,14 @@
           "label": "AHDV 802372",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372"
         }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372",
+          "kind": "ahdv",
+          "mark": "H"
+        }
       ]
     },
     {
@@ -486,6 +656,14 @@
           "label": "Antonio Camacho Ruiz, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho+ruiz&p=antonio"
         }
+      ],
+      "sources": [
+        {
+          "label": "Antonio Camacho Ruiz, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho+ruiz&p=antonio",
+          "kind": "geneanet",
+          "mark": "AEC"
+        }
       ]
     },
     {
@@ -497,6 +675,14 @@
         {
           "label": "Encarnación Liébana Tejero, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=liebana+tejero&p=encarnacion"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Encarnación Liébana Tejero, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=liebana+tejero&p=encarnacion",
+          "kind": "geneanet",
+          "mark": "AEC"
         }
       ]
     },
@@ -510,6 +696,14 @@
           "label": "Antonio Viñas Rodríguez, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=vinas+rodriguez&p=antonio"
         }
+      ],
+      "sources": [
+        {
+          "label": "Antonio Viñas Rodríguez, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=vinas+rodriguez&p=antonio",
+          "kind": "geneanet",
+          "mark": "AEC"
+        }
       ]
     },
     {
@@ -521,6 +715,14 @@
         {
           "label": "Mercedes López Valverde, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=mercedes&p=lopez+valverde"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Mercedes López Valverde, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=mercedes&p=lopez+valverde",
+          "kind": "geneanet",
+          "mark": "AEC"
         }
       ]
     },
@@ -534,6 +736,14 @@
           "label": "Manuel Camacho, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho&p=manuel"
         }
+      ],
+      "sources": [
+        {
+          "label": "Manuel Camacho, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho&p=manuel",
+          "kind": "geneanet",
+          "mark": "AEC"
+        }
       ]
     },
     {
@@ -545,6 +755,14 @@
         {
           "label": "Andrea Ruiz, aerec5",
           "href": "https://gw.geneanet.org/aerec5?lang=es&n=ruiz&p=andrea"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Andrea Ruiz, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=ruiz&p=andrea",
+          "kind": "geneanet",
+          "mark": "AEC"
         }
       ]
     },
@@ -558,6 +776,14 @@
         {
           "label": "AHDV 134606",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=134606"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 134606",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=134606",
+          "kind": "ahdv",
+          "mark": "H"
         }
       ]
     },
@@ -579,6 +805,14 @@
         {
           "label": "AHDV 135977",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135977"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 135977",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135977",
+          "kind": "ahdv",
+          "mark": "H"
         }
       ]
     },
