@@ -54,6 +54,7 @@ describe("title type scale", () => {
     expect(classOf(panel, "key={grado}").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">{ficha.lifeLine}<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Resumen<").split(/\s+/)).toContain("type-title");
+    expect(classOf(panel, ">Fuentes<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Enlaces de interés<").split(/\s+/)).toContain("type-title");
   });
 
@@ -71,12 +72,18 @@ describe("title type scale", () => {
     const summaryClass = classOf(panel, ">{ficha.summary}<");
     expect(summaryClass.length).toBeGreaterThan(0);
     expect(summaryClass.split(/\s+/)).not.toContain("type-title");
-    const rows = panel.slice(
-      panel.indexOf("ficha.links.map"),
+    const leftoverRows = panel.slice(
+      panel.indexOf("leftover.map"),
       panel.indexOf("ficha.noticeMailto"),
     );
-    expect(rows.length).toBeGreaterThan(0);
-    expect(rows).not.toMatch(/\btype-title\b/);
+    expect(leftoverRows.length).toBeGreaterThan(0);
+    expect(leftoverRows).not.toMatch(/\btype-title\b/);
+    const sourceRows = panel.slice(
+      panel.indexOf("ficha.sources.map"),
+      panel.indexOf("leftover.length"),
+    );
+    expect(sourceRows.length).toBeGreaterThan(0);
+    expect(sourceRows).not.toMatch(/\btype-title\b/);
   });
 
   it("does not mark welcome introduction as title", () => {
