@@ -189,7 +189,7 @@ describe("snapshot parent gaps", () => {
       "andres-martin-ochoa-erena",
     );
     expect(franciscoAndres.parentBirthYear).toBe(1961);
-    expect(franciscoAndres.childBirthYear).toBeUndefined();
+    expect(franciscoAndres.childBirthYear).toBe(1995);
     expect(
       hasLargeTimeGap(
         franciscoAndres.parentBirthYear,

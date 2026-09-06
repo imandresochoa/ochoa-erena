@@ -3,7 +3,7 @@ import familyJson from "@/data/family.json";
 import { family, defaultPerson } from "@/data/family";
 import { DEFAULT_FOCUS_NAME } from "@/domain/types";
 import { findExactName, suggestPeople } from "@/domain/search";
-import { siblingsOf, visiblePeople } from "@/domain/graph";
+import { parentsOf, siblingsOf, visiblePeople } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
 import { asPersonId } from "@/domain/types";
 
@@ -44,8 +44,53 @@ describe("family snapshot", () => {
     );
   });
 
-  it("does not invent Mercedes as a sibling of Andrés", () => {
-    expect(siblingsOf(family, asPersonId("andres-martin-ochoa-erena"))).toEqual([]);
+  it("records Mercedes as sister of Andrés after CONF Andrés 2026-09-06", () => {
+    const andres = asPersonId("andres-martin-ochoa-erena");
+    const mercedes = asPersonId("mercedes-ochoa-erena");
+    const mercedesPerson = family.people.find((person) => person.id === mercedes);
+    expect(mercedesPerson?.displayName).toBe("Mercedes Ochoa Erena");
+    expect(mercedesPerson?.birth).toEqual({
+      year: 1990,
+      approx: false,
+      text: "1990-10-05 [CONF Andrés 2026-09-06]",
+    });
+    expect(siblingsOf(family, andres)).toEqual([mercedes]);
+    expect(siblingsOf(family, mercedes)).toContain(andres);
+    expect(parentsOf(family, mercedes)).toEqual([
+      asPersonId("francisco-javier-ochoa-palop"),
+      asPersonId("maria-aurora-erena-camacho"),
+    ]);
+    expect(
+      family.edges.some(
+        (edge) =>
+          edge.kind === "sibling" &&
+          ((edge.from === andres && edge.to === mercedes) ||
+            (edge.from === mercedes && edge.to === andres)),
+      ),
+    ).toBe(true);
+  });
+
+  it("records Darío de Dios Ochoa as child of Mercedes without a father person", () => {
+    const mercedes = asPersonId("mercedes-ochoa-erena");
+    const dario = asPersonId("dario-de-dios-ochoa");
+    const darioPerson = family.people.find((person) => person.id === dario);
+    expect(darioPerson?.displayName).toBe("Darío de Dios Ochoa");
+    expect(darioPerson?.birth).toEqual({
+      year: 2015,
+      approx: false,
+      text: "2015-10-18 [CONF Andrés 2026-09-06]",
+    });
+    expect(parentsOf(family, dario)).toEqual([mercedes]);
+    expect(
+      family.people.some(
+        (person) =>
+          person.id !== dario &&
+          /de-dios|de dios/i.test(`${person.id} ${person.displayName}`),
+      ),
+    ).toBe(false);
+    expect(family.people.some((person) => person.displayName.trim() === "")).toBe(
+      false,
+    );
   });
 
   it("plus on Francisco reveals Matilde", () => {
@@ -76,9 +121,9 @@ describe("family snapshot", () => {
   });
 
   it("keeps the snapshot size and does not invent people, Zufiaur, or files", () => {
-    expect(rawPeople()).toHaveLength(61);
-    expect(family.people).toHaveLength(61);
-    expect(family.edges).toHaveLength(96);
+    expect(rawPeople()).toHaveLength(63);
+    expect(family.people).toHaveLength(63);
+    expect(family.edges).toHaveLength(100);
     expect(
       rawPeople().some(
         (person) =>
@@ -208,6 +253,8 @@ describe("family snapshot", () => {
       "vicenta-ruiz-de-eguino",
       "manuel-martinez-de-albeniz-albizu",
       "andres-martin-ochoa-erena",
+      "mercedes-ochoa-erena",
+      "dario-de-dios-ochoa",
       "maria-aurora-erena-camacho",
       "aurora-camacho-vinas",
     ]) {

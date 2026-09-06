@@ -4,8 +4,25 @@
       "id": "andres-martin-ochoa-erena",
       "displayName": "Andrés Martín Ochoa Erena",
       "marks": ["TO"],
+      "birth": { "year": 1995, "approx": false, "text": "1995-11-12 [CONF Andrés 2026-09-06]" },
       "place": "Jaén",
-      "summary": "Nació en Jaén. El árbol de esta casa es el suyo. Las marcas [TO] son su tradición oral.",
+      "summary": "Nació en Jaén el 12 de noviembre de 1995 [CONF Andrés 2026-09-06]. El árbol de esta casa es el suyo. Las marcas [TO] son su tradición oral.",
+      "links": []
+    },
+    {
+      "id": "mercedes-ochoa-erena",
+      "displayName": "Mercedes Ochoa Erena",
+      "marks": ["TO"],
+      "birth": { "year": 1990, "approx": false, "text": "1990-10-05 [CONF Andrés 2026-09-06]" },
+      "summary": "Hermana de Andrés. Hija de Francisco Javier Ochoa Palop y María Aurora Erena Camacho. Madre de Darío de Dios Ochoa. [CONF Andrés 2026-09-06].",
+      "links": []
+    },
+    {
+      "id": "dario-de-dios-ochoa",
+      "displayName": "Darío de Dios Ochoa",
+      "marks": ["TO"],
+      "birth": { "year": 2015, "approx": false, "text": "2015-10-18 [CONF Andrés 2026-09-06]" },
+      "summary": "Hijo de Mercedes Ochoa Erena. Primer apellido De Dios. Segundo apellido Ochoa. El nombre de pila del padre no está. No se inventa una persona padre. [CONF Andrés 2026-09-06].",
       "links": []
     },
     {
@@ -1072,6 +1089,10 @@
   "edges": [
     { "kind": "parent", "from": "francisco-javier-ochoa-palop", "to": "andres-martin-ochoa-erena", "certainty": "confirmed" },
     { "kind": "parent", "from": "maria-aurora-erena-camacho", "to": "andres-martin-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "francisco-javier-ochoa-palop", "to": "mercedes-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-aurora-erena-camacho", "to": "mercedes-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "andres-martin-ochoa-erena", "to": "mercedes-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "mercedes-ochoa-erena", "to": "dario-de-dios-ochoa", "certainty": "confirmed" },
     { "kind": "spouse", "from": "francisco-javier-ochoa-palop", "to": "maria-aurora-erena-camacho", "certainty": "confirmed" },
     { "kind": "sibling", "from": "francisco-javier-ochoa-palop", "to": "matilde-ochoa-palop", "certainty": "confirmed" },
 
