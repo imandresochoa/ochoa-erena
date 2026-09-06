@@ -19,13 +19,13 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
   const hidden = reduce
     ? { opacity: 0 }
     : narrow
-      ? { opacity: 0, y: "100%" }
-      : { opacity: 0, x: "100%" };
+      ? { opacity: 0, transform: "translateY(100%)" }
+      : { opacity: 0, transform: "translateX(100%)" };
   const shown = reduce
     ? { opacity: 1 }
     : narrow
-      ? { opacity: 1, y: 0 }
-      : { opacity: 1, x: 0 };
+      ? { opacity: 1, transform: "translateY(0)" }
+      : { opacity: 1, transform: "translateX(0)" };
 
   return (
     <motion.aside
