@@ -9,25 +9,6 @@ import {
 import { LEGEND_ITEMS } from "@/domain/legend";
 
 function Sample({ id }: { id: (typeof LEGEND_ITEMS)[number]["id"] }) {
-  if (id === "node-idle") {
-    return <span className="inline-block h-2.5 w-5 bg-[var(--color-node)]" />;
-  }
-  if (id === "node-hover") {
-    return (
-      <span className="relative inline-block h-2.5 w-5 bg-[var(--color-node-hover)]">
-        <span className="absolute -top-px -right-px h-1 w-1 border-t border-r border-[var(--color-ink)]" />
-        <span className="absolute -bottom-px -left-px h-1 w-1 border-b border-l border-[var(--color-ink)]" />
-      </span>
-    );
-  }
-  if (id === "node-selected") {
-    return (
-      <span className="relative inline-block h-2.5 w-5 bg-[var(--color-ink)]">
-        <span className="absolute -top-px -right-px h-1 w-1 border-t border-r border-[var(--color-canvas)]" />
-        <span className="absolute -bottom-px -left-px h-1 w-1 border-b border-l border-[var(--color-canvas)]" />
-      </span>
-    );
-  }
   if (id === "line-solid") {
     return <span className="inline-block h-px w-5 bg-[var(--color-line)]" />;
   }

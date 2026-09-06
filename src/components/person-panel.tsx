@@ -44,7 +44,7 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
       }}
     >
       <div className="sticky top-0 py-2.5">
-        <button type="button" onClick={onBack} className="ghost-btn gap-1 py-1 pr-3">
+        <button type="button" onClick={onBack} className="ghost-btn ficha-back">
           <span className="relative size-5 overflow-clip" aria-hidden="true">
             <ChevronLeftIcon />
           </span>

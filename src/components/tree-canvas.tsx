@@ -2,10 +2,9 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import Image from "next/image";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
-import { ochoaCrest } from "@/domain/crest";
+import { connectorStroke, paintConnectors } from "@/domain/connector-paint";
 import {
   collapsePath,
   expandPinId,
@@ -14,7 +13,7 @@ import {
   pinExpandedLayout,
   plusOrigin,
 } from "@/domain/expand-motion";
-import { hasExpandableSiblings, requirePerson } from "@/domain/graph";
+import { expandControl, requirePerson } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
 import {
   addPan,
@@ -97,22 +96,26 @@ export function TreeCanvas({
   }
   const layout = view.current.layout;
   const svgBounds = useMemo(() => {
-    const boxes = [...layout.nodes, ...layout.crests];
-    if (boxes.length === 0) {
+    if (layout.nodes.length === 0) {
       return { x: 0, y: 0, w: 1, h: 1 };
     }
     const pad = 24;
-    const minX = Math.min(...boxes.map((box) => box.x)) - pad;
-    const minY = Math.min(...boxes.map((box) => box.y)) - pad;
-    const maxX = Math.max(...boxes.map((box) => box.x + box.width)) + pad;
-    const maxY = Math.max(...boxes.map((box) => box.y + box.height)) + pad;
+    const minX = Math.min(...layout.nodes.map((node) => node.x)) - pad;
+    const minY = Math.min(...layout.nodes.map((node) => node.y)) - pad;
+    const maxX = Math.max(...layout.nodes.map((node) => node.x + node.width)) + pad;
+    const maxY = Math.max(...layout.nodes.map((node) => node.y + node.height)) + pad;
     return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
   }, [layout]);
   const pinId = view.current.pinId;
   const pinNode = pinId
     ? layout.nodes.find((node) => node.id === pinId)
     : undefined;
-  const pinOrigin = pinNode ? plusOrigin(pinNode) : null;
+  const pinOrigin = pinNode
+    ? plusOrigin(
+        pinNode,
+        expandControl(family, focusId, pinNode.id, expandedIds)?.side ?? "left",
+      )
+    : null;
   const people = useMemo(
     () => new Map(family.people.map((person) => [person.id, person])),
     [],
@@ -275,7 +278,10 @@ export function TreeCanvas({
             }}
           >
             <AnimatePresence initial={false}>
-              {layout.connectors.map((connector) => {
+              {paintConnectors(
+                layout.connectors,
+                (connector) => connectorKey(connector) === hover?.key,
+              ).map((connector) => {
                 const key = connectorKey(connector);
                 const fresh = !entering && !seenConnectors.current.has(key);
                 if (fresh && pinOrigin) {
@@ -291,6 +297,7 @@ export function TreeCanvas({
                 return (
                   <motion.g
                     key={key}
+                    style={{ zIndex: hovered ? 1 : 0 }}
                     initial={reduce || !fresh ? false : { opacity: 1 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -302,7 +309,7 @@ export function TreeCanvas({
                     <motion.path
                       d={connector.d}
                       fill="none"
-                      stroke={hovered ? "var(--color-ink)" : "var(--color-line)"}
+                      stroke={connectorStroke(hovered)}
                       strokeWidth={connector.kind === "spouse" ? 2 : 1}
                       strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
                       initial={reduce || !fresh ? false : { d: start }}
@@ -339,13 +346,13 @@ export function TreeCanvas({
           {hover ? (
             <motion.div
               className="vinculo-tip pointer-events-none absolute z-30"
-              style={{ left: hover.x, top: hover.y }}
-              initial={
-                reduce
-                  ? { opacity: 1, transform: "translate(-50%, -16px)" }
-                  : { opacity: 0, transform: "translate(-50%, -8px)" }
-              }
-              animate={{ opacity: 1, transform: "translate(-50%, -16px)" }}
+              style={{
+                left: hover.x,
+                top: hover.y,
+                transform: "translate(-50%, -50%)",
+              }}
+              initial={{ opacity: reduce ? 1 : 0 }}
+              animate={{ opacity: 1 }}
               transition={{
                 duration: reduce ? 0 : 0.18,
                 ease: [0.23, 1, 0.32, 1],
@@ -354,26 +361,6 @@ export function TreeCanvas({
               {hover.label}
             </motion.div>
           ) : null}
-          {layout.crests.map((crest) => (
-            <div
-              key={crest.id}
-              className="pointer-events-none absolute"
-              style={{
-                left: crest.x,
-                top: crest.y,
-                width: crest.width,
-                height: crest.height,
-              }}
-            >
-              <Image
-                src={ochoaCrest.src}
-                alt={ochoaCrest.alt}
-                width={crest.width}
-                height={crest.height}
-                sizes={`${crest.width}px`}
-              />
-            </div>
-          ))}
           <AnimatePresence initial={false}>
             {layout.nodes.map((placed) => {
               const person = people.get(placed.id) ?? requirePerson(family, placed.id);
@@ -381,17 +368,18 @@ export function TreeCanvas({
               if (fresh && pinOrigin) {
                 enterOrigins.current.set(placed.id, pinOrigin);
               }
+              const control = expandControl(family, focusId, placed.id, expandedIds);
               const origin =
                 enterOrigins.current.get(placed.id) ??
                 pinOrigin ??
-                plusOrigin(placed);
+                plusOrigin(placed, control?.side ?? "left");
               return (
                 <PersonNode
                   key={placed.id}
                   person={person}
                   placed={placed}
                   selected={placed.id === selectedId}
-                  showPlus={hasExpandableSiblings(family, placed.id, expandedIds)}
+                  expand={control}
                   coarsePointer={coarsePointer}
                   fresh={fresh}
                   origin={origin}
