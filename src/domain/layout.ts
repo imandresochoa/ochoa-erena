@@ -592,6 +592,14 @@ function centerAlign(nodes: PlacedNode[], centerX: number): PlacedNode[] {
   return shiftNodes(nodes, centerX - (minX + maxX) / 2);
 }
 
+function pinFocusOrigin(nodes: PlacedNode[], focusId: PersonId): PlacedNode[] {
+  const focus = nodes.find((node) => node.id === focusId);
+  if (!focus) {
+    return centerAlign(nodes, 0);
+  }
+  return shiftNodes(nodes, -nodeCenter(focus).x);
+}
+
 export function layoutHouseCanvas(
   graph: FamilyGraph,
   focusId: PersonId,
@@ -701,10 +709,10 @@ export function layoutPedigree(
     restByGen.set(generation, row);
   }
   for (const [generation, ids] of restByGen) {
-    const restNodes = centerAlign(
-      packSequence(rowOrder(graph, ids, focusId), byId, graph, generation),
-      0,
-    );
+    const packed = packSequence(rowOrder(graph, ids, focusId), byId, graph, generation);
+    const restNodes = ids.includes(focusId)
+      ? pinFocusOrigin(packed, focusId)
+      : centerAlign(packed, 0);
     for (const node of restNodes) {
       placed.set(node.id, node);
     }

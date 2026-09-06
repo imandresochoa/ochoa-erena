@@ -121,6 +121,9 @@ export function visiblePeople(
     for (const sibling of siblingsOf(graph, expanded)) {
       visible.add(sibling);
     }
+    for (const child of childrenOf(graph, expanded)) {
+      visible.add(child);
+    }
   }
   return visible;
 }
@@ -146,17 +149,37 @@ export function expansionsToReveal(
   graph: FamilyGraph,
   targetId: PersonId,
 ): PersonId[] {
-  const spine = visiblePeople(graph, DEFAULT_FOCUS_ID, []);
-  if (spine.has(targetId)) {
-    return [];
-  }
-  const revealers: PersonId[] = [];
-  for (const sibling of siblingsOf(graph, targetId)) {
-    if (spine.has(sibling) && !revealers.includes(sibling)) {
-      revealers.push(sibling);
+  const opened: PersonId[] = [];
+  const seen = new Set<PersonId>();
+
+  const visibleNow = () => visiblePeople(graph, DEFAULT_FOCUS_ID, opened);
+
+  const reveal = (id: PersonId) => {
+    if (seen.has(id) || visibleNow().has(id)) {
+      return;
     }
-  }
-  return revealers;
+    seen.add(id);
+    for (const sibling of siblingsOf(graph, id)) {
+      if (visibleNow().has(sibling)) {
+        if (!opened.includes(sibling)) {
+          opened.push(sibling);
+        }
+        return;
+      }
+    }
+    const parents = parentsOf(graph, id);
+    for (const parent of parents) {
+      reveal(parent);
+    }
+    const visible = visibleNow();
+    const opener = parents.find((parent) => visible.has(parent));
+    if (opener && !opened.includes(opener)) {
+      opened.push(opener);
+    }
+  };
+
+  reveal(targetId);
+  return opened;
 }
 
 export function hasExpandableSiblings(
@@ -212,7 +235,9 @@ export function expandControl(
   if (expandedIds.includes(id)) {
     return { kind: "minus", side };
   }
-  if (siblingsOf(graph, id).some((sibling) => !visible.has(sibling))) {
+  const hiddenSibling = siblingsOf(graph, id).some((sibling) => !visible.has(sibling));
+  const hiddenChild = childrenOf(graph, id).some((child) => !visible.has(child));
+  if (hiddenSibling || hiddenChild) {
     return { kind: "plus", side };
   }
   return null;
