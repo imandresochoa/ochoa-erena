@@ -164,6 +164,14 @@
         {
           "label": "BOE-A-1975-20929, Obejo",
           "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1975-20929"
+        },
+        {
+          "label": "BOE 1976, Monte alto",
+          "href": "https://www.boe.es/boe/dias/1976/11/29/pdfs/A23753-23754.pdf"
+        },
+        {
+          "label": "Colegiado honorífico, 1985",
+          "href": "https://www.corvet.es/libro_corvet__28_nov.pdf"
         }
       ],
       "sources": [
@@ -177,6 +185,18 @@
           "label": "BOE-A-1975-20929, Obejo",
           "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1975-20929",
           "kind": "boe",
+          "mark": "H"
+        },
+        {
+          "label": "BOE 1976, Monte alto",
+          "href": "https://www.boe.es/boe/dias/1976/11/29/pdfs/A23753-23754.pdf",
+          "kind": "boe",
+          "mark": "H"
+        },
+        {
+          "label": "Colegiado honorífico, 1985",
+          "href": "https://www.corvet.es/libro_corvet__28_nov.pdf",
+          "kind": "web",
           "mark": "H"
         }
       ]
@@ -343,6 +363,10 @@
         {
           "label": "AHDV 135757",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135757"
+        },
+        {
+          "label": "PARES ESC,24187",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/description/5461839"
         }
       ],
       "sources": [
@@ -350,6 +374,12 @@
           "label": "AHDV 135757",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135757",
           "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "PARES ESC,24187",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/description/5461839",
+          "kind": "pares",
           "mark": "H"
         }
       ]
@@ -463,7 +493,30 @@
       "birth": { "year": 1828, "approx": false, "text": "baut. 1828-10-27, Egino" },
       "place": "Egino, Aspárrena",
       "summary": "Tatarabuelo. Entra porque Andrés confirma a Martín María como bisabuelo. El índice del bautismo escribe Gemelos; Padre desconocido; — se cita, no se reinterpreta.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 802997",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802997"
+        },
+        {
+          "label": "AHDV 69157",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=69157"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802997",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802997",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 69157",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=69157",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "maria-concepcion-antia-saez",
@@ -476,12 +529,22 @@
         {
           "label": "AHDV 13023",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=13023"
+        },
+        {
+          "label": "AHDV 69157",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=69157"
         }
       ],
       "sources": [
         {
           "label": "AHDV 13023",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=13023",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 69157",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=69157",
           "kind": "ahdv",
           "mark": "H"
         }
@@ -556,12 +619,22 @@
         {
           "label": "AHDV 7758",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=7758"
+        },
+        {
+          "label": "AHDV 72524",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72524"
         }
       ],
       "sources": [
         {
           "label": "AHDV 7758",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=7758",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 72524",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72524",
           "kind": "ahdv",
           "mark": "H"
         }
@@ -578,12 +651,22 @@
         {
           "label": "AHDV 8055",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=8055"
+        },
+        {
+          "label": "AHDV 72524",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72524"
         }
       ],
       "sources": [
         {
           "label": "AHDV 8055",
           "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=8055",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 72524",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72524",
           "kind": "ahdv",
           "mark": "H"
         }
@@ -637,14 +720,40 @@
       "displayName": "Antonio Martínez de Ezcurra Zuluaga",
       "marks": ["H"],
       "summary": "Padre de Martina Martínez de Ezcurra. Entra en Andrés por la confirmación de Martín María.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 178311",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=178311"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 178311",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=178311",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "francisca-ruiz-de-savando",
       "displayName": "Francisca Ruiz de Savando Ortiz de Luzuriaga",
       "marks": ["H"],
       "summary": "Madre de Martina Martínez de Ezcurra. Bautismo de Francisca: falta.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 178311",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=178311"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 178311",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=178311",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "antonio-camacho-ruiz",
@@ -793,7 +902,20 @@
       "marks": ["H"],
       "birth": { "year": 1865, "approx": false, "text": "1865-09-04, San Miguel" },
       "summary": "Hermana de Martín María. Bautizada el mismo día que Rosalía.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 135978",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135978"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 135978",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135978",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "rosalia-ochoa-antia",
@@ -822,7 +944,20 @@
       "marks": ["H"],
       "birth": { "year": 1868, "approx": false, "text": "1868-03-10, San Pedro" },
       "summary": "Hermano de Martín María. Bautizado en San Miguel porque San Pedro estaba cerrada al culto.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 61861",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=61861"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 61861",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=61861",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "vicenta-ochoa-antia",
@@ -830,7 +965,20 @@
       "marks": ["H"],
       "birth": { "year": 1869, "approx": false, "text": "1869-10-27, San Pedro" },
       "summary": "Hermana de Martín María según el índice AHDV.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 62624",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=62624"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 62624",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=62624",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "martina-ochoa-antia",
@@ -838,7 +986,20 @@
       "marks": ["H"],
       "birth": { "year": 1873, "approx": false, "text": "1873-04-25, San Pedro" },
       "summary": "Hermana de Martín María según el índice AHDV.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 62913",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=62913"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 62913",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=62913",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "lino-ochoa-antia",
@@ -846,7 +1007,20 @@
       "marks": ["H"],
       "birth": { "year": 1877, "approx": false, "text": "1877-09-23, San Pedro" },
       "summary": "Hermano de Martín María según el índice AHDV.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 67855",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=67855"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 67855",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=67855",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     }
   ],
   "edges": [
