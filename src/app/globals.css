@@ -100,19 +100,41 @@ body {
   }
 }
 
-.chip-btn {
+.chrome-ctl {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-node);
-  color: var(--color-ink);
-  padding: 8px 16px;
-  font-size: 16px;
+  background: transparent;
+  color: var(--color-muted-ink);
+  padding: 0;
+  font-size: 12px;
   line-height: 1.4;
   border: 0;
+  border-bottom: 1px dashed var(--color-muted-ink);
   border-radius: 0;
   outline: none;
-  transition: background-color 140ms ease;
+  transition: color 140ms var(--ease-out), border-color 140ms var(--ease-out);
+}
+
+.chrome-ctl::placeholder {
+  color: var(--color-muted-ink);
+  opacity: 1;
+}
+
+.chrome-ctl:focus-visible,
+.chrome-ctl[data-state="open"] {
+  color: var(--color-ink);
+  border-bottom-color: var(--color-ink);
+}
+
+button.chrome-ctl {
+  position: relative;
+}
+
+button.chrome-ctl::after {
+  content: "";
+  position: absolute;
+  inset: -12px;
 }
 
 .ink-btn {
@@ -157,10 +179,6 @@ body {
   border: 0;
   box-shadow: none;
   outline: none;
-}
-
-.chip-btn[data-state="open"] {
-  background: var(--color-node-hover);
 }
 
 .plus-cut {
@@ -210,10 +228,13 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .node-chip:hover,
-  .chip-btn:hover,
-  .chip-btn[data-state="open"],
   .ghost-btn:hover {
     background: var(--color-node-hover);
+  }
+
+  .chrome-ctl:hover {
+    color: var(--color-ink);
+    border-bottom-color: var(--color-ink);
   }
 
   .person-node:hover .node-chip:not([data-selected="true"]) {
@@ -239,7 +260,8 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .fog-edge[data-entering="true"] {
+  .fog-edge[data-entering="true"],
+  .legend-menu {
     animation: none;
   }
 

@@ -10,7 +10,7 @@ export function RestaurarButton({ visible, onRestore }: Props) {
     return null;
   }
   return (
-    <button type="button" onClick={onRestore} className="chip-btn">
+    <button type="button" onClick={onRestore} className="chrome-ctl">
       Restaurar
     </button>
   );

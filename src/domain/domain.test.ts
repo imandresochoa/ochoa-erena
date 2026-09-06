@@ -15,6 +15,7 @@ import {
 import {
   classifyPointer,
   fichaPersonAfterPointer,
+  focusPerson,
   isRestored,
   needsRestaurar,
   restorePan,
@@ -206,6 +207,44 @@ describe("view", () => {
 
   it("keeps the ficha closed when tapping with no person", () => {
     expect(fichaPersonAfterPointer(false, null)).toBeNull();
+  });
+});
+
+describe("focus", () => {
+  const andres = asPersonId("andres");
+  const francisco = asPersonId("francisco");
+  const view = {
+    focusId: andres,
+    selectedId: andres,
+    expandedIds: [francisco],
+    pan: { x: 120, y: -40 },
+    entering: true,
+  };
+
+  it("focusing another person recenters and clears selection and expansions", () => {
+    expect(focusPerson(view, francisco)).toEqual({
+      focusId: francisco,
+      selectedId: null,
+      expandedIds: [],
+      pan: { x: 0, y: 0 },
+      entering: false,
+    });
+  });
+
+  it("focusing the same person keeps selection and expansions but zeros pan", () => {
+    expect(focusPerson(view, andres)).toEqual({
+      focusId: andres,
+      selectedId: andres,
+      expandedIds: [francisco],
+      pan: { x: 0, y: 0 },
+      entering: false,
+    });
+  });
+
+  it("does not open a ficha when focusing from the chrome", () => {
+    const closed = { ...view, selectedId: null };
+    expect(focusPerson(closed, francisco).selectedId).toBeNull();
+    expect(focusPerson(closed, andres).selectedId).toBeNull();
   });
 });
 
