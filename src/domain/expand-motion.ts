@@ -1,7 +1,13 @@
 import type { PedigreeLayout, PersonId, PlacedNode } from "./types";
 
-export function plusOrigin(node: PlacedNode): { x: number; y: number } {
-  return { x: node.x, y: node.y + node.height / 2 };
+export function plusOrigin(
+  node: PlacedNode,
+  side: "left" | "right" = "left",
+): { x: number; y: number } {
+  return {
+    x: side === "right" ? node.x + node.width : node.x,
+    y: node.y + node.height / 2,
+  };
 }
 
 export function expandPinId(

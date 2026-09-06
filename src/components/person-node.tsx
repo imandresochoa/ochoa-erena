@@ -2,13 +2,14 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { PlusIcon } from "@/components/plus-icon";
+import type { ExpandControl } from "@/domain/graph";
 import type { Person, PlacedNode } from "@/domain/types";
 
 type Props = {
   person: Person;
   placed: PlacedNode;
   selected: boolean;
-  showPlus: boolean;
+  expand: ExpandControl | null;
   coarsePointer: boolean;
   fresh: boolean;
   origin: { x: number; y: number };
@@ -21,7 +22,7 @@ export function PersonNode({
   person,
   placed,
   selected,
-  showPlus,
+  expand,
   coarsePointer,
   fresh,
   origin,
@@ -51,13 +52,22 @@ export function PersonNode({
       exit={reduce ? { opacity: 0 } : { opacity: 0, x: start.x, y: start.y }}
       transition={move}
     >
-      {showPlus ? (
+      {expand ? (
         <button
           type="button"
           data-expand="true"
+          data-side={expand.side}
           data-on={plusOnSelect ? "true" : "false"}
-          aria-label={`Mostrar hermanos de ${person.displayName}`}
-          className="node-plus absolute top-1/2 right-full z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-end pr-[3px]"
+          aria-label={
+            expand.kind === "minus"
+              ? `Ocultar hermanos de ${person.displayName}`
+              : `Mostrar hermanos de ${person.displayName}`
+          }
+          className={
+            expand.side === "right"
+              ? "node-plus absolute top-1/2 left-full z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-start pl-[3px]"
+              : "node-plus absolute top-1/2 right-full z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-end pr-[3px]"
+          }
           onPointerDown={(event) => {
             event.stopPropagation();
           }}
@@ -71,7 +81,7 @@ export function PersonNode({
           }}
         >
           <span className="plus-cut" aria-hidden="true" />
-          <PlusIcon />
+          <PlusIcon kind={expand.kind} />
         </button>
       ) : null}
       <button

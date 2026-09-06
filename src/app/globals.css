@@ -220,6 +220,11 @@ button.chrome-ctl-plain:disabled {
   pointer-events: none;
 }
 
+.node-plus[data-side="right"] .plus-cut {
+  right: auto;
+  left: 0;
+}
+
 .node-plus svg {
   position: relative;
   z-index: 1;

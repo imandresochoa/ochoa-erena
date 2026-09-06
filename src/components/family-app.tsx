@@ -20,6 +20,7 @@ import {
   needsRestaurar,
   openFicha,
   restorePan,
+  toggleExpand,
   type TreeView,
 } from "@/domain/view";
 
@@ -127,9 +128,7 @@ export function FamilyApp() {
         }
         onExpand={(id) =>
           setScreen((current) =>
-            current.kind === "tree" && !current.expandedIds.includes(id)
-              ? { ...current, expandedIds: [...current.expandedIds, id] }
-              : current,
+            current.kind === "tree" ? { ...current, ...toggleExpand(current, id) } : current,
           )
         }
       />

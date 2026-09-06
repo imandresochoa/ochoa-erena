@@ -13,7 +13,7 @@ import {
   pinExpandedLayout,
   plusOrigin,
 } from "@/domain/expand-motion";
-import { hasExpandableSiblings, requirePerson } from "@/domain/graph";
+import { expandControl, requirePerson } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
 import {
   addPan,
@@ -110,7 +110,12 @@ export function TreeCanvas({
   const pinNode = pinId
     ? layout.nodes.find((node) => node.id === pinId)
     : undefined;
-  const pinOrigin = pinNode ? plusOrigin(pinNode) : null;
+  const pinOrigin = pinNode
+    ? plusOrigin(
+        pinNode,
+        expandControl(family, focusId, pinNode.id, expandedIds)?.side ?? "left",
+      )
+    : null;
   const people = useMemo(
     () => new Map(family.people.map((person) => [person.id, person])),
     [],
@@ -363,17 +368,18 @@ export function TreeCanvas({
               if (fresh && pinOrigin) {
                 enterOrigins.current.set(placed.id, pinOrigin);
               }
+              const control = expandControl(family, focusId, placed.id, expandedIds);
               const origin =
                 enterOrigins.current.get(placed.id) ??
                 pinOrigin ??
-                plusOrigin(placed);
+                plusOrigin(placed, control?.side ?? "left");
               return (
                 <PersonNode
                   key={placed.id}
                   person={person}
                   placed={placed}
                   selected={placed.id === selectedId}
-                  showPlus={hasExpandableSiblings(family, placed.id, expandedIds)}
+                  expand={control}
                   coarsePointer={coarsePointer}
                   fresh={fresh}
                   origin={origin}
