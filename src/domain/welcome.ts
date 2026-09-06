@@ -1,2 +1,4 @@
+export const WELCOME_TITLE = "Árbol genealógico de la familia Ochoa Erena";
+
 export const WELCOME_INTRODUCTION =
   "Las raíces de la familia Ochoa Erena se remontan a dos tierras: Álava, en el norte, y la campiña jiennense. La rama Ochoa nace en el solar de Eguiyara, entre Aspárrena y Vitoria —de donde Martín María Ochoa de Eguiyara Antia bajó a Posadas a principios del siglo XX—, y se afirma después en Jaén. La rama Erena hunde sus orígenes en Torredonjimeno y Martos, donde Antonio Erena Liébana y Dolores López Martos asentaron la línea que, unida a la Ochoa, da nombre a esta casa.";
