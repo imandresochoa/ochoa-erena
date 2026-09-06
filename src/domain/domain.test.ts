@@ -14,11 +14,19 @@ import {
 } from "@/domain/types";
 import {
   classifyPointer,
+  clampZoom,
+  DEFAULT_ZOOM,
   fichaPersonAfterPointer,
   focusPerson,
   isRestored,
   needsRestaurar,
   restorePan,
+  stepZoom,
+  wheelZoom,
+  ZOOM_MAX,
+  ZOOM_MIN,
+  ZOOM_STEP,
+  zoomPercentText,
 } from "@/domain/view";
 import { WELCOME_INTRODUCTION } from "@/domain/welcome";
 
@@ -219,25 +227,28 @@ describe("focus", () => {
     expandedIds: [francisco],
     pan: { x: 120, y: -40 },
     entering: true,
+    zoom: 0.8,
   };
 
-  it("focusing another person recenters and clears selection and expansions", () => {
+  it("focusing another person recenters, clears selection and expansions, and keeps zoom", () => {
     expect(focusPerson(view, francisco)).toEqual({
       focusId: francisco,
       selectedId: null,
       expandedIds: [],
       pan: { x: 0, y: 0 },
       entering: false,
+      zoom: 0.8,
     });
   });
 
-  it("focusing the same person keeps selection and expansions but zeros pan", () => {
+  it("focusing the same person keeps selection, expansions, and zoom but zeros pan", () => {
     expect(focusPerson(view, andres)).toEqual({
       focusId: andres,
       selectedId: andres,
       expandedIds: [francisco],
       pan: { x: 0, y: 0 },
       entering: false,
+      zoom: 0.8,
     });
   });
 
@@ -245,6 +256,42 @@ describe("focus", () => {
     const closed = { ...view, selectedId: null };
     expect(focusPerson(closed, francisco).selectedId).toBeNull();
     expect(focusPerson(closed, andres).selectedId).toBeNull();
+  });
+});
+
+describe("zoom", () => {
+  it("exports default max min and step", () => {
+    expect(DEFAULT_ZOOM).toBe(1);
+    expect(ZOOM_MAX).toBe(1);
+    expect(ZOOM_MIN).toBe(0.25);
+    expect(ZOOM_STEP).toBe(0.1);
+  });
+
+  it("clamps zoom to the allowed range", () => {
+    expect(clampZoom(2)).toBe(1);
+    expect(clampZoom(0)).toBe(0.25);
+    expect(clampZoom(0.5)).toBe(0.5);
+  });
+
+  it("steps zoom then clamps at the ends", () => {
+    expect(stepZoom(1, 1)).toBe(1);
+    expect(stepZoom(1, -1)).toBe(0.9);
+    expect(stepZoom(0.3, -1)).toBe(0.25);
+  });
+
+  it("wheel zooms out for positive deltaY and stays in range", () => {
+    expect(wheelZoom(1, 120)).toBeLessThan(1);
+    expect(wheelZoom(1, 120)).toBeGreaterThanOrEqual(0.25);
+    expect(wheelZoom(1, -120)).toBe(1);
+    expect(wheelZoom(0.25, 400)).toBe(0.25);
+    expect(wheelZoom(0.5, 0)).toBe(0.5);
+  });
+
+  it("formats zoom as a percent", () => {
+    expect(zoomPercentText(1)).toBe("100%");
+    expect(zoomPercentText(0.9)).toBe("90%");
+    expect(zoomPercentText(0.25)).toBe("25%");
+    expect(zoomPercentText(0.333)).toBe("33%");
   });
 });
 
