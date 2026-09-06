@@ -5,7 +5,7 @@ import {
   fichaFromPerson,
   leftoverLinks,
 } from "@/domain/ficha";
-import { asPersonId, type Person } from "@/domain/types";
+import { asPersonId, type LifeMark, type Person } from "@/domain/types";
 
 const FRANCISCO_HREF =
   "http://abretelibro.blogspot.com/2014/09/empecemos-por-el-comienzo.html";
@@ -56,8 +56,28 @@ function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+const ISO_IN_PROSE = /\d{4}-\d{2}(?:-\d{2})?/;
+
+function dateClauses(item: Person, prose: string | null): string[] {
+  if (!prose) {
+    return [];
+  }
+  let rest = prose;
+  if (item.place) {
+    const prefix = `De ${item.place}.`;
+    if (rest.startsWith(prefix)) {
+      rest = rest.slice(prefix.length).trim();
+    }
+  }
+  return rest.length > 0 ? rest.split(/(?<=\.)\s+/) : [];
+}
+
+function markReadsApprox(mark: LifeMark | undefined): boolean {
+  return Boolean(mark && (mark.approx || mark.text?.includes("~")));
+}
+
 describe("fichaFromPerson", () => {
-  it("writes place and dated marks as ES Spain sentences, not a joined dump", () => {
+  it("writes place and house-formatted dates as ES Spain sentences, not a joined dump", () => {
     const ficha = fichaFromPerson(
       person({
         displayName: "Pedro Palop Fuentes",
@@ -66,8 +86,34 @@ describe("fichaFromPerson", () => {
         death: { year: 1989, approx: false, text: "Córdoba, 1989" },
       }),
     );
-    expect(ficha.lifeProse).toBe("De Lucena. Nació en Lucena, 1915. Murió en Córdoba, 1989.");
+    expect(ficha.lifeProse).toBe("De Lucena. Nació 1915. Murió 1989.");
     expect(ficha.lifeProse).not.toContain(" · ");
+    expect(ficha.lifeProse).not.toContain("Resumen");
+  });
+
+  it("formats Francisco Javier as place plus approx year without repeating Jaén", () => {
+    const francisco = family.people.find(
+      (item) => item.id === "francisco-javier-ochoa-palop",
+    );
+    expect(francisco).toBeDefined();
+    expect(fichaFromPerson(francisco!).lifeProse).toBe("De Jaén. Nació ~1961.");
+  });
+
+  it("formats Martín María baptism and death without ISO, muerte, or source tags", () => {
+    const martin = family.people.find(
+      (item) => item.id === "martin-maria-ochoa-de-eguiyara-antia",
+    );
+    expect(martin).toBeDefined();
+    expect(fichaFromPerson(martin!).lifeProse).toBe(
+      "De Vitoria-Gasteiz. Baut. 12 de octubre de 1874. Murió ~1926.",
+    );
+  });
+
+  it("formats Gregoria baptism day without a person place", () => {
+    const gregoria = family.people.find((item) => item.id === "gregoria-ochoa-antia");
+    expect(gregoria).toBeDefined();
+    expect(gregoria!.place).toBeUndefined();
+    expect(fichaFromPerson(gregoria!).lifeProse).toBe("Baut. 25 de abril de 1863.");
   });
 
   it("keeps Andrés on the snapshot place and refuses the Figma mock date", () => {
@@ -95,7 +141,7 @@ describe("fichaFromPerson", () => {
     expect(ficha.files).toEqual([]);
   });
 
-  it("wraps approximate and year-only marks without rewriting the stored text", () => {
+  it("wraps house-formatted approx and year-only marks and drops places inside date text", () => {
     expect(
       fichaFromPerson(
         person({
@@ -104,7 +150,7 @@ describe("fichaFromPerson", () => {
           birth: { year: 1961, approx: true, text: "~1961, Jaén" },
         }),
       ).lifeProse,
-    ).toBe("De Jaén. Nació ~1961, Jaén.");
+    ).toBe("De Jaén. Nació ~1961.");
     expect(
       fichaFromPerson(
         person({
@@ -115,7 +161,7 @@ describe("fichaFromPerson", () => {
     ).toBe("Murió 2015.");
   });
 
-  it("keeps baptism and muerte notes as stored, without inventing nació or murió", () => {
+  it("keeps baut. in prose and formats the house date, without inventing nació", () => {
     expect(
       fichaFromPerson(
         person({
@@ -125,36 +171,54 @@ describe("fichaFromPerson", () => {
           death: { year: 1926, approx: true, text: "muerte ~1926 [TO]" },
         }),
       ).lifeProse,
-    ).toBe("De Vitoria-Gasteiz. Baut. 1874-10-12, San Pedro, Vitoria. Muerte ~1926 [TO].");
+    ).toBe("De Vitoria-Gasteiz. Baut. 12 de octubre de 1874. Murió ~1926.");
   });
 
-  it("builds every snapshot life prose from place and date texts only, in that order", () => {
+  it("builds every snapshot life prose from place and house-formatted dates, in that order", () => {
     for (const item of family.people) {
       const prose = fichaFromPerson(item).lifeProse;
-      const fragments = [item.place, item.birth?.text, item.death?.text].filter(
-        (part): part is string => Boolean(part),
-      );
-      if (fragments.length === 0) {
+      if (!item.place && !item.birth && !item.death) {
         expect(prose).toBeNull();
         continue;
       }
-      expect(prose).toBeTruthy();
-      const folded = prose!.toLocaleLowerCase("es-ES");
+      expect(prose, item.displayName).toBeTruthy();
+      expect(prose, item.displayName).not.toContain(" · ");
+      expect(prose ?? "", item.displayName).not.toMatch(ISO_IN_PROSE);
+
+      if (item.place) {
+        expect(prose, item.displayName).toMatch(
+          new RegExp(`^De ${escapeRegExp(item.place)}\\.`),
+        );
+      }
+
+      const clauses = dateClauses(item, prose);
       let rest = prose!;
-      const hits: number[] = [];
-      for (const fragment of fragments) {
-        const needle = fragment.replace(/\.+$/, "");
-        const at = folded.indexOf(needle.toLocaleLowerCase("es-ES"));
-        expect(at).toBeGreaterThan(-1);
-        hits.push(at);
-        rest = rest.replace(new RegExp(escapeRegExp(needle), "i"), "");
+      if (item.place) {
+        rest = rest.replace(new RegExp(`^De ${escapeRegExp(item.place)}\\.`), "");
       }
-      for (let index = 1; index < hits.length; index += 1) {
-        expect(hits[index]).toBeGreaterThan(hits[index - 1]);
+
+      if (item.birth) {
+        const birthClause = clauses[0];
+        expect(birthClause, `${item.displayName} birth`).toBeDefined();
+        expect(birthClause, `${item.displayName} birth`).toContain(String(item.birth.year));
+        if (item.birth.text && /baut/i.test(item.birth.text)) {
+          expect(birthClause, `${item.displayName} birth`).toMatch(/^Baut\./);
+          expect(birthClause, `${item.displayName} birth`).not.toMatch(/^Nació/);
+        } else {
+          expect(birthClause, `${item.displayName} birth`).toMatch(/^Nació/);
+        }
+        rest = rest.replace(birthClause!, "");
       }
-      expect(rest.replace(/\s+/g, " ").trim()).toMatch(
-        /^(?:De\.?|Nació en\.?|Nació\.?|Murió en\.?|Murió\.?|[. ]+)*$/,
-      );
+
+      if (item.death) {
+        const deathClause = clauses[item.birth ? 1 : 0];
+        expect(deathClause, `${item.displayName} death`).toBeDefined();
+        expect(deathClause, `${item.displayName} death`).toContain(String(item.death.year));
+        expect(deathClause, `${item.displayName} death`).toMatch(/^Murió/);
+        rest = rest.replace(deathClause!, "");
+      }
+
+      expect(rest.replace(/\s+/g, " ").trim(), item.displayName).toBe("");
     }
   });
 
@@ -272,5 +336,46 @@ describe("leftoverLinks", () => {
 
   it("returns every link when sources are empty", () => {
     expect(leftoverLinks(ANTONIO_LINKS, [])).toEqual(ANTONIO_LINKS);
+  });
+});
+
+describe("house date display on every ficha lifeProse", () => {
+  it("drops ISO yyyy-mm-dd and yyyy-mm from every lifeProse", () => {
+    for (const item of family.people) {
+      const lifeProse = fichaFromPerson(item).lifeProse;
+      expect(lifeProse ?? "", item.displayName).not.toMatch(ISO_IN_PROSE);
+    }
+  });
+
+  it("drops comma-place tails from date clauses", () => {
+    for (const item of family.people) {
+      for (const clause of dateClauses(item, fichaFromPerson(item).lifeProse)) {
+        expect(clause, `${item.displayName}: ${clause}`).not.toMatch(/, /);
+      }
+    }
+  });
+
+  it("keeps a tilde on each approximate birth or death", () => {
+    for (const item of family.people) {
+      const lifeProse = fichaFromPerson(item).lifeProse;
+      const clauses = dateClauses(item, lifeProse);
+      if (markReadsApprox(item.birth)) {
+        expect(clauses[0], `${item.displayName} birth`).toContain("~");
+      }
+      if (markReadsApprox(item.death)) {
+        expect(clauses[item.birth ? 1 : 0], `${item.displayName} death`).toContain("~");
+      }
+    }
+  });
+
+  it("does not invent dates for people with no birth or death", () => {
+    for (const item of family.people) {
+      if (item.birth || item.death) {
+        continue;
+      }
+      expect(fichaFromPerson(item).lifeProse, item.displayName).toBe(
+        item.place ? `De ${item.place}.` : null,
+      );
+    }
   });
 });
