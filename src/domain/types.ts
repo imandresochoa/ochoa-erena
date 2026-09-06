@@ -55,6 +55,8 @@ export type PlacedNode = {
 export type Connector = {
   kind: "parent" | "spouse";
   certainty: Certainty;
+  fromId: PersonId;
+  toId: PersonId;
   d: string;
 };
 
@@ -71,6 +73,7 @@ export const CHAR_WIDTH = 8;
 export const ROW_GAP = 135;
 export const PAIR_GAP = 80;
 export const SIBLING_GAP = 24;
+export const BRANCH_GUTTER = 280;
 export const PAN_TAP_PX = 8;
 export const DEFAULT_FOCUS_NAME = "Andrés Martín Ochoa Erena";
 
