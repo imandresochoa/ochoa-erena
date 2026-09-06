@@ -22,7 +22,9 @@ import {
   isRestored,
   needsRestaurar,
   openFicha,
+  pinchZoom,
   restorePan,
+  startPinch,
   stepZoom,
   wheelZoom,
   ZOOM_MAX,
@@ -353,6 +355,24 @@ describe("zoom", () => {
     expect(zoomPercentText(0.9)).toBe("90%");
     expect(zoomPercentText(0.25)).toBe("25%");
     expect(zoomPercentText(0.333)).toBe("33%");
+  });
+
+  it("pinch zooms out when fingers move closer", () => {
+    const session = startPinch({ x: 0, y: 0 }, { x: 100, y: 0 }, 1);
+    expect(session).not.toBeNull();
+    expect(pinchZoom(session!, { x: 0, y: 0 }, { x: 50, y: 0 })).toBe(0.5);
+  });
+
+  it("pinch zooms in when fingers move apart and clamps at max", () => {
+    const session = startPinch({ x: 0, y: 0 }, { x: 50, y: 0 }, 0.5);
+    expect(session).not.toBeNull();
+    expect(pinchZoom(session!, { x: 0, y: 0 }, { x: 100, y: 0 })).toBe(1);
+    const atMax = startPinch({ x: 0, y: 0 }, { x: 40, y: 0 }, 1);
+    expect(pinchZoom(atMax!, { x: 0, y: 0 }, { x: 80, y: 0 })).toBe(1);
+  });
+
+  it("pinch ignores a zero start span", () => {
+    expect(startPinch({ x: 0, y: 0 }, { x: 0, y: 0 }, 1)).toBeNull();
   });
 });
 
