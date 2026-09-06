@@ -4,7 +4,7 @@ export const ANDRES_NOTICE_EMAIL = "Andresmoer@gmail.com";
 
 export type Ficha = {
   displayName: string;
-  lifeLine: string | null;
+  lifeProse: string | null;
   summary: string | null;
   links: PersonLink[];
   sources: PersonSource[];
@@ -12,11 +12,63 @@ export type Ficha = {
   noticeMailto: string | null;
 };
 
-function lifeLine(person: Person): string | null {
-  const parts = [person.place, person.birth?.text, person.death?.text].filter(
-    (part): part is string => Boolean(part),
-  );
-  return parts.length > 0 ? parts.join(" · ") : null;
+type LifeClause =
+  | { kind: "place"; text: string }
+  | { kind: "birth"; text: string }
+  | { kind: "death"; text: string };
+
+function stripDot(text: string): string {
+  return text.trim().replace(/\.+$/, "");
+}
+
+function asSentence(text: string): string {
+  const trimmed = stripDot(text);
+  const head = trimmed.charAt(0).toLocaleUpperCase("es-ES");
+  return `${head}${trimmed.slice(1)}.`;
+}
+
+function needsEn(text: string): boolean {
+  return /^[A-ZÁÉÍÓÚÑÜa-záéíóúñü]/.test(text);
+}
+
+function eventSentence(verb: "Nació" | "Murió", text: string, already: RegExp): string {
+  const trimmed = stripDot(text);
+  if (already.test(trimmed)) {
+    return asSentence(trimmed);
+  }
+  if (needsEn(trimmed)) {
+    return `${verb} en ${trimmed}.`;
+  }
+  return `${verb} ${trimmed}.`;
+}
+
+function lifeClauses(person: Person): LifeClause[] {
+  const clauses: LifeClause[] = [];
+  if (person.place) {
+    clauses.push({ kind: "place", text: person.place });
+  }
+  if (person.birth?.text) {
+    clauses.push({ kind: "birth", text: person.birth.text });
+  }
+  if (person.death?.text) {
+    clauses.push({ kind: "death", text: person.death.text });
+  }
+  return clauses;
+}
+
+function renderClause(clause: LifeClause): string {
+  if (clause.kind === "place") {
+    return `De ${clause.text}.`;
+  }
+  if (clause.kind === "birth") {
+    return eventSentence("Nació", clause.text, /^(naci[oó]|baut)/i);
+  }
+  return eventSentence("Murió", clause.text, /^(muri[oó]|muerte|defun)/i);
+}
+
+function lifeProse(person: Person): string | null {
+  const clauses = lifeClauses(person);
+  return clauses.length > 0 ? clauses.map(renderClause).join(" ") : null;
 }
 
 function noticeMailto(displayName: string): string {
@@ -37,7 +89,7 @@ export function fichaFromPerson(person: Person): Ficha {
   const thin = summary === null && links.length === 0;
   return {
     displayName: person.displayName,
-    lifeLine: lifeLine(person),
+    lifeProse: lifeProse(person),
     summary,
     links,
     sources,
