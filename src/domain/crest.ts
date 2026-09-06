@@ -1,12 +1,12 @@
 import type { PlacedCrest, PlacedNode } from "./types";
 
-export const CREST_CLUSTER_GAP = 24;
+export const CREST_CLUSTER_GAP = 72;
 
 export const ochoaCrest = {
   src: "/escudo/ochoa-escudo.png",
   alt: "Escudo de Ochoa",
-  width: 100,
-  height: 150,
+  width: 200,
+  height: 300,
 } as const;
 
 export function placeCrestAboveCluster(
