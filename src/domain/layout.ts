@@ -1,5 +1,6 @@
 import { childrenOf, parentsOf, siblingsOf, spouseEdge, spouseOf, visiblePeople } from "./graph";
 import {
+  BRANCH_GUTTER,
   NODE_HEIGHT,
   NODE_PAD_X,
   PAIR_GAP,
@@ -8,42 +9,29 @@ import {
   type Connector,
   type FamilyGraph,
   type PedigreeLayout,
+  type Person,
   type PersonId,
   type PlacedNode,
+  type Vec,
 } from "./types";
+
+const PATERNAL_SEED = "francisco-javier-ochoa-palop";
+const MATERNAL_SEED = "maria-aurora-erena-camacho";
 
 export function measureNodeWidth(name: string): number {
   return NODE_PAD_X * 2 + Math.round(name.length * 8.32);
 }
 
-function ancestorsOf(graph: FamilyGraph, focusId: PersonId): Set<PersonId> {
-  const out = new Set<PersonId>([focusId]);
-  const queue: PersonId[] = [focusId];
-  while (queue.length > 0) {
-    const current = queue.pop();
-    if (!current) {
-      break;
-    }
-    for (const parent of parentsOf(graph, current)) {
-      if (!out.has(parent)) {
-        out.add(parent);
-        queue.push(parent);
-      }
-    }
-  }
-  return out;
+export function nodeCenter(node: PlacedNode): Vec {
+  return { x: node.x + node.width / 2, y: node.y + node.height / 2 };
 }
 
-function spineOf(graph: FamilyGraph, focusId: PersonId): Set<PersonId> {
-  const spine = ancestorsOf(graph, focusId);
-  for (const child of childrenOf(graph, focusId)) {
-    spine.add(child);
+function orthogonalLane(from: Vec, to: Vec): string {
+  if (from.y === to.y) {
+    return `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
   }
-  const spouse = spouseOf(graph, focusId);
-  if (spouse) {
-    spine.add(spouse);
-  }
-  return spine;
+  const laneY = from.y + (to.y - from.y) / 2;
+  return `M ${from.x} ${from.y} L ${from.x} ${laneY} L ${to.x} ${laneY} L ${to.x} ${to.y}`;
 }
 
 function generationMap(
@@ -214,6 +202,122 @@ function rowOrder(
   return ordered;
 }
 
+function houseSeeds(
+  graph: FamilyGraph,
+  focusId: PersonId,
+): { paternal?: PersonId; maternal?: PersonId } {
+  const parents = parentsOf(graph, focusId);
+  const paternal = parents.find((id) => id === PATERNAL_SEED);
+  const maternal = parents.find((id) => id === MATERNAL_SEED);
+  if (paternal && maternal) {
+    return { paternal, maternal };
+  }
+  if (parents.length >= 2) {
+    return { paternal: parents[0], maternal: parents[1] };
+  }
+  if (parents.length === 1) {
+    return { paternal: parents[0] };
+  }
+  return {};
+}
+
+function growHouse(
+  graph: FamilyGraph,
+  seed: PersonId,
+  visible: Set<PersonId>,
+  expandedIds: readonly PersonId[],
+  excluded: Set<PersonId>,
+): Set<PersonId> {
+  const house = new Set<PersonId>();
+  const queue: PersonId[] = [seed];
+  while (queue.length > 0) {
+    const current = queue.pop();
+    if (!current || !visible.has(current) || excluded.has(current) || house.has(current)) {
+      continue;
+    }
+    house.add(current);
+    for (const parent of parentsOf(graph, current)) {
+      queue.push(parent);
+    }
+  }
+  let changed = true;
+  while (changed) {
+    changed = false;
+    for (const id of house) {
+      if (!expandedIds.includes(id)) {
+        continue;
+      }
+      for (const sibling of siblingsOf(graph, id)) {
+        if (visible.has(sibling) && !house.has(sibling) && !excluded.has(sibling)) {
+          house.add(sibling);
+          changed = true;
+        }
+      }
+    }
+  }
+  return house;
+}
+
+function packSequence(
+  ids: PersonId[],
+  byId: Map<PersonId, Person>,
+  graph: FamilyGraph,
+  generation: number,
+): PlacedNode[] {
+  const placed: PlacedNode[] = [];
+  let x = 0;
+  for (const id of ids) {
+    const person = byId.get(id);
+    if (!person) {
+      continue;
+    }
+    const width = measureNodeWidth(person.displayName);
+    const prev = placed[placed.length - 1];
+    if (prev) {
+      const couple = Boolean(spouseEdge(graph, prev.id, id));
+      x = prev.x + prev.width + (couple ? PAIR_GAP : SIBLING_GAP);
+    }
+    placed.push({
+      id,
+      x,
+      y: generation * ROW_GAP,
+      width,
+      height: NODE_HEIGHT,
+      generation,
+    });
+  }
+  return placed;
+}
+
+function shiftNodes(nodes: PlacedNode[], dx: number): PlacedNode[] {
+  return nodes.map((node) => ({ ...node, x: node.x + dx }));
+}
+
+function rightAlign(nodes: PlacedNode[], rightEdge: number): PlacedNode[] {
+  if (nodes.length === 0) {
+    return [];
+  }
+  const maxX = Math.max(...nodes.map((node) => node.x + node.width));
+  return shiftNodes(nodes, rightEdge - maxX);
+}
+
+function leftAlign(nodes: PlacedNode[], leftEdge: number): PlacedNode[] {
+  if (nodes.length === 0) {
+    return [];
+  }
+  const minX = Math.min(...nodes.map((node) => node.x));
+  return shiftNodes(nodes, leftEdge - minX);
+}
+
+function centerAlign(nodes: PlacedNode[], centerX: number): PlacedNode[] {
+  if (nodes.length === 0) {
+    return [];
+  }
+  const minX = Math.min(...nodes.map((node) => node.x));
+  const maxX = Math.max(...nodes.map((node) => node.x + node.width));
+  return shiftNodes(nodes, centerX - (minX + maxX) / 2);
+}
+
 export function layoutPedigree(
   graph: FamilyGraph,
   focusId: PersonId,
@@ -221,7 +325,28 @@ export function layoutPedigree(
 ): PedigreeLayout {
   const visible = visiblePeople(graph, focusId, expandedIds);
   const gens = generationMap(graph, focusId, visible, expandedIds);
-  const spine = spineOf(graph, focusId);
+  const seeds = houseSeeds(graph, focusId);
+  const maternalSeed = seeds.maternal;
+  const paternalSeed = seeds.paternal;
+  const paternal = paternalSeed
+    ? growHouse(
+        graph,
+        paternalSeed,
+        visible,
+        expandedIds,
+        new Set(maternalSeed ? [maternalSeed] : []),
+      )
+    : new Set<PersonId>();
+  const maternal = maternalSeed
+    ? growHouse(
+        graph,
+        maternalSeed,
+        visible,
+        expandedIds,
+        new Set(paternalSeed ? [paternalSeed] : []),
+      )
+    : new Set<PersonId>();
+
   const rows = new Map<number, PersonId[]>();
   for (const id of visible) {
     const g = gens.get(id) ?? 0;
@@ -229,59 +354,40 @@ export function layoutPedigree(
     row.push(id);
     rows.set(g, row);
   }
+
   const nodes: PlacedNode[] = [];
   const byId = new Map(graph.people.map((person) => [person.id, person]));
+  const gutterLeft = -BRANCH_GUTTER / 2;
+  const gutterRight = BRANCH_GUTTER / 2;
+
   for (const [generation, ids] of rows) {
     const ordered = rowOrder(graph, ids, focusId);
-    let x = 0;
-    const placed: PlacedNode[] = [];
-    for (const id of ordered) {
-      const person = byId.get(id);
-      if (!person) {
-        continue;
-      }
-      const width = measureNodeWidth(person.displayName);
-      const prev = placed[placed.length - 1];
-      if (prev) {
-        const couple = Boolean(spouseEdge(graph, prev.id, id));
-        x = prev.x + prev.width + (couple ? PAIR_GAP : SIBLING_GAP);
-      }
-      placed.push({
-        id,
-        x,
-        y: generation * ROW_GAP,
-        width,
-        height: NODE_HEIGHT,
-        generation,
-      });
-    }
-    const anchors = placed.filter((node) => spine.has(node.id));
-    const box = anchors.length > 0 ? anchors : placed;
-    const minX = Math.min(...box.map((node) => node.x));
-    const maxX = Math.max(...box.map((node) => node.x + node.width));
-    const shift = Number.isFinite(minX) ? (minX + maxX) / 2 : 0;
-    for (const node of placed) {
-      nodes.push({ ...node, x: node.x - shift });
-    }
+    const paternalIds = ordered.filter((id) => paternal.has(id));
+    const maternalIds = ordered.filter((id) => maternal.has(id) && !paternal.has(id));
+    const restIds = ordered.filter((id) => !paternal.has(id) && !maternal.has(id));
+
+    const paternalNodes = rightAlign(
+      packSequence(paternalIds, byId, graph, generation),
+      gutterLeft,
+      );
+    const maternalNodes = leftAlign(
+      packSequence(maternalIds, byId, graph, generation),
+      gutterRight,
+    );
+    const restNodes = centerAlign(packSequence(restIds, byId, graph, generation), 0);
+    nodes.push(...paternalNodes, ...maternalNodes, ...restNodes);
   }
+
   const nodeMap = new Map(nodes.map((node) => [node.id, node]));
   const connectors: Connector[] = [];
   const seen = new Set<string>();
+
   for (const node of nodes) {
-    const pars = parentsOf(graph, node.id).filter((id) => nodeMap.has(id));
-    if (pars.length === 0) {
-      continue;
-    }
-    const parentNodes = pars
-      .map((id) => nodeMap.get(id))
-      .filter((item): item is PlacedNode => Boolean(item));
-    const midX =
-      parentNodes.reduce((sum, item) => sum + item.x + item.width / 2, 0) /
-      parentNodes.length;
-    const parentBottom = Math.min(...parentNodes.map((item) => item.y + item.height));
-    const childTop = node.y;
-    const barY = parentBottom + (childTop - parentBottom) / 2;
-    for (const parent of parentNodes) {
+    for (const parentId of parentsOf(graph, node.id)) {
+      const parent = nodeMap.get(parentId);
+      if (!parent) {
+        continue;
+      }
       const key = `${parent.id}->${node.id}`;
       if (seen.has(key)) {
         continue;
@@ -290,16 +396,16 @@ export function layoutPedigree(
       const edge = graph.edges.find(
         (item) => item.kind === "parent" && item.from === parent.id && item.to === node.id,
       );
-      const px = parent.x + parent.width / 2;
-      const py = parent.y + parent.height;
-      const d = `M ${px} ${py} L ${px} ${barY} L ${midX} ${barY} L ${midX} ${childTop}`;
       connectors.push({
         kind: "parent",
         certainty: edge?.certainty ?? "confirmed",
-        d,
+        fromId: parent.id,
+        toId: node.id,
+        d: orthogonalLane(nodeCenter(parent), nodeCenter(node)),
       });
     }
   }
+
   for (const edge of graph.edges) {
     if (edge.kind !== "spouse" && edge.kind !== "sibling") {
       continue;
@@ -309,14 +415,14 @@ export function layoutPedigree(
     if (!a || !b) {
       continue;
     }
-    const left = a.x < b.x ? a : b;
-    const right = a.x < b.x ? b : a;
-    const y = left.y + left.height / 2;
     connectors.push({
       kind: "spouse",
       certainty: edge.certainty,
-      d: `M ${left.x + left.width} ${y} L ${right.x} ${y}`,
+      fromId: edge.from,
+      toId: edge.to,
+      d: orthogonalLane(nodeCenter(a), nodeCenter(b)),
     });
   }
+
   return { nodes, connectors };
 }

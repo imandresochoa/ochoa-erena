@@ -69,7 +69,7 @@ export function TreeCanvas({
     }
     function onMove(event: PointerEvent) {
       const active = drag.current;
-      if (!active || event.pointerId !== active.pointerId) {
+    if (!active || event.pointerId !== active.pointerId) {
         return;
       }
       const delta = { x: event.clientX - active.x, y: event.clientY - active.y };
@@ -162,9 +162,9 @@ export function TreeCanvas({
               pointerEvents: "none",
             }}
           >
-            {layout.connectors.map((connector, index) => (
+            {layout.connectors.map((connector) => (
               <path
-                key={`${connector.d}-${index}`}
+                key={`${connector.kind}-${connector.fromId}-${connector.toId}`}
                 d={connector.d}
                 fill="none"
                 stroke="var(--color-line)"
