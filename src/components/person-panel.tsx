@@ -2,20 +2,24 @@
 
 import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeftIcon } from "@/components/chevron-left-icon";
+import { family } from "@/data/family";
 import { fichaFromPerson } from "@/domain/ficha";
-import type { Person } from "@/domain/types";
+import { gradoLabel } from "@/domain/grado";
+import type { Person, PersonId } from "@/domain/types";
 
 type Props = {
   person: Person;
+  focusId: PersonId;
   narrow: boolean;
   onBack: () => void;
 };
 
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
-export function PersonPanel({ person, narrow, onBack }: Props) {
+export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
   const reduce = useReducedMotion();
   const ficha = fichaFromPerson(person);
+  const grado = gradoLabel(family, focusId, person.id);
   const hidden = reduce
     ? { opacity: 0 }
     : narrow
@@ -29,7 +33,9 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
 
   return (
     <motion.aside
-      aria-label={`Ficha de ${ficha.displayName}`}
+      aria-label={
+        grado ? `Ficha de ${ficha.displayName}, ${grado}` : `Ficha de ${ficha.displayName}`
+      }
       className={`absolute z-30 flex flex-col overflow-hidden border-[var(--color-line)] bg-[rgb(244_242_239_/_0.8)] p-2.5 backdrop-blur-[15px] ${
         narrow
           ? "inset-x-0 bottom-0 max-h-[70dvh] border-t"
@@ -54,6 +60,20 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
       <div className="font-satoshi flex flex-1 flex-col gap-8 overflow-auto p-[25px] text-base leading-[1.4]">
         <div className="flex flex-col gap-1">
           <p className="text-[var(--color-ink)]">{ficha.displayName}</p>
+          {grado ? (
+            <motion.p
+              key={grado}
+              className="text-[var(--color-muted-ink)]"
+              initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
+              animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
+              transition={{
+                duration: reduce ? 0.16 : 0.24,
+                ease: EASE_OUT,
+              }}
+            >
+              {grado}
+            </motion.p>
+          ) : null}
           {ficha.lifeLine ? (
             <p className="text-[var(--color-muted-ink)]">{ficha.lifeLine}</p>
           ) : null}

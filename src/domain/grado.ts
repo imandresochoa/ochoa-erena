@@ -6,8 +6,10 @@ import {
   siblingsOf,
   spouseOf,
 } from "./graph";
-import { DEFAULT_FOCUS_NAME, type FamilyGraph, type Person, type PersonId } from "./types";
+import { asPersonId, type FamilyGraph, type Person, type PersonId } from "./types";
 import { type Sex, sexOfPerson } from "./vinculo";
+
+const DEFAULT_FOCUS_ID = asPersonId("andres-martin-ochoa-erena");
 
 type Hop = "U" | "D" | "S" | "H";
 
@@ -127,7 +129,7 @@ function termFor(graph: FamilyGraph, path: Step[]): string | null {
 }
 
 function focusName(focus: Person): string {
-  return focus.displayName === DEFAULT_FOCUS_NAME ? DEFAULT_FOCUS_SHORT_NAME : focus.displayName;
+  return focus.id === DEFAULT_FOCUS_ID ? DEFAULT_FOCUS_SHORT_NAME : focus.displayName;
 }
 
 export function gradoLabel(

@@ -174,6 +174,7 @@ export function FamilyApp() {
           <PersonPanel
             key="ficha"
             person={selected}
+            focusId={screen.focusId}
             narrow={narrow}
             onBack={() =>
               setScreen((current) =>
