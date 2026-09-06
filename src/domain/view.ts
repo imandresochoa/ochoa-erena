@@ -1,5 +1,13 @@
 import { PAN_TAP_PX, type PersonId, type PointerKind, type Vec } from "./types";
 
+export type TreeView = {
+  focusId: PersonId;
+  selectedId: PersonId | null;
+  expandedIds: PersonId[];
+  pan: Vec;
+  entering: boolean;
+};
+
 export function classifyPointer(delta: Vec): PointerKind {
   const distance = Math.hypot(delta.x, delta.y);
   return distance < PAN_TAP_PX ? "tap" : "pan";
@@ -26,4 +34,15 @@ export function needsRestaurar(expandedIds: readonly string[]): boolean {
 
 export function restorePan(): Vec {
   return { x: 0, y: 0 };
+}
+
+export function focusPerson(view: TreeView, id: PersonId): TreeView {
+  const same = id === view.focusId;
+  return {
+    focusId: id,
+    selectedId: same ? view.selectedId : null,
+    expandedIds: same ? view.expandedIds : [],
+    pan: restorePan(),
+    entering: false,
+  };
 }

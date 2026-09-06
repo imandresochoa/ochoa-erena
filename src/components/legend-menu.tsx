@@ -39,10 +39,10 @@ function Sample({ id }: { id: (typeof LEGEND_ITEMS)[number]["id"] }) {
 export function LegendMenu() {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="chip-btn">Leyenda</DropdownMenuTrigger>
+      <DropdownMenuTrigger className="chrome-ctl">Leyenda</DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="legend-menu min-w-0 rounded-none border-0 bg-[var(--color-canvas)] p-1.5 shadow-none ring-0 duration-[180ms] data-open:zoom-in-100 data-closed:zoom-out-100"
+        className="legend-menu w-max min-w-0 rounded-none border-0 bg-[var(--color-canvas)] p-1.5 shadow-none ring-0 duration-[180ms] ease-out data-open:zoom-in-100 data-closed:zoom-out-100"
       >
         {LEGEND_ITEMS.map((item) => (
           <DropdownMenuItem

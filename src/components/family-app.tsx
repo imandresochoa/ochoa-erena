@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { AnimatePresence } from "motion/react";
+import { FocusPicker } from "@/components/focus-picker";
 import { LandingScreen } from "@/components/landing-screen";
 import { LegendMenu } from "@/components/legend-menu";
 import { PersonPanel } from "@/components/person-panel";
@@ -10,20 +11,13 @@ import { TreeCanvas } from "@/components/tree-canvas";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { family } from "@/data/family";
 import { requirePerson } from "@/domain/graph";
-import { DEFAULT_FOCUS_NAME, type Person, type PersonId, type Vec } from "@/domain/types";
-import { needsRestaurar, restorePan } from "@/domain/view";
+import { DEFAULT_FOCUS_NAME, type Person } from "@/domain/types";
+import { focusPerson, needsRestaurar, restorePan, type TreeView } from "@/domain/view";
 
 type Screen =
   | { kind: "welcome" }
   | { kind: "landing"; query: string; error: string | null }
-  | {
-      kind: "tree";
-      focusId: PersonId;
-      selectedId: PersonId | null;
-      expandedIds: PersonId[];
-      pan: Vec;
-      entering: boolean;
-    };
+  | ({ kind: "tree" } & TreeView);
 
 export function FamilyApp() {
   const [screen, setScreen] = useState<Screen>({ kind: "welcome" });
@@ -131,10 +125,17 @@ export function FamilyApp() {
         }
       />
       <div className="pointer-events-none absolute inset-0 z-20">
-        <div className="pointer-events-auto absolute left-[max(32px,env(safe-area-inset-left))] top-[max(32px,env(safe-area-inset-top))] border-b border-dashed border-[var(--color-muted-ink)]">
-          <p className="text-center text-[12px] leading-[1.4] text-[var(--color-muted-ink)]">
-            {focus.displayName}
-          </p>
+        <div className="pointer-events-auto absolute left-[max(32px,env(safe-area-inset-left))] top-[max(32px,env(safe-area-inset-top))]">
+          <FocusPicker
+            focus={focus}
+            onPick={(person) =>
+              setScreen((current) =>
+                current.kind === "tree"
+                  ? { ...current, ...focusPerson(current, person.id) }
+                  : current,
+              )
+            }
+          />
         </div>
         <div className="pointer-events-auto absolute top-[max(32px,env(safe-area-inset-top))] right-[max(32px,env(safe-area-inset-right))]">
           <LegendMenu />
