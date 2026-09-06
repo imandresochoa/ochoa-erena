@@ -1,3 +1,4 @@
+import { formatOptionalLifeMark } from "./date-format";
 import type { Person, PersonLink, PersonSource } from "./types";
 
 export const ANDRES_NOTICE_EMAIL = "Andresmoer@gmail.com";
@@ -47,11 +48,13 @@ function lifeClauses(person: Person): LifeClause[] {
   if (person.place) {
     clauses.push({ kind: "place", text: person.place });
   }
-  if (person.birth?.text) {
-    clauses.push({ kind: "birth", text: person.birth.text });
+  const birth = formatOptionalLifeMark(person.birth);
+  if (birth) {
+    clauses.push({ kind: "birth", text: birth });
   }
-  if (person.death?.text) {
-    clauses.push({ kind: "death", text: person.death.text });
+  const death = formatOptionalLifeMark(person.death);
+  if (death) {
+    clauses.push({ kind: "death", text: death });
   }
   return clauses;
 }
