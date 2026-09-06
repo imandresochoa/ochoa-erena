@@ -357,13 +357,10 @@ describe("zoom", () => {
 });
 
 describe("legend", () => {
-  it("lists the five canvas styles", () => {
-    expect(LEGEND_ITEMS.map((item) => item.id)).toEqual([
-      "node-idle",
-      "node-hover",
-      "node-selected",
-      "line-solid",
-      "line-dashed",
+  it("lists only confirmed and hypothesis vínculos", () => {
+    expect(LEGEND_ITEMS.map((item) => item.label)).toEqual([
+      "vínculo confirmado",
+      "hipótesis",
     ]);
   });
 });
