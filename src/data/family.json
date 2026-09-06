@@ -31,7 +31,7 @@
       "marks": ["TO", "H"],
       "birth": { "year": 1961, "approx": true, "text": "~1961, Jaén" },
       "place": "Jaén",
-      "summary": "Padre de Andrés. En público, Javier Ochoa Palop, escritor, Jaén 1961. El nombre completo Francisco Javier y el sitio en el árbol son de casa.",
+      "summary": "Padre de Andrés. En público, Javier Ochoa Palop, escritor, Jaén 1961. El nombre completo Francisco Javier y el sitio en el árbol son de casa. Sus padres, Martín Ochoa Hidalgo y Matilde Palop Fuentes, están confirmados [CONF Andrés 2026-09-06].",
       "links": [
         {
           "label": "Javier Ochoa Palop, Jaén 1961",
@@ -122,7 +122,7 @@
       "birth": { "year": 1917, "approx": true, "text": "~1917, Posadas" },
       "death": { "year": 1994, "approx": true, "text": "~1994" },
       "place": "Posadas",
-      "summary": "Abuelo paterno. Huérfano a los ~9 años (~1926). Presidente del Real Jaén, 1970-71 y 1971-72. Alférez provisional de Infantería. Coronel y Guerra Civil: solo tradición oral.",
+      "summary": "Abuelo paterno. Padre de Francisco Javier Ochoa Palop. Hijo de Martín María Ochoa de Eguiyara Antia. [CONF Andrés 2026-09-06]. Huérfano a los ~9 años (~1926). Presidente del Real Jaén, 1970-71 y 1971-72. Alférez provisional de Infantería. Coronel y Guerra Civil: solo tradición oral.",
       "links": [
         {
           "label": "Presidentes del Real Jaén",
@@ -155,7 +155,7 @@
       "birth": { "year": 1919, "approx": true, "text": "~1919, Lopera" },
       "death": { "year": 1989, "approx": true, "text": "~1989" },
       "place": "Lopera",
-      "summary": "Abuela paterna. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos.",
+      "summary": "Abuela paterna. Madre de Francisco Javier Ochoa Palop. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos. [CONF Andrés 2026-09-06].",
       "links": [
         { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
       ],
@@ -360,7 +360,7 @@
       "birth": { "year": 1874, "approx": false, "text": "baut. 1874-10-12, San Pedro, Vitoria" },
       "death": { "year": 1926, "approx": true, "text": "muerte ~1926 [TO]" },
       "place": "Vitoria-Gasteiz",
-      "summary": "Bisabuelo de Andrés. Andrés confirma: Martín María (AHDV 61790) es el bisabuelo oral Martín Ochoa Antía. Fue ingeniero, según casa. Autia (Docutren) = Antía sigue como hipótesis.",
+      "summary": "Bisabuelo de Andrés. Andrés confirma [CONF Andrés 2026-09-06]: Martín María (AHDV 61790) es el bisabuelo oral Martín Ochoa Antía. Fue ingeniero, según casa. Autia (Docutren) = Antía sigue como hipótesis.",
       "links": [
         {
           "label": "AHDV 61790",
