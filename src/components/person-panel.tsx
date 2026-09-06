@@ -19,8 +19,8 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
   const hidden = reduce
     ? { opacity: 0 }
     : narrow
-      ? { opacity: 0, y: 24 }
-      : { opacity: 0, x: 28 };
+      ? { opacity: 0, y: "100%" }
+      : { opacity: 0, x: "100%" };
   const shown = reduce
     ? { opacity: 1 }
     : narrow
