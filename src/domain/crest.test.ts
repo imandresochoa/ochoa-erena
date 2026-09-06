@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { family } from "@/data/family";
-import { ochoaCrest } from "@/domain/crest";
+import { CREST_CLUSTER_GAP, ochoaCrest, placeCrestAboveCluster } from "@/domain/crest";
 import { pinExpandedLayout } from "@/domain/expand-motion";
 import { layoutPedigree } from "@/domain/layout";
 import {
@@ -53,8 +53,24 @@ describe("ochoaCrest", () => {
   it("names the original asset in ES Spain", () => {
     expect(ochoaCrest.src).toBe("/escudo/ochoa-escudo.png");
     expect(ochoaCrest.alt).toBe("Escudo de Ochoa");
-    expect(ochoaCrest.height).toBeGreaterThanOrEqual(120);
-    expect(ochoaCrest.height).toBeLessThanOrEqual(180);
+    expect(ochoaCrest.width).toBe(200);
+    expect(ochoaCrest.height).toBe(300);
+  });
+
+  it("triples the gap above the cluster", () => {
+    expect(CREST_CLUSTER_GAP).toBe(72);
+  });
+
+  it("places the crest farther above the top row", () => {
+    const crest = placeCrestAboveCluster(
+      [{ id: ANDRES, x: 0, y: 0, width: 120, height: 38, generation: 0 }],
+      { id: "ochoa", width: ochoaCrest.width, height: ochoaCrest.height },
+    );
+    expect(crest).not.toBeNull();
+    expect(crest?.width).toBe(200);
+    expect(crest?.height).toBe(300);
+    expect(crest?.y).toBe(-CREST_CLUSTER_GAP - ochoaCrest.height);
+    expect(0 - (crest!.y + crest!.height)).toBe(72);
   });
 });
 
@@ -64,8 +80,8 @@ describe("branch crest", () => {
     expect(layout.crests).toHaveLength(1);
     const crest = layout.crests[0];
     expect(crest.id).toBe("ochoa");
-    expect(crest.height).toBeGreaterThanOrEqual(120);
-    expect(crest.height).toBeLessThanOrEqual(180);
+    expect(crest.width).toBe(200);
+    expect(crest.height).toBe(300);
     const javier = nodeById(layout, JAVIER);
     const aurora = nodeById(layout, AURORA_ERENA);
     expect(javier.x + javier.width).toBeLessThan(aurora.x);
@@ -73,7 +89,7 @@ describe("branch crest", () => {
     expect(cluster.some((node) => node.id === JAVIER)).toBe(true);
     expect(cluster.some((node) => node.id === AURORA_ERENA)).toBe(false);
     const box = bbox(cluster);
-    expect(crest.y + crest.height).toBeLessThanOrEqual(box.minY);
+    expect(box.minY - (crest.y + crest.height)).toBe(CREST_CLUSTER_GAP);
     expect(crest.x + crest.width / 2).toBeCloseTo((box.minX + box.maxX) / 2, 5);
   });
 
@@ -88,7 +104,7 @@ describe("branch crest", () => {
     const crest = layout.crests[0];
     expect(crest.id).toBe("ochoa");
     const box = bbox(layout.nodes);
-    expect(crest.y + crest.height).toBeLessThanOrEqual(box.minY);
+    expect(box.minY - (crest.y + crest.height)).toBe(CREST_CLUSTER_GAP);
     expect(crest.x + crest.width / 2).toBeCloseTo((box.minX + box.maxX) / 2, 5);
   });
 
