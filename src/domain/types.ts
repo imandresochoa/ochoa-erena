@@ -17,6 +17,15 @@ export type PersonLink = {
   href?: string;
 };
 
+export type SourceKind = "ahdv" | "pares" | "boe" | "geneanet" | "ahus" | "bvm" | "web";
+
+export type PersonSource = {
+  label: string;
+  href: string;
+  kind: SourceKind;
+  mark: SourceMark;
+};
+
 export type Person = {
   id: PersonId;
   displayName: string;
@@ -27,6 +36,7 @@ export type Person = {
   place?: string;
   summary: string;
   links: PersonLink[];
+  sources: PersonSource[];
 };
 
 export type Edge = {

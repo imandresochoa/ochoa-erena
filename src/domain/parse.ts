@@ -4,11 +4,22 @@ import {
   type Edge,
   type FamilyGraph,
   type Person,
+  type PersonSource,
+  type SourceKind,
   type SourceMark,
 } from "./types";
 
 const MARKS = new Set<SourceMark>(["TO", "H", "AEC", "C", "N"]);
 const KINDS = new Set(["parent", "spouse", "sibling"]);
+const SOURCE_KINDS = new Set<SourceKind>([
+  "ahdv",
+  "pares",
+  "boe",
+  "geneanet",
+  "ahus",
+  "bvm",
+  "web",
+]);
 const CERTAINTY = new Set(["confirmed", "hypothesis"]);
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -49,6 +60,7 @@ function readPerson(value: unknown): Person {
     marks: readMarks(value.marks),
     summary: typeof value.summary === "string" ? value.summary : "",
     links: [],
+    sources: [],
   };
   if (isRecord(value.birth) && typeof value.birth.year === "number") {
     person.birth = {
@@ -78,6 +90,32 @@ function readPerson(value: unknown): Person {
           href: typeof link.href === "string" ? link.href : undefined,
         },
       ];
+    });
+  }
+  if (Array.isArray(value.sources)) {
+    person.sources = value.sources.flatMap((item) => {
+      if (!isRecord(item)) {
+        return [];
+      }
+      if (typeof item.label !== "string" || item.label.length === 0) {
+        return [];
+      }
+      if (typeof item.href !== "string" || item.href.length === 0) {
+        return [];
+      }
+      if (typeof item.kind !== "string" || !SOURCE_KINDS.has(item.kind as SourceKind)) {
+        return [];
+      }
+      if (typeof item.mark !== "string" || !MARKS.has(item.mark as SourceMark)) {
+        return [];
+      }
+      const source: PersonSource = {
+        label: item.label,
+        href: item.href,
+        kind: item.kind as SourceKind,
+        mark: item.mark as SourceMark,
+      };
+      return [source];
     });
   }
   return person;
