@@ -1,3 +1,4 @@
+import { ochoaCrest, placeCrestAboveCluster } from "./crest";
 import { childrenOf, parentsOf, siblingsOf, spouseEdge, spouseOf, visiblePeople } from "./graph";
 import { vinculoLabel } from "./vinculo";
 import {
@@ -7,6 +8,7 @@ import {
   PAIR_GAP,
   ROW_GAP,
   SIBLING_GAP,
+  asPersonId,
   type Connector,
   type FamilyGraph,
   type PedigreeLayout,
@@ -751,5 +753,26 @@ export function layoutPedigree(
     });
   }
 
-  return { nodes, connectors };
+  const ochoaSeed = asPersonId(PATERNAL_SEED);
+  const ochoaTrunk =
+    focusId === ochoaSeed || parentsOf(graph, focusId).includes(ochoaSeed);
+  const ochoaHouse = ochoaTrunk
+    ? growHouse(
+        graph,
+        ochoaSeed,
+        visible,
+        expandedIds,
+        new Set(maternalSeed ? [maternalSeed] : []),
+      )
+    : new Set<PersonId>();
+  const crest = placeCrestAboveCluster(
+    nodes.filter((node) => ochoaHouse.has(node.id)),
+    {
+      id: "ochoa",
+      width: ochoaCrest.width,
+      height: ochoaCrest.height,
+    },
+  );
+
+  return { nodes, connectors, crests: crest ? [crest] : [] };
 }

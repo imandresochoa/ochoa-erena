@@ -61,9 +61,20 @@ export type Connector = {
   label: string;
 };
 
+export type CrestId = "ochoa";
+
+export type PlacedCrest = {
+  id: CrestId;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 export type PedigreeLayout = {
   nodes: PlacedNode[];
   connectors: Connector[];
+  crests: PlacedCrest[];
 };
 
 export type PointerKind = "tap" | "pan";

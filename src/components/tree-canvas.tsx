@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import Image from "next/image";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
+import { ochoaCrest } from "@/domain/crest";
 import {
   collapsePath,
   expandPinId,
@@ -95,14 +97,15 @@ export function TreeCanvas({
   }
   const layout = view.current.layout;
   const svgBounds = useMemo(() => {
-    if (layout.nodes.length === 0) {
+    const boxes = [...layout.nodes, ...layout.crests];
+    if (boxes.length === 0) {
       return { x: 0, y: 0, w: 1, h: 1 };
     }
     const pad = 24;
-    const minX = Math.min(...layout.nodes.map((node) => node.x)) - pad;
-    const minY = Math.min(...layout.nodes.map((node) => node.y)) - pad;
-    const maxX = Math.max(...layout.nodes.map((node) => node.x + node.width)) + pad;
-    const maxY = Math.max(...layout.nodes.map((node) => node.y + node.height)) + pad;
+    const minX = Math.min(...boxes.map((box) => box.x)) - pad;
+    const minY = Math.min(...boxes.map((box) => box.y)) - pad;
+    const maxX = Math.max(...boxes.map((box) => box.x + box.width)) + pad;
+    const maxY = Math.max(...boxes.map((box) => box.y + box.height)) + pad;
     return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
   }, [layout]);
   const pinId = view.current.pinId;
@@ -351,6 +354,26 @@ export function TreeCanvas({
               {hover.label}
             </motion.div>
           ) : null}
+          {layout.crests.map((crest) => (
+            <div
+              key={crest.id}
+              className="pointer-events-none absolute"
+              style={{
+                left: crest.x,
+                top: crest.y,
+                width: crest.width,
+                height: crest.height,
+              }}
+            >
+              <Image
+                src={ochoaCrest.src}
+                alt={ochoaCrest.alt}
+                width={crest.width}
+                height={crest.height}
+                sizes={`${crest.width}px`}
+              />
+            </div>
+          ))}
           <AnimatePresence initial={false}>
             {layout.nodes.map((placed) => {
               const person = people.get(placed.id) ?? requirePerson(family, placed.id);
