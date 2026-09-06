@@ -69,7 +69,7 @@ function dateClauses(item: Person, prose: string | null): string[] {
       rest = rest.slice(prefix.length).trim();
     }
   }
-  return rest.length > 0 ? rest.split(/(?<=\.)\s+/) : [];
+  return rest.length > 0 ? rest.split(/(?<=\.)\s+(?=[A-ZÁÉÍÓÚÑÜ])/) : [];
 }
 
 function markReadsApprox(mark: LifeMark | undefined): boolean {
