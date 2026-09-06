@@ -29,6 +29,27 @@ export function wheelZoom(zoom: number, deltaY: number): number {
   return clampZoom(zoom * Math.exp(-deltaY * 0.002));
 }
 
+export type PinchSession = {
+  startDistance: number;
+  startZoom: number;
+};
+
+export function startPinch(a: Vec, b: Vec, zoom: number): PinchSession | null {
+  const startDistance = Math.hypot(b.x - a.x, b.y - a.y);
+  if (startDistance <= 0) {
+    return null;
+  }
+  return { startDistance, startZoom: zoom };
+}
+
+export function pinchZoom(session: PinchSession, a: Vec, b: Vec): number {
+  const distance = Math.hypot(b.x - a.x, b.y - a.y);
+  if (distance <= 0) {
+    return clampZoom(session.startZoom);
+  }
+  return clampZoom(session.startZoom * (distance / session.startDistance));
+}
+
 export function zoomPercentText(zoom: number): string {
   return `${Math.round(zoom * 100)}%`;
 }

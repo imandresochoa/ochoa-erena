@@ -25,7 +25,10 @@ import {
   addPan,
   classifyPointer,
   fichaPersonAfterPointer,
+  pinchZoom,
+  startPinch,
   wheelZoom,
+  type PinchSession,
 } from "@/domain/view";
 import {
   asPersonId,
@@ -135,6 +138,7 @@ export function TreeCanvas({
     moved: boolean;
     personId: PersonId | null;
   } | null>(null);
+  const pinch = useRef<PinchSession | null>(null);
   const panned = useRef(false);
   const seenIds = useRef(new Set<PersonId>());
   const onPanRef = useRef(onPan);
@@ -176,6 +180,9 @@ export function TreeCanvas({
       return;
     }
     function onMove(event: PointerEvent) {
+      if (pinch.current) {
+        return;
+      }
       const active = drag.current;
       if (!active || event.pointerId !== active.pointerId) {
         return;
@@ -193,7 +200,7 @@ export function TreeCanvas({
         return;
       }
       drag.current = null;
-      if (event.type === "pointerup") {
+      if (event.type === "pointerup" && !pinch.current) {
         const id = fichaPersonAfterPointer(active.moved, active.personId);
         if (id) {
           onSelectRef.current(id);
@@ -203,8 +210,47 @@ export function TreeCanvas({
         panned.current = false;
       }, 0);
     }
+    function touchPoint(touch: Touch) {
+      return { x: touch.clientX, y: touch.clientY };
+    }
+    function onTouchStart(event: TouchEvent) {
+      if (event.touches.length < 2) {
+        return;
+      }
+      event.preventDefault();
+      const session = startPinch(
+        touchPoint(event.touches[0]),
+        touchPoint(event.touches[1]),
+        zoomRef.current,
+      );
+      const captured = drag.current;
+      drag.current = null;
+      pinch.current = session;
+      const canvas = frame.current;
+      if (captured && canvas && canvas.hasPointerCapture(captured.pointerId)) {
+        canvas.releasePointerCapture(captured.pointerId);
+      }
+    }
+    function onTouchMove(event: TouchEvent) {
+      const session = pinch.current;
+      if (!session || event.touches.length < 2) {
+        return;
+      }
+      event.preventDefault();
+      onZoomRef.current(
+        pinchZoom(session, touchPoint(event.touches[0]), touchPoint(event.touches[1])),
+      );
+    }
+    function onTouchEnd(event: TouchEvent) {
+      if (event.touches.length < 2) {
+        pinch.current = null;
+      }
+    }
     function onWheel(event: WheelEvent) {
       event.preventDefault();
+      if (pinch.current) {
+        return;
+      }
       if (event.metaKey || event.ctrlKey) {
         onZoomRef.current(wheelZoom(zoomRef.current, event.deltaY));
         return;
@@ -216,11 +262,19 @@ export function TreeCanvas({
     node.addEventListener("pointermove", onMove);
     node.addEventListener("pointerup", onUp);
     node.addEventListener("pointercancel", onUp);
+    node.addEventListener("touchstart", onTouchStart, { passive: false });
+    node.addEventListener("touchmove", onTouchMove, { passive: false });
+    node.addEventListener("touchend", onTouchEnd);
+    node.addEventListener("touchcancel", onTouchEnd);
     node.addEventListener("wheel", onWheel, { passive: false });
     return () => {
       node.removeEventListener("pointermove", onMove);
       node.removeEventListener("pointerup", onUp);
       node.removeEventListener("pointercancel", onUp);
+      node.removeEventListener("touchstart", onTouchStart);
+      node.removeEventListener("touchmove", onTouchMove);
+      node.removeEventListener("touchend", onTouchEnd);
+      node.removeEventListener("touchcancel", onTouchEnd);
       node.removeEventListener("wheel", onWheel);
     };
   }, []);
@@ -249,7 +303,9 @@ export function TreeCanvas({
           moved: false,
           personId: raw ? asPersonId(raw) : null,
         };
-        event.currentTarget.setPointerCapture(event.pointerId);
+        if (event.pointerType !== "touch") {
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }
       }}
     >
       <motion.div

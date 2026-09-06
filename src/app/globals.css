@@ -270,6 +270,22 @@ button.ghost-btn.ficha-back {
   }
 }
 
+@media (hover: none), (pointer: coarse), (max-width: 800px) {
+  button.chrome-ctl-plain {
+    min-width: 28px;
+    min-height: 28px;
+    font-size: 16px;
+    color: var(--color-ink);
+    background: rgb(244 242 239 / 0.55);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+
+  button.chrome-ctl-plain:disabled {
+    color: var(--color-muted-ink);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .node-chip:hover,
   .ghost-btn:hover {
