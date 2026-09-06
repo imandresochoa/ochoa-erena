@@ -285,28 +285,28 @@
       "id": "angustias-erena-lopez",
       "displayName": "Angustias Erena López",
       "marks": ["AEC"],
-      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5. No es partida.",
       "links": []
     },
     {
       "id": "manuel-erena-lopez",
       "displayName": "Manuel Erena López",
       "marks": ["AEC"],
-      "summary": "Hermano de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "summary": "Hermano de Nicomedes Andrés Erena López, según Geneanet aerec5. No es partida.",
       "links": []
     },
     {
       "id": "dolores-erena-lopez",
       "displayName": "Dolores Erena López",
       "marks": ["AEC"],
-      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5. No es partida.",
       "links": []
     },
     {
       "id": "patrocinio-erena",
       "displayName": "Patrocinio Erena",
       "marks": ["TO", "AEC"],
-      "summary": "Hermana de Andrés Erena López y tía de María Aurora. El parentesco lo decía ya Andrés.",
+      "summary": "Hermana de Andrés Erena López y tía de María Aurora. El parentesco lo decía ya Andrés. Según Geneanet aerec5. No es partida.",
       "links": []
     },
     {
@@ -320,8 +320,21 @@
       "id": "antonio-camacho-vinas",
       "displayName": "Antonio Camacho Viñas",
       "marks": ["AEC"],
-      "summary": "Hermano de Aurora Camacho Viñas, según Geneanet aerec5. Geneanet, no civil. Oficio no se escribe.",
-      "links": []
+      "summary": "Hermano de Aurora Camacho Viñas, según Geneanet aerec5. Hijo de Antonio Camacho Liébana y Mercedes Viñas López en esa ficha. Geneanet, no civil. Oficio no se escribe.",
+      "links": [
+        {
+          "label": "Antonio Camacho Viñas, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho+vinas&p=antonio"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Antonio Camacho Viñas, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho+vinas&p=antonio",
+          "kind": "geneanet",
+          "mark": "AEC"
+        }
+      ]
     },
     {
       "id": "martin-maria-ochoa-de-eguiyara-antia",
@@ -388,8 +401,41 @@
       "id": "emeterio-guillerna",
       "displayName": "Emeterio Guillerna",
       "marks": ["H"],
-      "summary": "Esposo de Gregoria Ochoa Antia. En el índice también Hemeterio Guillerna Ybañez. Las grafías no coinciden del todo.",
-      "links": []
+      "summary": "Esposo de Gregoria Ochoa Antia. Tres piezas [H] lo nombran: AHDV 69059 (Emeterio Guillerna Ybañez), AHDV 6062 (Hemeterio Guillerma Ybañez) y ESC,24187 (Emeterio Guillerna Mendoza). Las tres grafías se citan. No se elige una.",
+      "links": [
+        {
+          "label": "AHDV 69059",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=69059"
+        },
+        {
+          "label": "AHDV 6062",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=6062"
+        },
+        {
+          "label": "PARES ESC,24187",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/description/5461839"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 69059",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=69059",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 6062",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=6062",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "PARES ESC,24187",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/description/5461839",
+          "kind": "pares",
+          "mark": "H"
+        }
+      ]
     },
     {
       "id": "bruno-guillerna-ochoa",
@@ -880,7 +926,7 @@
       "displayName": "Buenaventura Ochoa Antia",
       "marks": ["H"],
       "birth": { "year": 1859, "approx": false, "text": "1859-07-14, San Miguel" },
-      "summary": "Hermano de Martín María según el índice AHDV.",
+      "summary": "Hermano de Martín María según el índice AHDV. Baut. 1859-07-14, San Miguel.",
       "links": [
         {
           "label": "AHDV 134606",
@@ -964,7 +1010,7 @@
       "displayName": "Vicenta Ochoa Antia",
       "marks": ["H"],
       "birth": { "year": 1869, "approx": false, "text": "1869-10-27, San Pedro" },
-      "summary": "Hermana de Martín María según el índice AHDV.",
+      "summary": "Hermana de Martín María según el índice AHDV. Baut. 1869-10-27, San Pedro.",
       "links": [
         {
           "label": "AHDV 62624",
@@ -985,7 +1031,7 @@
       "displayName": "Martina Ochoa Antia",
       "marks": ["H"],
       "birth": { "year": 1873, "approx": false, "text": "1873-04-25, San Pedro" },
-      "summary": "Hermana de Martín María según el índice AHDV.",
+      "summary": "Hermana de Martín María según el índice AHDV. Baut. 1873-04-25, San Pedro.",
       "links": [
         {
           "label": "AHDV 62913",
@@ -1006,7 +1052,7 @@
       "displayName": "Lino Ochoa Antia",
       "marks": ["H"],
       "birth": { "year": 1877, "approx": false, "text": "1877-09-23, San Pedro" },
-      "summary": "Hermano de Martín María según el índice AHDV.",
+      "summary": "Hermano de Martín María según el índice AHDV. Baut. 1877-09-23, San Pedro.",
       "links": [
         {
           "label": "AHDV 67855",
