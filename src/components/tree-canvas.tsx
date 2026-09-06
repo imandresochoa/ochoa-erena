@@ -226,8 +226,9 @@ export function TreeCanvas({
       const captured = drag.current;
       drag.current = null;
       pinch.current = session;
-      if (captured && node.hasPointerCapture(captured.pointerId)) {
-        node.releasePointerCapture(captured.pointerId);
+      const canvas = frame.current;
+      if (captured && canvas && canvas.hasPointerCapture(captured.pointerId)) {
+        canvas.releasePointerCapture(captured.pointerId);
       }
     }
     function onTouchMove(event: TouchEvent) {
