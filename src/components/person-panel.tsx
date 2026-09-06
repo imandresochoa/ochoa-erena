@@ -4,6 +4,8 @@ import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeftIcon } from "@/components/chevron-left-icon";
 import { family } from "@/data/family";
 import { fichaFromPerson, leftoverLinks } from "@/domain/ficha";
+import { FICHA_KIN_HYPOTHESIS, FICHA_KIN_LABELS, fichaKin } from "@/domain/ficha-kin";
+import type { FichaKinPerson } from "@/domain/ficha-kin";
 import { gradoLabel } from "@/domain/grado";
 import type { Person, PersonId } from "@/domain/types";
 
@@ -14,13 +16,48 @@ type Props = {
   onBack: () => void;
 };
 
+type KinRowProps = {
+  relative: FichaKinPerson;
+  index: number;
+  reduce: boolean | null;
+};
+
 const EASE_OUT = [0.23, 1, 0.32, 1] as const;
+
+function kinName(relative: FichaKinPerson): string {
+  return relative.certainty === "hypothesis"
+    ? `${relative.displayName} (${FICHA_KIN_HYPOTHESIS})`
+    : relative.displayName;
+}
+
+function KinRow({ relative, index, reduce }: KinRowProps) {
+  return (
+    <motion.p
+      className="text-[var(--color-muted-ink)]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{
+        duration: reduce ? 0.16 : 0.24,
+        delay: reduce ? 0 : index * 0.02,
+        ease: EASE_OUT,
+      }}
+    >
+      {kinName(relative)}
+    </motion.p>
+  );
+}
 
 export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
   const reduce = useReducedMotion();
   const ficha = fichaFromPerson(person);
   const leftover = leftoverLinks(ficha.links, ficha.sources);
+  const kin = fichaKin(family, person.id);
   const grado = gradoLabel(family, focusId, person.id);
+  const riseIn = {
+    initial: reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" },
+    animate: reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" },
+    transition: { duration: reduce ? 0.16 : 0.24, ease: EASE_OUT },
+  };
   const hidden = reduce
     ? { opacity: 0 }
     : narrow
@@ -95,6 +132,30 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
             </motion.p>
           ) : null}
         </div>
+        {kin.parents.length > 0 ? (
+          <motion.div key={`${person.id}-parents`} className="flex flex-col gap-1" {...riseIn}>
+            <p className="type-title text-[var(--color-ink)]">{FICHA_KIN_LABELS.parents}</p>
+            {kin.parents.map((relative, index) => (
+              <KinRow key={relative.id} relative={relative} index={index} reduce={reduce} />
+            ))}
+          </motion.div>
+        ) : null}
+        {kin.children.length > 0 ? (
+          <motion.div key={`${person.id}-children`} className="flex flex-col gap-1" {...riseIn}>
+            <p className="type-title text-[var(--color-ink)]">{FICHA_KIN_LABELS.children}</p>
+            {kin.children.map((relative, index) => (
+              <KinRow key={relative.id} relative={relative} index={index} reduce={reduce} />
+            ))}
+          </motion.div>
+        ) : null}
+        {kin.siblings.length > 0 ? (
+          <motion.div key={`${person.id}-siblings`} className="flex flex-col gap-1" {...riseIn}>
+            <p className="type-title text-[var(--color-ink)]">{FICHA_KIN_LABELS.siblings}</p>
+            {kin.siblings.map((relative, index) => (
+              <KinRow key={relative.id} relative={relative} index={index} reduce={reduce} />
+            ))}
+          </motion.div>
+        ) : null}
         {ficha.lifeProse || ficha.summary ? (
           <div className="flex flex-col gap-3">
             {ficha.lifeProse ? (

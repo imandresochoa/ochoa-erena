@@ -128,7 +128,7 @@ describe("title type scale", () => {
   });
 
   it("places the kin lists after the header and before Fuentes", () => {
-    const header = panel.indexOf(">{ficha.lifeLine}<");
+    const header = panel.indexOf("key={grado}");
     const fuentes = panel.indexOf(">Fuentes<");
     const [padres, hijos, hermanos] = KIN_TITLES.map(([group, label]) =>
       panel.indexOf(kinTitleMarker(panel, group, label)),
@@ -141,7 +141,7 @@ describe("title type scale", () => {
 
   it("does not mark person-panel kin name rows as title", () => {
     const markers = KIN_TITLES.map(([group, label]) => kinTitleMarker(panel, group, label));
-    const nextTitles = [[markers[1]], [markers[2]], [">Resumen<", ">Fuentes<"]];
+    const nextTitles = [[markers[1]], [markers[2]], [">Fuentes<"]];
     for (const [index, marker] of markers.entries()) {
       const at = panel.indexOf(marker);
       expect(at).toBeGreaterThan(-1);

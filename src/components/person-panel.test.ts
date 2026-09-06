@@ -29,11 +29,21 @@ describe("person panel copy layout", () => {
     expect(panel).not.toContain(" · ");
   });
 
-  it("does not fold HIP badges or kinship lists into the card", () => {
+  it("does not fold HIP badges into the card", () => {
     expect(panel).not.toMatch(/\bHIP\b/);
-    expect(panel).not.toContain("Padres");
-    expect(panel).not.toContain("Hijos");
-    expect(panel).not.toContain("Hermanos");
+  });
+
+  it("lists padres, hijos, and hermanos from fichaKin after the degree line", () => {
+    const gradoAt = panel.indexOf("key={grado}");
+    const padresAt = panel.indexOf("{FICHA_KIN_LABELS.parents}");
+    const hijosAt = panel.indexOf("{FICHA_KIN_LABELS.children}");
+    const hermanosAt = panel.indexOf("{FICHA_KIN_LABELS.siblings}");
+    const lifeAt = panel.indexOf(">{ficha.lifeProse}<");
+    expect(padresAt).toBeGreaterThan(gradoAt);
+    expect(hijosAt).toBeGreaterThan(padresAt);
+    expect(hermanosAt).toBeGreaterThan(hijosAt);
+    expect(lifeAt).toBeGreaterThan(hermanosAt);
+    expect(panel).toMatch(/from "@\/domain\/ficha-kin"/);
   });
 
   it("animates grado and life prose, and honors reduced motion", () => {
