@@ -47,6 +47,11 @@ export function pinExpandedLayout(
       ...connector,
       d: shiftPath(connector.d, dx, dy),
     })),
+    crests: next.crests.map((crest) => ({
+      ...crest,
+      x: crest.x + dx,
+      y: crest.y + dy,
+    })),
   };
 }
 
