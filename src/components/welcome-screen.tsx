@@ -11,7 +11,7 @@ export function WelcomeScreen({ onContinue }: Props) {
     <div className="flex h-dvh w-full items-center justify-center bg-[var(--color-canvas)] p-8">
       <div className="flex w-full max-w-[560px] flex-col items-center gap-[120px]">
         <div className="flex w-full flex-col items-center gap-6">
-          <p className="text-center text-base leading-[1.4] text-[var(--color-ink)]">
+          <p className="type-title text-center text-base leading-[1.4] text-[var(--color-ink)]">
             Árbol genealógico de la familia Ochoa Erena
           </p>
           <p className="font-satoshi text-center text-base leading-[1.4] text-[var(--color-muted-ink)]">

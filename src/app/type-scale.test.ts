@@ -51,6 +51,7 @@ describe("title type scale", () => {
 
   it("marks person-panel titles with type-title", () => {
     expect(classOf(panel, ">{ficha.displayName}<").split(/\s+/)).toContain("type-title");
+    expect(classOf(panel, "key={grado}").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">{ficha.lifeLine}<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Resumen<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Enlaces de interés<").split(/\s+/)).toContain("type-title");

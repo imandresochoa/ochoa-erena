@@ -59,6 +59,7 @@
   --ring: #0d0d0d;
   --radius: 0;
   --font-satoshi: "Satoshi", var(--font-inter), sans-serif;
+  --font-weight-title: 450;
 }
 
 html,
@@ -78,6 +79,10 @@ body {
 
 .font-satoshi {
   font-family: var(--font-satoshi);
+}
+
+.type-title {
+  font-weight: var(--font-weight-title);
 }
 
 .fog-edge {
@@ -210,6 +215,7 @@ button.ghost-btn.ficha-back {
   border: 0;
   font-size: 12px;
   line-height: 1.4;
+  font-weight: var(--font-weight-title);
   padding: 2px 8px;
   white-space: nowrap;
 }
