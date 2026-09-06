@@ -135,6 +135,54 @@ export function hasExpandableSiblings(
   return siblingsOf(graph, id).length > 0;
 }
 
+export type ExpandControl = {
+  kind: "plus" | "minus";
+  side: "left" | "right";
+};
+
+function siblingExpandSide(
+  graph: FamilyGraph,
+  focusId: PersonId,
+  id: PersonId,
+  visible: Set<PersonId>,
+): "left" | "right" {
+  const spouse = spouseOf(graph, id);
+  if (!spouse || !visible.has(spouse)) {
+    return "left";
+  }
+  if (id === focusId) {
+    return "left";
+  }
+  if (spouse === focusId) {
+    return "right";
+  }
+  const child = childrenOf(graph, id).find(
+    (item) => visible.has(item) && parentsOf(graph, item).includes(spouse),
+  );
+  if (!child) {
+    return "left";
+  }
+  const first = parentsOf(graph, child).find((parent) => parent === id || parent === spouse);
+  return first === id ? "left" : "right";
+}
+
+export function expandControl(
+  graph: FamilyGraph,
+  focusId: PersonId,
+  id: PersonId,
+  expandedIds: readonly PersonId[],
+): ExpandControl | null {
+  const visible = visiblePeople(graph, focusId, expandedIds);
+  const side = siblingExpandSide(graph, focusId, id, visible);
+  if (expandedIds.includes(id)) {
+    return { kind: "minus", side };
+  }
+  if (siblingsOf(graph, id).some((sibling) => !visible.has(sibling))) {
+    return { kind: "plus", side };
+  }
+  return null;
+}
+
 export function edgeCertainty(edge: Edge | undefined): Certainty {
   return edge?.certainty ?? "confirmed";
 }

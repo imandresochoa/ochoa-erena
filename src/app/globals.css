@@ -142,6 +142,18 @@ button.chrome-ctl::after {
   inset: -12px;
 }
 
+.chrome-ctl-plain {
+  border-bottom-color: transparent;
+  padding: 2px 4px;
+  transition: color 140ms var(--ease-out), background-color 140ms var(--ease-out);
+}
+
+.chrome-ctl-plain:focus-visible,
+.chrome-ctl-plain[data-state="open"],
+button.chrome-ctl-plain:disabled {
+  border-bottom-color: transparent;
+}
+
 .ink-btn {
   display: flex;
   align-items: center;
@@ -180,6 +192,12 @@ button.chrome-ctl::after {
   transform: scale(0.97);
 }
 
+button.ghost-btn.ficha-back {
+  padding: 8px;
+  gap: 4px;
+  line-height: 1;
+}
+
 .legend-menu {
   border: 0;
   box-shadow: none;
@@ -189,7 +207,7 @@ button.chrome-ctl::after {
 .vinculo-tip {
   background: var(--color-canvas);
   color: var(--color-ink);
-  border: 1px solid var(--color-line);
+  border: 0;
   font-size: 12px;
   line-height: 1.4;
   padding: 2px 8px;
@@ -206,6 +224,11 @@ button.chrome-ctl::after {
   transform: translateY(-50%);
   background: var(--color-canvas);
   pointer-events: none;
+}
+
+.node-plus[data-side="right"] .plus-cut {
+  right: auto;
+  left: 0;
 }
 
 .node-plus svg {
@@ -252,6 +275,14 @@ button.chrome-ctl::after {
     border-bottom-color: var(--color-ink);
   }
 
+  .chrome-ctl-plain:hover:not(:disabled) {
+    color: var(--color-ink);
+    border-bottom-color: transparent;
+    background: rgb(244 242 239 / 0.4);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+  }
+
   .person-node:hover .node-chip:not([data-selected="true"]) {
     background: var(--color-node-hover);
   }
@@ -277,7 +308,8 @@ button.chrome-ctl::after {
 @media (prefers-reduced-motion: reduce) {
   .fog-edge[data-entering="true"],
   .legend-menu,
-  .vinculo-tip {
+  .vinculo-tip,
+  .chrome-ctl-plain {
     animation: none;
     transition: none;
   }

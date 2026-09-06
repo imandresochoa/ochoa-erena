@@ -80,3 +80,13 @@ export function openFicha(view: TreeView, id: PersonId): TreeView {
 export function closeFicha(view: TreeView): TreeView {
   return { ...view, selectedId: null };
 }
+
+export function toggleExpand(view: TreeView, id: PersonId): TreeView {
+  const open = view.expandedIds.includes(id);
+  return {
+    ...view,
+    expandedIds: open
+      ? view.expandedIds.filter((item) => item !== id)
+      : [...view.expandedIds, id],
+  };
+}
