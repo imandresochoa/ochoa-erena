@@ -4,6 +4,7 @@ import {
   canvasVisible,
   childrenOf,
   expansionsToReveal,
+  parentsOf,
   requirePerson,
   spouseOf,
   visiblePeople,
@@ -239,6 +240,24 @@ describe("layoutHouseCanvas", () => {
     const dario = nodeById(layout, DARIO);
     expect(mercedes.y).toBe(andres.y);
     expect(dario.y).toBe(mercedes.y + ROW_GAP);
+  });
+
+  it("aligns a rest-row child under its one already-placed parent", () => {
+    expect(parentsOf(family, DARIO)).toEqual([MERCEDES]);
+    const layout = layoutHouseCanvas(family, ANDRES, [ANDRES, MERCEDES]);
+    expectHouseKept(layout);
+    expect(ids(layout).has(ANDRES)).toBe(true);
+    expect(ids(layout).has(JAVIER)).toBe(true);
+    expect(ids(layout).has(AURORA)).toBe(true);
+    const andres = nodeById(layout, ANDRES);
+    const mercedes = nodeById(layout, MERCEDES);
+    const dario = nodeById(layout, DARIO);
+    expect(dario.y).toBe(mercedes.y + ROW_GAP);
+    const darioCx = nodeCenter(dario).x;
+    const mercedesCx = nodeCenter(mercedes).x;
+    const andresCx = nodeCenter(andres).x;
+    expect(darioCx).toBeCloseTo(mercedesCx, 5);
+    expect(darioCx).not.toBeCloseTo(andresCx, 5);
   });
 
   it("keeps the Ochoa crest when Aurora is the focus", () => {
