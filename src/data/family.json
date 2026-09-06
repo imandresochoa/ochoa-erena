@@ -1,0 +1,637 @@
+{
+  "people": [
+    {
+      "id": "andres-martin-ochoa-erena",
+      "displayName": "Andrés Martín Ochoa Erena",
+      "marks": ["TO"],
+      "place": "Jaén",
+      "summary": "Nació en Jaén. El árbol de esta casa es el suyo. Las marcas [TO] son su tradición oral.",
+      "links": []
+    },
+    {
+      "id": "francisco-javier-ochoa-palop",
+      "displayName": "Francisco Javier Ochoa Palop",
+      "marks": ["TO", "H"],
+      "birth": { "year": 1961, "approx": true, "text": "~1961, Jaén" },
+      "place": "Jaén",
+      "summary": "Padre de Andrés. En público, Javier Ochoa Palop, escritor, Jaén 1961. El nombre completo Francisco Javier y el sitio en el árbol son de casa.",
+      "links": [
+        {
+          "label": "Javier Ochoa Palop, Jaén 1961",
+          "href": "http://abretelibro.blogspot.com/2014/09/empecemos-por-el-comienzo.html"
+        }
+      ]
+    },
+    {
+      "id": "maria-aurora-erena-camacho",
+      "displayName": "María Aurora Erena Camacho",
+      "marks": ["TO"],
+      "birth": { "year": 1963, "approx": true, "text": "~1963, Jaén" },
+      "place": "Jaén",
+      "summary": "Madre de Andrés. Hija de Nicomedes Andrés Erena López y Aurora Camacho Viñas.",
+      "links": []
+    },
+    {
+      "id": "matilde-ochoa-palop",
+      "displayName": "Matilde Ochoa Palop",
+      "marks": ["TO", "H"],
+      "place": "Jaén",
+      "summary": "Hermana de Francisco Javier y tía paterna de Andrés. El BOE de 1999 la escribe en Andrés Segovia 19, Jaén. No es la abuela Matilde Palop Fuentes. Padres no asignados.",
+      "links": [
+        {
+          "label": "BOE-B-1999-310266",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-B-1999-310266"
+        }
+      ]
+    },
+    {
+      "id": "antonio-erena-camacho",
+      "displayName": "Antonio Erena Camacho",
+      "marks": ["TO", "AEC"],
+      "summary": "Hermano de María Aurora y tío materno de Andrés. Firma Geneanet aerec5 y publicaciones. El parentesco lo dice Andrés. El contenido del árbol lo firma él.",
+      "links": [
+        { "label": "Geneanet aerec5", "href": "https://gw.geneanet.org/aerec5" },
+        { "label": "Bitácora In ictu oculi", "href": "http://antonioerena.blogspot.com/2019/01/" }
+      ]
+    },
+    {
+      "id": "silvia-erena-camacho",
+      "displayName": "Silvia Erena Camacho",
+      "marks": ["AEC"],
+      "summary": "Hermana de María Aurora, según el árbol que firma Antonio Erena Camacho. No es partida parroquial.",
+      "links": []
+    },
+    {
+      "id": "andres-erena-camacho",
+      "displayName": "Andrés Erena Camacho",
+      "marks": ["AEC"],
+      "summary": "Hermano de María Aurora, según Geneanet aerec5. No es partida parroquial.",
+      "links": []
+    },
+    {
+      "id": "martin-ochoa-hidalgo",
+      "displayName": "Martín Ochoa Hidalgo",
+      "marks": ["TO", "H"],
+      "birth": { "year": 1917, "approx": true, "text": "~1917, Posadas" },
+      "death": { "year": 1994, "approx": true, "text": "~1994" },
+      "place": "Posadas",
+      "summary": "Abuelo paterno. Huérfano a los ~9 años (~1926). Presidente del Real Jaén, 1970-71 y 1971-72. Alférez provisional de Infantería. Coronel y Guerra Civil: solo tradición oral.",
+      "links": [
+        {
+          "label": "Presidentes del Real Jaén",
+          "href": "http://seguidorrealjaen.blogspot.com/p/goles.html"
+        },
+        {
+          "label": "Alférez provisional, BVM",
+          "href": "https://bibliotecavirtual.defensa.gob.es/BVMDefensa/es/catalogo_imagenes/imagen.do?path=1113137"
+        }
+      ]
+    },
+    {
+      "id": "matilde-palop-fuentes",
+      "displayName": "Matilde Palop Fuentes",
+      "marks": ["TO"],
+      "birth": { "year": 1919, "approx": true, "text": "~1919, Lopera" },
+      "death": { "year": 1989, "approx": true, "text": "~1989" },
+      "place": "Lopera",
+      "summary": "Abuela paterna. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos.",
+      "links": [
+        { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
+      ]
+    },
+    {
+      "id": "manuel-palop-fuentes",
+      "displayName": "Manuel Palop Fuentes",
+      "marks": ["TO", "H"],
+      "summary": "Hermano de Matilde Palop Fuentes, según Cordobapedia y Andrés. Veterinario titular: Ceuta 1973, Obejo 1975. Colegiado honorífico 1985. «Número uno de su promoción»: solo oral. Padres no asignados.",
+      "links": []
+    },
+    {
+      "id": "pedro-palop-fuentes",
+      "displayName": "Pedro Palop Fuentes",
+      "marks": ["TO", "H"],
+      "birth": { "year": 1915, "approx": false, "text": "Lucena, 1915" },
+      "death": { "year": 1989, "approx": false, "text": "Córdoba, 1989" },
+      "place": "Lucena",
+      "summary": "Hermano de Matilde Palop Fuentes. Latinista, pregonero, académico de la RAC desde 1958. Averroes y esperanto: solo oral. Lucena frente a Lopera: hipótesis. Padres no asignados.",
+      "links": [
+        { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
+      ]
+    },
+    {
+      "id": "rafael-ochoa-hidalgo",
+      "displayName": "Rafael Ochoa Hidalgo",
+      "marks": ["TO", "H"],
+      "summary": "Hermano de Martín Ochoa Hidalgo. Expediente en la Escuela Normal de Maestros, 1929; el catálogo AHUS lo liga a Posadas. Padres no asignados.",
+      "links": []
+    },
+    {
+      "id": "jose-ochoa-hidalgo",
+      "displayName": "José Ochoa Hidalgo",
+      "marks": ["TO", "C", "H"],
+      "summary": "De la familia. El parentesco exacto queda pendiente. No se escribe como hermano de Martín. Abogado del Colegio de Córdoba, 1961. Padres no asignados.",
+      "links": []
+    },
+    {
+      "id": "nicomedes-andres-erena-lopez",
+      "displayName": "Nicomedes Andrés Erena López",
+      "marks": ["TO", "H"],
+      "birth": { "year": 1928, "approx": true, "text": "~1928, Torredonjimeno" },
+      "death": { "year": 2015, "approx": false, "text": "2015" },
+      "place": "Torredonjimeno",
+      "summary": "Abuelo materno. En abierto, Andrés Erena López, veterinario, Rabadán 29, Torredonjimeno.",
+      "links": [
+        {
+          "label": "Andrés Erena López, veterinario",
+          "href": "https://www.guiaveterinarios.com/pro/andres-erena-lopez-torredonjimeno-3974993/"
+        }
+      ]
+    },
+    {
+      "id": "aurora-camacho-vinas",
+      "displayName": "Aurora Camacho Viñas",
+      "marks": ["TO"],
+      "birth": { "year": 1939, "approx": true, "text": "~1939, Martos" },
+      "death": { "year": 2014, "approx": false, "text": "2014" },
+      "place": "Martos",
+      "summary": "Abuela materna. Hija de Antonio Camacho Liébana y Mercedes Viñas López, según el árbol que firma el tío.",
+      "links": []
+    },
+    {
+      "id": "angustias-erena-lopez",
+      "displayName": "Angustias Erena López",
+      "marks": ["AEC"],
+      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "links": []
+    },
+    {
+      "id": "manuel-erena-lopez",
+      "displayName": "Manuel Erena López",
+      "marks": ["AEC"],
+      "summary": "Hermano de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "links": []
+    },
+    {
+      "id": "dolores-erena-lopez",
+      "displayName": "Dolores Erena López",
+      "marks": ["AEC"],
+      "summary": "Hermana de Nicomedes Andrés Erena López, según Geneanet aerec5.",
+      "links": []
+    },
+    {
+      "id": "patrocinio-erena",
+      "displayName": "Patrocinio Erena",
+      "marks": ["TO", "AEC"],
+      "summary": "Hermana de Andrés Erena López y tía de María Aurora. El parentesco lo decía ya Andrés.",
+      "links": []
+    },
+    {
+      "id": "antonio-erena-lopez",
+      "displayName": "Antonio Erena López",
+      "marks": ["AEC"],
+      "summary": "Hermano de Nicomedes Andrés Erena López. Muere (†). El tío firma el nombre. No es partida.",
+      "links": []
+    },
+    {
+      "id": "antonio-camacho-vinas",
+      "displayName": "Antonio Camacho Viñas",
+      "marks": ["AEC"],
+      "summary": "Hermano de Aurora Camacho Viñas, según Geneanet aerec5. Geneanet, no civil. Oficio no se escribe.",
+      "links": []
+    },
+    {
+      "id": "martin-maria-ochoa-de-eguiyara-antia",
+      "displayName": "Martín María Ochoa de Eguiyara Antia",
+      "marks": ["TO", "H"],
+      "birth": { "year": 1874, "approx": false, "text": "baut. 1874-10-12, San Pedro, Vitoria" },
+      "death": { "year": 1926, "approx": true, "text": "muerte ~1926 [TO]" },
+      "place": "Vitoria-Gasteiz",
+      "summary": "Bisabuelo de Andrés. Andrés confirma: Martín María (AHDV 61790) es el bisabuelo oral Martín Ochoa Antía. Fue ingeniero, según casa. Autia (Docutren) = Antía sigue como hipótesis.",
+      "links": []
+    },
+    {
+      "id": "josefa-hidalgo-de-la-vega",
+      "displayName": "Josefa Hidalgo de la Vega",
+      "marks": ["TO"],
+      "summary": "Bisabuela. Esposa de Martín Ochoa Antía y madre de Martín Ochoa Hidalgo. Andrés lo confirma. La nota de Posadas 1908-08-10 no nombra a la esposa; que sea esa boda sigue como hipótesis.",
+      "links": []
+    },
+    {
+      "id": "gregoria-ochoa-antia",
+      "displayName": "Gregoria Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1863, "approx": false, "text": "baut. 1863-04-25, San Miguel" },
+      "summary": "Hermana de Martín María. Capitulaciones de 1884 con Emeterio Guillerna (ESC,24187).",
+      "links": []
+    },
+    {
+      "id": "emeterio-guillerna",
+      "displayName": "Emeterio Guillerna",
+      "marks": ["H"],
+      "summary": "Esposo de Gregoria Ochoa Antia. En el índice también Hemeterio Guillerna Ybañez. Las grafías no coinciden del todo.",
+      "links": []
+    },
+    {
+      "id": "bruno-guillerna-ochoa",
+      "displayName": "Bruno Guillerna Ochoa",
+      "marks": ["H", "TO", "N"],
+      "birth": { "year": 1885, "approx": false, "text": "baut. 1885-10-07, San Pedro, Vitoria" },
+      "summary": "Sobrino de Martín María, hijo de Gregoria. La casa lo dio por hermano: confusión. Paso a América: CEMLA 0 pasajeros.",
+      "links": []
+    },
+    {
+      "id": "heliodoro-palop-padron",
+      "displayName": "Heliodoro Palop Padrón",
+      "marks": ["TO"],
+      "summary": "Padre de Matilde Palop Fuentes, según casa. No hay ficha en abierto.",
+      "links": []
+    },
+    {
+      "id": "matilde-fuentes-lopez",
+      "displayName": "Matilde Fuentes López",
+      "marks": ["TO"],
+      "summary": "Madre de Matilde Palop Fuentes, según casa. No hay ficha en abierto.",
+      "links": []
+    },
+    {
+      "id": "antonio-erena-liebana",
+      "displayName": "Antonio Erena Liébana",
+      "marks": ["TO", "H"],
+      "place": "Torredonjimeno",
+      "summary": "Bisabuelo materno. Cartulina DNSD E0020546: natural de Torredonjimeno, deportado por desafecto. Expediente de expropiación rústica. La familia no reconoce el oficio de cartero.",
+      "links": []
+    },
+    {
+      "id": "dolores-lopez-martos",
+      "displayName": "Dolores López Martos",
+      "marks": ["AEC"],
+      "place": "Torredonjimeno",
+      "summary": "Bisabuela materna. Nacida en Torredonjimeno. El segundo apellido lo firma aerec5. No es partida parroquial. Padres no están en aerec5.",
+      "links": []
+    },
+    {
+      "id": "antonio-camacho-liebana",
+      "displayName": "Antonio Camacho Liébana",
+      "marks": ["AEC"],
+      "place": "Martos",
+      "summary": "Bisabuelo materno Camacho. De Martos, según el árbol que firma el tío. No es partida.",
+      "links": []
+    },
+    {
+      "id": "mercedes-vinas-lopez",
+      "displayName": "Mercedes Viñas López",
+      "marks": ["AEC"],
+      "place": "Linares",
+      "summary": "Bisabuela materna Viñas. De Linares. El segundo apellido López lo firma aerec5. Antes se escribía Mercedes Viñas con un segundo apellido abierto.",
+      "links": []
+    },
+    {
+      "id": "juan-jose-ochoa-de-eguiara",
+      "displayName": "Juan José Ochoa de Eguiara Martínez de Ezcurra",
+      "marks": ["H", "TO"],
+      "birth": { "year": 1828, "approx": false, "text": "baut. 1828-10-27, Egino" },
+      "place": "Egino, Aspárrena",
+      "summary": "Tatarabuelo. Entra porque Andrés confirma a Martín María como bisabuelo. El índice del bautismo escribe Gemelos; Padre desconocido; — se cita, no se reinterpreta.",
+      "links": []
+    },
+    {
+      "id": "maria-concepcion-antia-saez",
+      "displayName": "María Concepción Antia Sáez",
+      "marks": ["H", "TO"],
+      "birth": { "year": 1838, "approx": false, "text": "baut. 1838-12-08, Albéniz" },
+      "place": "Albéniz, Aspárrena",
+      "summary": "Tatarabuela. Bautizada en San Juan Bautista, Albéniz. Se casa en Albéniz el 24 de septiembre de 1855.",
+      "links": []
+    },
+    {
+      "id": "juan-ochoa-de-eguiara",
+      "displayName": "Juan Ochoa de Eguiara",
+      "marks": ["H", "C"],
+      "summary": "Padre de Juan José en el índice AHDV. Bautismo cerrado: falta. Candidato Yaza 1786 → Eyaza 1812 → Eyara 1814. No cerrado. Folios no leídos.",
+      "links": []
+    },
+    {
+      "id": "martina-martinez-de-ezcurra",
+      "displayName": "Martina Martínez de Ezcurra",
+      "marks": ["H"],
+      "birth": { "year": 1790, "approx": false, "text": "baut. 1790-02-26, Andoin" },
+      "place": "Andoin, Aspárrena",
+      "summary": "Madre de Juan José. El índice le da el segundo apellido Ruiz de Savando. Encaje Savando / Sabando: hipótesis.",
+      "links": []
+    },
+    {
+      "id": "joaquin-antia",
+      "displayName": "Joaquín Antia Martínez de Albéniz",
+      "marks": ["H"],
+      "birth": { "year": 1804, "approx": false, "text": "baut. 1804-10-17, Albéniz" },
+      "place": "Albéniz, Aspárrena",
+      "summary": "Padre de María Concepción. Bautizado en San Juan Bautista, Albéniz.",
+      "links": []
+    },
+    {
+      "id": "josefa-saez-de-eguilaz",
+      "displayName": "Josefa Sáez de Eguilaz García de Vicuña",
+      "marks": ["H", "C"],
+      "summary": "Madre de María Concepción. Bautismo: falta. Buscado en San Román de San Millán y alrededores: sin ficha.",
+      "links": []
+    },
+    {
+      "id": "manuel-antia-ruiz-de-eguino",
+      "displayName": "Manuel Antia Ruiz de Eguino",
+      "marks": ["H"],
+      "summary": "Padre de Joaquín Antia. Entra en Andrés por la confirmación de Martín María.",
+      "links": []
+    },
+    {
+      "id": "barbara-martinez-de-albeniz",
+      "displayName": "Bárbara Martínez de Albéniz Zufiaur",
+      "marks": ["H"],
+      "birth": { "year": 1773, "approx": false, "text": "baut. 1773-01-23, Albéniz" },
+      "place": "Albéniz",
+      "summary": "Madre de Joaquín Antia. María Bárbara Inés Ildefonsa Martínez de Albéniz Zufiaur, baut. 1773-01-23, Albéniz, AHDV 8055. Entra en Andrés por la confirmación de Martín María.",
+      "links": []
+    },
+    {
+      "id": "francisco-antia-zubicain",
+      "displayName": "Francisco Antia Zubicain",
+      "marks": ["H"],
+      "summary": "Padre de Manuel Antia Ruiz de Eguino. Quinto abuelo en la rama Antia, según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "vicenta-ruiz-de-eguino",
+      "displayName": "Vicenta Ruiz de Eguino Tros de Ylarduia",
+      "marks": ["H"],
+      "summary": "Madre de Manuel Antia Ruiz de Eguino. Quinta abuela en la rama Antia, según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "manuel-martinez-de-albeniz-albizu",
+      "displayName": "Manuel Martínez de Albéniz Albizu",
+      "marks": ["H"],
+      "summary": "Padre de Bárbara Martínez de Albéniz Zufiaur. Quinto abuelo en la rama Albéniz, según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "phelipa-zufiaur-ybarreta",
+      "displayName": "Phelipa Zufiaur Ybarreta",
+      "marks": ["H"],
+      "summary": "Madre de Bárbara Martínez de Albéniz Zufiaur. Quinta abuela en la rama Albéniz, según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "antonio-martinez-de-ezcurra",
+      "displayName": "Antonio Martínez de Ezcurra Zuluaga",
+      "marks": ["H"],
+      "summary": "Padre de Martina Martínez de Ezcurra. Entra en Andrés por la confirmación de Martín María.",
+      "links": []
+    },
+    {
+      "id": "francisca-ruiz-de-savando",
+      "displayName": "Francisca Ruiz de Savando Ortiz de Luzuriaga",
+      "marks": ["H"],
+      "summary": "Madre de Martina Martínez de Ezcurra. Bautismo de Francisca: falta.",
+      "links": []
+    },
+    {
+      "id": "antonio-camacho-ruiz",
+      "displayName": "Antonio Camacho Ruiz",
+      "marks": ["AEC"],
+      "summary": "Tatarabuelo materno Camacho. Padres, según aerec5: Manuel Camacho y Andrea Ruiz. Geneanet, no partida.",
+      "links": [
+        {
+          "label": "Antonio Camacho Ruiz, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho+ruiz&p=antonio"
+        }
+      ]
+    },
+    {
+      "id": "encarnacion-liebana-tejero",
+      "displayName": "Encarnación Liébana Tejero",
+      "marks": ["AEC"],
+      "summary": "Tatarabuela materna. Esposa de Antonio Camacho Ruiz. Sin padres en aerec5.",
+      "links": [
+        {
+          "label": "Encarnación Liébana Tejero, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=liebana+tejero&p=encarnacion"
+        }
+      ]
+    },
+    {
+      "id": "antonio-vinas-rodriguez",
+      "displayName": "Antonio Viñas Rodríguez",
+      "marks": ["AEC"],
+      "summary": "Tatarabuelo materno Viñas. Sin padres en aerec5.",
+      "links": [
+        {
+          "label": "Antonio Viñas Rodríguez, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=vinas+rodriguez&p=antonio"
+        }
+      ]
+    },
+    {
+      "id": "mercedes-lopez-valverde",
+      "displayName": "Mercedes López Valverde",
+      "marks": ["AEC"],
+      "summary": "Tatarabuela materna. Esposa de Antonio Viñas Rodríguez. Sin padres en aerec5.",
+      "links": [
+        {
+          "label": "Mercedes López Valverde, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=mercedes&p=lopez+valverde"
+        }
+      ]
+    },
+    {
+      "id": "manuel-camacho",
+      "displayName": "Manuel Camacho",
+      "marks": ["AEC"],
+      "summary": "Tatatarabuelo materno Camacho. Padre de Antonio Camacho Ruiz. Sin padres más atrás en aerec5.",
+      "links": [
+        {
+          "label": "Manuel Camacho, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=camacho&p=manuel"
+        }
+      ]
+    },
+    {
+      "id": "andrea-ruiz",
+      "displayName": "Andrea Ruiz",
+      "marks": ["AEC"],
+      "summary": "Tatatarabuela materna. Madre de Antonio Camacho Ruiz. Sin padres más atrás en aerec5.",
+      "links": [
+        {
+          "label": "Andrea Ruiz, aerec5",
+          "href": "https://gw.geneanet.org/aerec5?lang=es&n=ruiz&p=andrea"
+        }
+      ]
+    },
+    {
+      "id": "buenaventura-ochoa-antia",
+      "displayName": "Buenaventura Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1859, "approx": false, "text": "1859-07-14, San Miguel" },
+      "summary": "Hermano de Martín María según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "candida-ochoa-antia",
+      "displayName": "Cándida Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1865, "approx": false, "text": "1865-09-04, San Miguel" },
+      "summary": "Hermana de Martín María. Bautizada el mismo día que Rosalía.",
+      "links": []
+    },
+    {
+      "id": "rosalia-ochoa-antia",
+      "displayName": "Rosalía Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1865, "approx": false, "text": "1865-09-04, San Miguel" },
+      "summary": "Hermana de Martín María. Bautizada el mismo día que Cándida.",
+      "links": []
+    },
+    {
+      "id": "francisco-ochoa-antia",
+      "displayName": "Francisco Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1868, "approx": false, "text": "1868-03-10, San Pedro" },
+      "summary": "Hermano de Martín María. Bautizado en San Miguel porque San Pedro estaba cerrada al culto.",
+      "links": []
+    },
+    {
+      "id": "vicenta-ochoa-antia",
+      "displayName": "Vicenta Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1869, "approx": false, "text": "1869-10-27, San Pedro" },
+      "summary": "Hermana de Martín María según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "martina-ochoa-antia",
+      "displayName": "Martina Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1873, "approx": false, "text": "1873-04-25, San Pedro" },
+      "summary": "Hermana de Martín María según el índice AHDV.",
+      "links": []
+    },
+    {
+      "id": "lino-ochoa-antia",
+      "displayName": "Lino Ochoa Antia",
+      "marks": ["H"],
+      "birth": { "year": 1877, "approx": false, "text": "1877-09-23, San Pedro" },
+      "summary": "Hermano de Martín María según el índice AHDV.",
+      "links": []
+    }
+  ],
+  "edges": [
+    { "kind": "parent", "from": "francisco-javier-ochoa-palop", "to": "andres-martin-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-aurora-erena-camacho", "to": "andres-martin-ochoa-erena", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "francisco-javier-ochoa-palop", "to": "maria-aurora-erena-camacho", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "francisco-javier-ochoa-palop", "to": "matilde-ochoa-palop", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "nicomedes-andres-erena-lopez", "to": "maria-aurora-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "aurora-camacho-vinas", "to": "maria-aurora-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "nicomedes-andres-erena-lopez", "to": "antonio-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "aurora-camacho-vinas", "to": "antonio-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "nicomedes-andres-erena-lopez", "to": "silvia-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "aurora-camacho-vinas", "to": "silvia-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "nicomedes-andres-erena-lopez", "to": "andres-erena-camacho", "certainty": "confirmed" },
+    { "kind": "parent", "from": "aurora-camacho-vinas", "to": "andres-erena-camacho", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "nicomedes-andres-erena-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "martin-ochoa-hidalgo", "to": "francisco-javier-ochoa-palop", "certainty": "confirmed" },
+    { "kind": "parent", "from": "matilde-palop-fuentes", "to": "francisco-javier-ochoa-palop", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "martin-ochoa-hidalgo", "to": "matilde-palop-fuentes", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "martin-ochoa-hidalgo", "to": "rafael-ochoa-hidalgo", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "martin-ochoa-hidalgo", "to": "jose-ochoa-hidalgo", "certainty": "hypothesis" },
+    { "kind": "sibling", "from": "matilde-palop-fuentes", "to": "manuel-palop-fuentes", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "matilde-palop-fuentes", "to": "pedro-palop-fuentes", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "martin-maria-ochoa-de-eguiyara-antia", "to": "martin-ochoa-hidalgo", "certainty": "confirmed" },
+    { "kind": "parent", "from": "josefa-hidalgo-de-la-vega", "to": "martin-ochoa-hidalgo", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "martin-maria-ochoa-de-eguiyara-antia", "to": "josefa-hidalgo-de-la-vega", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "heliodoro-palop-padron", "to": "matilde-palop-fuentes", "certainty": "confirmed" },
+    { "kind": "parent", "from": "matilde-fuentes-lopez", "to": "matilde-palop-fuentes", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "heliodoro-palop-padron", "to": "matilde-fuentes-lopez", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "nicomedes-andres-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "nicomedes-andres-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "angustias-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "angustias-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "manuel-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "manuel-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "dolores-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "dolores-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "patrocinio-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "patrocinio-erena", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-erena-liebana", "to": "antonio-erena-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "dolores-lopez-martos", "to": "antonio-erena-lopez", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "antonio-erena-liebana", "to": "dolores-lopez-martos", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "antonio-camacho-liebana", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
+    { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
+    { "kind": "parent", "from": "antonio-camacho-liebana", "to": "antonio-camacho-vinas", "certainty": "confirmed" },
+    { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "antonio-camacho-vinas", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "antonio-camacho-liebana", "to": "mercedes-vinas-lopez", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "martin-maria-ochoa-de-eguiyara-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "martin-maria-ochoa-de-eguiyara-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "gregoria-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "gregoria-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "buenaventura-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "buenaventura-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "candida-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "candida-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "rosalia-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "rosalia-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "francisco-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "francisco-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "vicenta-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "vicenta-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "martina-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "martina-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-jose-ochoa-de-eguiara", "to": "lino-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-concepcion-antia-saez", "to": "lino-ochoa-antia", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "juan-jose-ochoa-de-eguiara", "to": "maria-concepcion-antia-saez", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "gregoria-ochoa-antia", "to": "bruno-guillerna-ochoa", "certainty": "confirmed" },
+    { "kind": "parent", "from": "emeterio-guillerna", "to": "bruno-guillerna-ochoa", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "gregoria-ochoa-antia", "to": "emeterio-guillerna", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "juan-ochoa-de-eguiara", "to": "juan-jose-ochoa-de-eguiara", "certainty": "confirmed" },
+    { "kind": "parent", "from": "martina-martinez-de-ezcurra", "to": "juan-jose-ochoa-de-eguiara", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "juan-ochoa-de-eguiara", "to": "martina-martinez-de-ezcurra", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "joaquin-antia", "to": "maria-concepcion-antia-saez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "josefa-saez-de-eguilaz", "to": "maria-concepcion-antia-saez", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "joaquin-antia", "to": "josefa-saez-de-eguilaz", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "manuel-antia-ruiz-de-eguino", "to": "joaquin-antia", "certainty": "confirmed" },
+    { "kind": "parent", "from": "barbara-martinez-de-albeniz", "to": "joaquin-antia", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "manuel-antia-ruiz-de-eguino", "to": "barbara-martinez-de-albeniz", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "francisco-antia-zubicain", "to": "manuel-antia-ruiz-de-eguino", "certainty": "confirmed" },
+    { "kind": "parent", "from": "vicenta-ruiz-de-eguino", "to": "manuel-antia-ruiz-de-eguino", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "francisco-antia-zubicain", "to": "vicenta-ruiz-de-eguino", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "manuel-martinez-de-albeniz-albizu", "to": "barbara-martinez-de-albeniz", "certainty": "confirmed" },
+    { "kind": "parent", "from": "phelipa-zufiaur-ybarreta", "to": "barbara-martinez-de-albeniz", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "manuel-martinez-de-albeniz-albizu", "to": "phelipa-zufiaur-ybarreta", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "antonio-martinez-de-ezcurra", "to": "martina-martinez-de-ezcurra", "certainty": "confirmed" },
+    { "kind": "parent", "from": "francisca-ruiz-de-savando", "to": "martina-martinez-de-ezcurra", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "antonio-martinez-de-ezcurra", "to": "francisca-ruiz-de-savando", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "antonio-camacho-ruiz", "to": "antonio-camacho-liebana", "certainty": "confirmed" },
+    { "kind": "parent", "from": "encarnacion-liebana-tejero", "to": "antonio-camacho-liebana", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "antonio-camacho-ruiz", "to": "encarnacion-liebana-tejero", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "antonio-vinas-rodriguez", "to": "mercedes-vinas-lopez", "certainty": "confirmed" },
+    { "kind": "parent", "from": "mercedes-lopez-valverde", "to": "mercedes-vinas-lopez", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "antonio-vinas-rodriguez", "to": "mercedes-lopez-valverde", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "manuel-camacho", "to": "antonio-camacho-ruiz", "certainty": "confirmed" },
+    { "kind": "parent", "from": "andrea-ruiz", "to": "antonio-camacho-ruiz", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "manuel-camacho", "to": "andrea-ruiz", "certainty": "confirmed" }
+  ]
+}
