@@ -9,6 +9,8 @@ const ANDRES = asPersonId("andres-martin-ochoa-erena");
 const JAVIER = asPersonId("francisco-javier-ochoa-palop");
 const AURORA = asPersonId("maria-aurora-erena-camacho");
 const MATILDE = asPersonId("matilde-ochoa-palop");
+const MERCEDES = asPersonId("mercedes-ochoa-erena");
+const DARIO = asPersonId("dario-de-dios-ochoa");
 
 describe("expandControl", () => {
   it("shows plus only when collapsed siblings remain", () => {
@@ -39,6 +41,18 @@ describe("expandControl", () => {
       kind: "minus",
       side: "right",
     });
+  });
+
+  it("shows plus on Mercedes after Andrés opens, because Darío is still collapsed", () => {
+    expect(expandControl(family, ANDRES, MERCEDES, [ANDRES])).toEqual({
+      kind: "plus",
+      side: "left",
+    });
+    expect(expandControl(family, ANDRES, MERCEDES, [ANDRES, MERCEDES])).toEqual({
+      kind: "minus",
+      side: "left",
+    });
+    expect(expandControl(family, ANDRES, DARIO, [ANDRES, MERCEDES])).toBeNull();
   });
 });
 

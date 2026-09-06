@@ -137,6 +137,14 @@ describe("expansionsToReveal", () => {
     expect(visiblePeople(family, DEFAULT_FOCUS_ID, reveal).has(MERCEDES)).toBe(true);
   });
 
+  it("opens Andrés then Mercedes to reveal Darío", () => {
+    const reveal = expansionsToReveal(family, DARIO);
+    expect(reveal).toContain(ANDRES);
+    expect(reveal).toContain(MERCEDES);
+    expect(visiblePeople(family, DEFAULT_FOCUS_ID, reveal).has(DARIO)).toBe(true);
+    expect(visiblePeople(family, DEFAULT_FOCUS_ID, [ANDRES]).has(DARIO)).toBe(false);
+  });
+
   it("opens Martín to reveal José", () => {
     const reveal = expansionsToReveal(family, JOSE);
     expect(reveal).toContain(MARTIN);
@@ -144,7 +152,7 @@ describe("expansionsToReveal", () => {
   });
 
   it("only opens people who are on the canvas", () => {
-    for (const target of [MATILDE, MERCEDES, JOSE]) {
+    for (const target of [MATILDE, MERCEDES, JOSE, DARIO]) {
       const reveal = expansionsToReveal(family, target);
       const visible = visiblePeople(family, DEFAULT_FOCUS_ID, reveal);
       expect(reveal).not.toContain(target);
@@ -185,6 +193,17 @@ describe("canvasVisible", () => {
     expect(canvasVisible(family, JAVIER, []).has(MATILDE)).toBe(false);
     expect(canvasVisible(family, ANDRES, [JAVIER]).has(MATILDE)).toBe(true);
   });
+
+  it("reaches Mercedes then Darío from Andrés by expanding the path", () => {
+    expect(canvasVisible(family, ANDRES, []).has(MERCEDES)).toBe(false);
+    expect(canvasVisible(family, ANDRES, []).has(DARIO)).toBe(false);
+    expect(canvasVisible(family, ANDRES, [ANDRES]).has(MERCEDES)).toBe(true);
+    expect(canvasVisible(family, ANDRES, [ANDRES]).has(DARIO)).toBe(false);
+    const opened = canvasVisible(family, ANDRES, [ANDRES, MERCEDES]);
+    expect(opened.has(MERCEDES)).toBe(true);
+    expect(opened.has(DARIO)).toBe(true);
+    expect(opened.has(ANDRES)).toBe(true);
+  });
 });
 
 describe("layoutHouseCanvas", () => {
@@ -213,7 +232,7 @@ describe("layoutHouseCanvas", () => {
   });
 
   it("places Darío one row under Mercedes without dropping the house", () => {
-    const layout = layoutHouseCanvas(family, MERCEDES, [ANDRES]);
+    const layout = layoutHouseCanvas(family, ANDRES, [ANDRES, MERCEDES]);
     expectHouseKept(layout);
     const andres = nodeById(layout, ANDRES);
     const mercedes = nodeById(layout, MERCEDES);
@@ -318,6 +337,17 @@ describe("focusPerson keeps the house", () => {
     expect(ids(laid).has(MERCEDES)).toBe(true);
     expect(ids(laid).has(DARIO)).toBe(true);
     expect(next.pan).toEqual(framePerson(laid, MERCEDES, andresView.zoom));
+  });
+
+  it("reaches Darío from Andrés focus by opening Mercedes", () => {
+    const next = focusPerson(andresView, DARIO, family);
+    expect(next.expandedIds).toContain(ANDRES);
+    expect(next.expandedIds).toContain(MERCEDES);
+    const laid = layoutHouseCanvas(family, ANDRES, next.expandedIds);
+    expectHouseKept(laid);
+    expect(ids(laid).has(MERCEDES)).toBe(true);
+    expect(ids(laid).has(DARIO)).toBe(true);
+    expect(next.pan).toEqual(framePerson(laid, DARIO, 1));
   });
 
   it("frames a parent above the origin", () => {
