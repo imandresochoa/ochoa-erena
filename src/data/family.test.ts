@@ -13,6 +13,7 @@ type RawPerson = {
   id: string;
   displayName: string;
   summary: string;
+  marks?: string[];
   links?: RawLink[];
   sources?: RawSource[];
   files?: unknown;
@@ -118,6 +119,81 @@ describe("family snapshot", () => {
         (item.from === "jose-ochoa-hidalgo" || item.to === "jose-ochoa-hidalgo"),
     );
     expect(edge?.certainty).toBe("hypothesis");
+  });
+
+  it("locks CONF Andrés 2026-09-06: parents of Francisco Javier are confirmed", () => {
+    const stamp = "[CONF Andrés 2026-09-06]";
+    const father = family.edges.find(
+      (edge) =>
+        edge.kind === "parent" &&
+        edge.from === "martin-ochoa-hidalgo" &&
+        edge.to === "francisco-javier-ochoa-palop",
+    );
+    const mother = family.edges.find(
+      (edge) =>
+        edge.kind === "parent" &&
+        edge.from === "matilde-palop-fuentes" &&
+        edge.to === "francisco-javier-ochoa-palop",
+    );
+    expect(father?.certainty).toBe("confirmed");
+    expect(mother?.certainty).toBe("confirmed");
+    expect(rawPerson("francisco-javier-ochoa-palop").summary).toContain(stamp);
+    expect(rawPerson("martin-ochoa-hidalgo").summary).toContain(stamp);
+    expect(rawPerson("matilde-palop-fuentes").summary).toContain(stamp);
+    for (const id of [
+      "francisco-javier-ochoa-palop",
+      "martin-ochoa-hidalgo",
+      "matilde-palop-fuentes",
+    ]) {
+      expect(rawPerson(id).marks).not.toContain("C");
+      expect(rawPerson(id).marks).not.toContain("N");
+    }
+  });
+
+  it("locks CONF Andrés 2026-09-06: Martín María is confirmed with a confirmed filial link", () => {
+    const stamp = "[CONF Andrés 2026-09-06]";
+    const son = family.edges.find(
+      (edge) =>
+        edge.kind === "parent" &&
+        edge.from === "martin-maria-ochoa-de-eguiyara-antia" &&
+        edge.to === "martin-ochoa-hidalgo",
+    );
+    expect(son?.certainty).toBe("confirmed");
+    expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").summary).toContain(
+      stamp,
+    );
+    expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").summary).toMatch(
+      /Autia.*hipótesis/,
+    );
+    expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").marks).not.toContain(
+      "C",
+    );
+    expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").marks).not.toContain(
+      "N",
+    );
+  });
+
+  it("leaves other real hypotheses in place after the CONF Andrés trunk lock", () => {
+    const jose = family.edges.find(
+      (item) =>
+        item.kind === "sibling" &&
+        (item.from === "jose-ochoa-hidalgo" || item.to === "jose-ochoa-hidalgo"),
+    );
+    const andresErena = family.edges.find(
+      (edge) =>
+        edge.kind === "parent" &&
+        edge.from === "andres-erena" &&
+        edge.to === "antonio-erena-liebana",
+    );
+    const capilla = family.edges.find(
+      (edge) =>
+        edge.kind === "parent" &&
+        edge.from === "capilla-liebana" &&
+        edge.to === "antonio-erena-liebana",
+    );
+    expect(jose?.certainty).toBe("hypothesis");
+    expect(andresErena?.certainty).toBe("hypothesis");
+    expect(capilla?.certainty).toBe("hypothesis");
   });
 
   it("keeps the snapshot size and does not invent people, Zufiaur, or files", () => {
