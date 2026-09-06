@@ -98,6 +98,7 @@ export const SIBLING_GAP = 96;
 export const BRANCH_GUTTER = 280;
 export const PAN_TAP_PX = 8;
 export const DEFAULT_FOCUS_NAME = "Andrés Martín Ochoa Erena";
+export const DEFAULT_FOCUS_ID = asPersonId("andres-martin-ochoa-erena");
 
 export function asPersonId(id: string): PersonId {
   return id as PersonId;

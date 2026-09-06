@@ -234,32 +234,28 @@ describe("focus", () => {
     zoom: 0.8,
   };
 
-  it("focusing another person recenters, clears selection and expansions, and keeps zoom", () => {
-    expect(focusPerson(view, francisco)).toEqual({
-      focusId: francisco,
-      selectedId: null,
-      expandedIds: [],
-      pan: { x: 0, y: 0 },
-      entering: false,
-      zoom: 0.8,
-    });
+  it("focusing another person keeps expansions, closes ficha, and keeps zoom", () => {
+    const next = focusPerson(view, francisco, fixture);
+    expect(next.focusId).toBe(francisco);
+    expect(next.selectedId).toBeNull();
+    expect(next.expandedIds).toEqual([francisco]);
+    expect(next.entering).toBe(false);
+    expect(next.zoom).toBe(0.8);
   });
 
-  it("focusing the same person keeps selection, expansions, and zoom but zeros pan", () => {
-    expect(focusPerson(view, andres)).toEqual({
-      focusId: andres,
-      selectedId: andres,
-      expandedIds: [francisco],
-      pan: { x: 0, y: 0 },
-      entering: false,
-      zoom: 0.8,
-    });
+  it("focusing the same person keeps selection, expansions, and zoom", () => {
+    const next = focusPerson(view, andres, fixture);
+    expect(next.focusId).toBe(andres);
+    expect(next.selectedId).toBe(andres);
+    expect(next.expandedIds).toEqual([francisco]);
+    expect(next.entering).toBe(false);
+    expect(next.zoom).toBe(0.8);
   });
 
   it("does not open a ficha when focusing from the chrome", () => {
     const closed = { ...view, selectedId: null };
-    expect(focusPerson(closed, francisco).selectedId).toBeNull();
-    expect(focusPerson(closed, andres).selectedId).toBeNull();
+    expect(focusPerson(closed, francisco, fixture).selectedId).toBeNull();
+    expect(focusPerson(closed, andres, fixture).selectedId).toBeNull();
   });
 });
 
