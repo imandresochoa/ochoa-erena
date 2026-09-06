@@ -9,10 +9,19 @@ import { PersonPanel } from "@/components/person-panel";
 import { RestaurarButton } from "@/components/restaurar-button";
 import { TreeCanvas } from "@/components/tree-canvas";
 import { WelcomeScreen } from "@/components/welcome-screen";
+import { ZoomControls } from "@/components/zoom-controls";
 import { family } from "@/data/family";
 import { requirePerson } from "@/domain/graph";
 import { DEFAULT_FOCUS_NAME, type Person } from "@/domain/types";
-import { focusPerson, needsRestaurar, restorePan, type TreeView } from "@/domain/view";
+import {
+  closeFicha,
+  DEFAULT_ZOOM,
+  focusPerson,
+  needsRestaurar,
+  openFicha,
+  restorePan,
+  type TreeView,
+} from "@/domain/view";
 
 type Screen =
   | { kind: "welcome" }
@@ -48,6 +57,7 @@ export function FamilyApp() {
       expandedIds: [],
       pan: { x: 0, y: 0 },
       entering: true,
+      zoom: DEFAULT_ZOOM,
     });
     window.setTimeout(() => {
       setScreen((current) =>
@@ -99,20 +109,19 @@ export function FamilyApp() {
         selectedId={screen.selectedId}
         expandedIds={screen.expandedIds}
         pan={screen.pan}
+        zoom={screen.zoom}
         entering={screen.entering}
         coarsePointer={coarsePointer}
         onPan={(pan) =>
           setScreen((current) => (current.kind === "tree" ? { ...current, pan } : current))
         }
+        onZoom={(zoom) =>
+          setScreen((current) => (current.kind === "tree" ? { ...current, zoom } : current))
+        }
         onSelect={(id) =>
           setScreen((current) =>
             current.kind === "tree"
-              ? {
-                  ...current,
-                  focusId: id,
-                  selectedId: id,
-                  pan: { x: 0, y: 0 },
-                }
+              ? { ...current, ...openFicha(current, id) }
               : current,
           )
         }
@@ -137,8 +146,16 @@ export function FamilyApp() {
             }
           />
         </div>
-        <div className="pointer-events-auto absolute top-[max(32px,env(safe-area-inset-top))] right-[max(32px,env(safe-area-inset-right))]">
+        <div className="pointer-events-auto absolute top-[max(32px,env(safe-area-inset-top))] right-[max(32px,env(safe-area-inset-right))] flex flex-col items-end gap-3">
           <LegendMenu />
+          <ZoomControls
+            zoom={screen.zoom}
+            onZoom={(zoom) =>
+              setScreen((current) =>
+                current.kind === "tree" ? { ...current, zoom } : current,
+              )
+            }
+          />
         </div>
         <div className="pointer-events-auto absolute bottom-[max(32px,env(safe-area-inset-bottom))] left-1/2 -translate-x-1/2">
           <RestaurarButton
@@ -161,7 +178,9 @@ export function FamilyApp() {
             narrow={narrow}
             onBack={() =>
               setScreen((current) =>
-                current.kind === "tree" ? { ...current, selectedId: null } : current,
+                current.kind === "tree"
+                  ? { ...current, ...closeFicha(current) }
+                  : current,
               )
             }
           />

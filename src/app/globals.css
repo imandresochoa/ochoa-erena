@@ -131,6 +131,11 @@ button.chrome-ctl {
   position: relative;
 }
 
+button.chrome-ctl:disabled {
+  color: var(--color-line);
+  border-bottom-color: var(--color-line);
+}
+
 button.chrome-ctl::after {
   content: "";
   position: absolute;
@@ -232,7 +237,7 @@ button.chrome-ctl::after {
     background: var(--color-node-hover);
   }
 
-  .chrome-ctl:hover {
+  .chrome-ctl:hover:not(:disabled) {
     color: var(--color-ink);
     border-bottom-color: var(--color-ink);
   }
