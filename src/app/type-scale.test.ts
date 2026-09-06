@@ -26,7 +26,6 @@ describe("title type scale", () => {
   const panel = read("../components/person-panel.tsx");
   const welcome = read("../components/welcome-screen.tsx");
   const landing = read("../components/landing-screen.tsx");
-  const pageTitle = "Árbol genealógico de la familia Ochoa Erena";
 
   it("defines --font-weight-title 450 and a shared .type-title class", () => {
     expect(css).toMatch(/--font-weight-title:\s*450\b/);
@@ -59,8 +58,8 @@ describe("title type scale", () => {
   });
 
   it("marks welcome and landing page titles with type-title", () => {
-    expect(classOf(welcome, pageTitle).split(/\s+/)).toContain("type-title");
-    expect(classOf(landing, pageTitle).split(/\s+/)).toContain("type-title");
+    expect(classOf(welcome, "{WELCOME_TITLE}").split(/\s+/)).toContain("type-title");
+    expect(classOf(landing, "{WELCOME_TITLE}").split(/\s+/)).toContain("type-title");
   });
 
   it("uses the title token on .vinculo-tip", () => {

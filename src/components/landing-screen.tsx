@@ -3,6 +3,7 @@
 import { defaultPerson, family } from "@/data/family";
 import { findExactName, suggestPeople } from "@/domain/search";
 import { DEFAULT_FOCUS_NAME, type Person } from "@/domain/types";
+import { WELCOME_TITLE } from "@/domain/welcome";
 
 type Props = {
   query: string;
@@ -39,7 +40,7 @@ export function LandingScreen({ query, error, onQuery, onEnter, onMiss }: Props)
       <div className="flex w-full max-w-[333px] flex-col items-center gap-[120px]">
         <div className="flex w-full flex-col items-center gap-6">
           <p className="type-title text-center text-base leading-[1.4] text-[var(--color-ink)]">
-            Árbol genealógico de la familia Ochoa Erena
+            {WELCOME_TITLE}
           </p>
           <div className="relative w-full">
             <input
