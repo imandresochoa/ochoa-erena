@@ -213,13 +213,7 @@ function houseSeeds(
   if (paternal && maternal) {
     return { paternal, maternal };
   }
-  if (parents.length >= 2) {
-    return { paternal: parents[0], maternal: parents[1] };
-  }
-  if (parents.length === 1) {
-    return { paternal: parents[0] };
-  }
-  return {};
+  return { paternal: focusId };
 }
 
 function growHouse(
@@ -255,6 +249,10 @@ function growHouse(
         }
       }
     }
+  }
+  const spouse = spouseOf(graph, seed);
+  if (spouse && visible.has(spouse) && !excluded.has(spouse)) {
+    house.add(spouse);
   }
   return house;
 }
@@ -588,29 +586,57 @@ export function layoutPedigree(
   const byId = new Map(graph.people.map((person) => [person.id, person]));
   const gutterLeft = -BRANCH_GUTTER / 2;
   const gutterRight = BRANCH_GUTTER / 2;
-
-  let paternalNodes = rightAlign(
-    placeHouse(graph, paternal, gens, byId, focusId),
-    gutterLeft,
+  const twoTrunks = Boolean(
+    paternalSeed &&
+      maternalSeed &&
+      paternalSeed !== focusId &&
+      maternalSeed !== focusId,
   );
-  let maternalNodes = leftAlign(
-    placeHouse(graph, maternal, gens, byId, focusId),
-    gutterRight,
-  );
-  if (paternalNodes.length > 0 && maternalNodes.length > 0) {
-    const paternalRight = Math.max(...paternalNodes.map((node) => node.x + node.width));
-    const maternalLeft = Math.min(...maternalNodes.map((node) => node.x));
-    const gap = maternalLeft - paternalRight;
-    if (gap < BRANCH_GUTTER) {
-      const extra = BRANCH_GUTTER - gap;
-      paternalNodes = shiftNodes(paternalNodes, -Math.ceil(extra / 2));
-      maternalNodes = shiftNodes(maternalNodes, Math.floor(extra / 2));
-    }
-  }
 
   const placed = new Map<PersonId, PlacedNode>();
-  for (const node of [...paternalNodes, ...maternalNodes]) {
-    placed.set(node.id, node);
+  if (twoTrunks) {
+    let paternalNodes = rightAlign(
+      placeHouse(graph, paternal, gens, byId, focusId),
+      gutterLeft,
+    );
+    let maternalNodes = leftAlign(
+      placeHouse(graph, maternal, gens, byId, focusId),
+      gutterRight,
+    );
+    if (paternalNodes.length > 0 && maternalNodes.length > 0) {
+      const paternalRight = Math.max(...paternalNodes.map((node) => node.x + node.width));
+      const maternalLeft = Math.min(...maternalNodes.map((node) => node.x));
+      const gap = maternalLeft - paternalRight;
+      if (gap < BRANCH_GUTTER) {
+        const extra = BRANCH_GUTTER - gap;
+        paternalNodes = shiftNodes(paternalNodes, -Math.ceil(extra / 2));
+        maternalNodes = shiftNodes(maternalNodes, Math.floor(extra / 2));
+      }
+    }
+    for (const node of [...paternalNodes, ...maternalNodes]) {
+      placed.set(node.id, node);
+    }
+  } else {
+    const seed = paternalSeed ?? maternalSeed ?? focusId;
+    const house = growHouse(graph, seed, visible, expandedIds, new Set());
+    house.add(focusId);
+    const focusSpouse = spouseOf(graph, focusId);
+    if (focusSpouse && visible.has(focusSpouse)) {
+      house.add(focusSpouse);
+    }
+    for (const child of childrenOf(graph, focusId)) {
+      if (visible.has(child)) {
+        house.add(child);
+      }
+    }
+    let houseNodes = placeHouse(graph, house, gens, byId, focusId);
+    const focusNode = houseNodes.find((node) => node.id === focusId);
+    if (focusNode) {
+      houseNodes = shiftNodes(houseNodes, -nodeCenter(focusNode).x);
+    }
+    for (const node of houseNodes) {
+      placed.set(node.id, node);
+    }
   }
 
   const restByGen = new Map<number, PersonId[]>();

@@ -144,6 +144,29 @@ describe("layout symmetry", () => {
     expect(couple).toBeCloseTo(child.x, 0);
   });
 
+  it("centers Manuel × Phelipa on Bárbara when she is the focus", () => {
+    const layout = layoutPedigree(family, BARBARA, []);
+    const couple = unitCenter(layout, [MANUEL_MARTINEZ, PHELIPA]);
+    const child = nodeCenter(nodeById(layout, BARBARA));
+    expect(couple).toBeCloseTo(child.x, 0);
+    expect(gapBetween(nodeById(layout, MANUEL_MARTINEZ), nodeById(layout, PHELIPA))).toBe(
+      PAIR_GAP,
+    );
+    for (let i = 0; i < layout.nodes.length; i += 1) {
+      for (let j = i + 1; j < layout.nodes.length; j += 1) {
+        const a = layout.nodes[i];
+        const b = layout.nodes[j];
+        const hit = !(
+          a.x + a.width <= b.x ||
+          b.x + b.width <= a.x ||
+          a.y + a.height <= b.y ||
+          b.y + b.height <= a.y
+        );
+        expect(hit, `${a.id} overlaps ${b.id}`).toBe(false);
+      }
+    }
+  });
+
   it("centers Francisco × Vicenta on Manuel Antia", () => {
     const layout = layoutPedigree(family, ANDRES, []);
     const couple = unitCenter(layout, [FRANCISCO_ANTIA, VICENTA]);

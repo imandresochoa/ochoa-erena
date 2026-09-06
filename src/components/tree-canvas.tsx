@@ -275,7 +275,7 @@ export function TreeCanvas({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{
-                      duration: reduce ? 0 : 0.45,
+                      duration: reduce ? 0 : 0.3,
                       ease: [0.23, 1, 0.32, 1],
                     }}
                   >
@@ -288,7 +288,7 @@ export function TreeCanvas({
                       initial={reduce || !fresh ? false : { d: start }}
                       animate={{ d: connector.d }}
                       transition={{
-                        duration: reduce ? 0 : 0.45,
+                        duration: reduce ? 0 : 0.3,
                         ease: [0.23, 1, 0.32, 1],
                       }}
                     />
