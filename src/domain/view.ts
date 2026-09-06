@@ -1,8 +1,15 @@
-import { PAN_TAP_PX, type PointerKind, type Vec } from "./types";
+import { PAN_TAP_PX, type PersonId, type PointerKind, type Vec } from "./types";
 
 export function classifyPointer(delta: Vec): PointerKind {
   const distance = Math.hypot(delta.x, delta.y);
   return distance < PAN_TAP_PX ? "tap" : "pan";
+}
+
+export function fichaPersonAfterPointer(
+  moved: boolean,
+  personId: PersonId | null,
+): PersonId | null {
+  return moved ? null : personId;
 }
 
 export function addPan(pan: Vec, delta: Vec): Vec {

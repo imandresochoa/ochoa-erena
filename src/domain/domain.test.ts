@@ -12,7 +12,13 @@ import {
   NODE_HEIGHT,
   ROW_GAP,
 } from "@/domain/types";
-import { classifyPointer, isRestored, needsRestaurar, restorePan } from "@/domain/view";
+import {
+  classifyPointer,
+  fichaPersonAfterPointer,
+  isRestored,
+  needsRestaurar,
+  restorePan,
+} from "@/domain/view";
 import { WELCOME_INTRODUCTION } from "@/domain/welcome";
 
 const fixture = parseFamily({
@@ -187,6 +193,19 @@ describe("view", () => {
   it("shows restaurar only after a plus expand", () => {
     expect(needsRestaurar([])).toBe(false);
     expect(needsRestaurar(["francisco"])).toBe(true);
+  });
+
+  it("opens the ficha when tapping a person", () => {
+    const personId = asPersonId("andres");
+    expect(fichaPersonAfterPointer(false, personId)).toBe(personId);
+  });
+
+  it("keeps the ficha closed after a pan", () => {
+    expect(fichaPersonAfterPointer(true, asPersonId("andres"))).toBeNull();
+  });
+
+  it("keeps the ficha closed when tapping with no person", () => {
+    expect(fichaPersonAfterPointer(false, null)).toBeNull();
   });
 });
 

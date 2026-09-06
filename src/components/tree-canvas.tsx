@@ -13,8 +13,14 @@ import {
 } from "@/domain/expand-motion";
 import { hasExpandableSiblings, requirePerson } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
-import { addPan, classifyPointer } from "@/domain/view";
-import { NODE_HEIGHT, type PedigreeLayout, type PersonId, type Vec } from "@/domain/types";
+import { addPan, classifyPointer, fichaPersonAfterPointer } from "@/domain/view";
+import {
+  asPersonId,
+  NODE_HEIGHT,
+  type PedigreeLayout,
+  type PersonId,
+  type Vec,
+} from "@/domain/types";
 
 type Props = {
   focusId: PersonId;
@@ -87,13 +93,16 @@ export function TreeCanvas({
     y: number;
     pan: Vec;
     moved: boolean;
+    personId: PersonId | null;
   } | null>(null);
   const panned = useRef(false);
   const seenIds = useRef(new Set<PersonId>());
   const onPanRef = useRef(onPan);
+  const onSelectRef = useRef(onSelect);
   const panRef = useRef(pan);
   const frame = useRef<HTMLDivElement>(null);
   onPanRef.current = onPan;
+  onSelectRef.current = onSelect;
   panRef.current = pan;
 
   const known = seenIds.current;
@@ -136,6 +145,12 @@ export function TreeCanvas({
         return;
       }
       drag.current = null;
+      if (event.type === "pointerup") {
+        const id = fichaPersonAfterPointer(active.moved, active.personId);
+        if (id) {
+          onSelectRef.current(id);
+        }
+      }
       window.setTimeout(() => {
         panned.current = false;
       }, 0);
@@ -172,12 +187,15 @@ export function TreeCanvas({
           return;
         }
         panned.current = false;
+        const host = target?.closest("[data-person-id]");
+        const raw = host?.getAttribute("data-person-id");
         drag.current = {
           pointerId: event.pointerId,
           x: event.clientX,
           y: event.clientY,
           pan,
           moved: false,
+          personId: raw ? asPersonId(raw) : null,
         };
         event.currentTarget.setPointerCapture(event.pointerId);
       }}
