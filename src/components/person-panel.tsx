@@ -59,11 +59,11 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
       </div>
       <div className="font-satoshi flex flex-1 flex-col gap-8 overflow-auto p-[25px] text-base leading-[1.4]">
         <div className="flex flex-col gap-1">
-          <p className="text-[var(--color-ink)]">{ficha.displayName}</p>
+          <p className="type-title text-[var(--color-ink)]">{ficha.displayName}</p>
           {grado ? (
             <motion.p
               key={grado}
-              className="text-[var(--color-muted-ink)]"
+              className="type-title text-[var(--color-muted-ink)]"
               initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
               animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
               transition={{
@@ -75,18 +75,18 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
             </motion.p>
           ) : null}
           {ficha.lifeLine ? (
-            <p className="text-[var(--color-muted-ink)]">{ficha.lifeLine}</p>
+            <p className="type-title text-[var(--color-muted-ink)]">{ficha.lifeLine}</p>
           ) : null}
         </div>
         {ficha.summary ? (
           <div className="flex flex-col gap-1">
-            <p className="text-[var(--color-ink)]">Resumen</p>
+            <p className="type-title text-[var(--color-ink)]">Resumen</p>
             <p className="text-[var(--color-muted-ink)]">{ficha.summary}</p>
           </div>
         ) : null}
         {ficha.links.length > 0 ? (
           <div className="flex flex-col gap-1">
-            <p className="text-[var(--color-ink)]">Enlaces de interés</p>
+            <p className="type-title text-[var(--color-ink)]">Enlaces de interés</p>
             {ficha.links.map((link) =>
               link.href ? (
                 <a
