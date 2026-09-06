@@ -49,6 +49,36 @@ export function firstPathPoint(d: string): { x: number; y: number } {
   return { x: Number(match?.[0] ?? 0), y: Number(match?.[1] ?? 0) };
 }
 
+export function pathPoints(d: string): { x: number; y: number }[] {
+  const tokens = d.trim().split(/[\s,]+/).filter(Boolean);
+  const points: { x: number; y: number }[] = [];
+  for (let i = 0; i < tokens.length; i += 1) {
+    const token = tokens[i];
+    if (token === "M" || token === "L") {
+      points.push({ x: Number(tokens[i + 1]), y: Number(tokens[i + 2]) });
+      i += 2;
+    }
+  }
+  return points;
+}
+
+export function pathMidpoint(d: string): { x: number; y: number } {
+  const points = pathPoints(d);
+  if (points.length === 0) {
+    return firstPathPoint(d);
+  }
+  if (points.length === 2) {
+    return {
+      x: (points[0].x + points[1].x) / 2,
+      y: (points[0].y + points[1].y) / 2,
+    };
+  }
+  const mid = Math.floor((points.length - 1) / 2);
+  const a = points[mid];
+  const b = points[Math.min(mid + 1, points.length - 1)];
+  return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+}
+
 export function collapsePath(d: string, origin: { x: number; y: number }): string {
   let index = 0;
   return d.replace(/-?[\d.]+/g, () => {

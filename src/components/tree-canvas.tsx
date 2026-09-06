@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
@@ -8,6 +8,7 @@ import {
   collapsePath,
   expandPinId,
   firstPathPoint,
+  pathMidpoint,
   pinExpandedLayout,
   plusOrigin,
 } from "@/domain/expand-motion";
@@ -59,6 +60,12 @@ export function TreeCanvas({
   onExpand,
 }: Props) {
   const reduce = useReducedMotion();
+  const [hover, setHover] = useState<{
+    key: string;
+    label: string;
+    x: number;
+    y: number;
+  } | null>(null);
   const packed = useMemo(
     () => layoutPedigree(family, focusId, expandedIds),
     [focusId, expandedIds],
@@ -87,6 +94,17 @@ export function TreeCanvas({
     };
   }
   const layout = view.current.layout;
+  const svgBounds = useMemo(() => {
+    if (layout.nodes.length === 0) {
+      return { x: 0, y: 0, w: 1, h: 1 };
+    }
+    const pad = 24;
+    const minX = Math.min(...layout.nodes.map((node) => node.x)) - pad;
+    const minY = Math.min(...layout.nodes.map((node) => node.y)) - pad;
+    const maxX = Math.max(...layout.nodes.map((node) => node.x + node.width)) + pad;
+    const maxY = Math.max(...layout.nodes.map((node) => node.y + node.height)) + pad;
+    return { x: minX, y: minY, w: maxX - minX, h: maxY - minY };
+  }, [layout]);
   const pinId = view.current.pinId;
   const pinNode = pinId
     ? layout.nodes.find((node) => node.id === pinId)
@@ -119,6 +137,10 @@ export function TreeCanvas({
   zoomRef.current = zoom;
 
   const known = seenIds.current;
+
+  useEffect(() => {
+    setHover(null);
+  }, [viewKey]);
 
   useEffect(() => {
     seenIds.current = new Set(layout.nodes.map((node) => node.id));
@@ -237,13 +259,14 @@ export function TreeCanvas({
           }}
         >
           <svg
-            width="1"
-            height="1"
+            width={svgBounds.w}
+            height={svgBounds.h}
+            viewBox={`${svgBounds.x} ${svgBounds.y} ${svgBounds.w} ${svgBounds.h}`}
             className="overflow-visible"
             style={{
               position: "absolute",
-              left: 0,
-              top: 0,
+              left: svgBounds.x,
+              top: svgBounds.y,
               overflow: "visible",
               pointerEvents: "none",
             }}
@@ -260,32 +283,74 @@ export function TreeCanvas({
                   pinOrigin ??
                   firstPathPoint(connector.d);
                 const start = collapsePath(connector.d, origin);
+                const mid = pathMidpoint(connector.d);
+                const hovered = hover?.key === key;
                 return (
-                  <motion.path
+                  <motion.g
                     key={key}
-                    d={connector.d}
-                    fill="none"
-                    stroke="var(--color-line)"
-                    strokeWidth="1"
-                    strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
-                    initial={
-                      reduce || !fresh ? false : { d: start, opacity: 1 }
-                    }
-                    animate={{ d: connector.d, opacity: 1 }}
-                    exit={
-                      reduce
-                        ? { opacity: 0 }
-                        : { d: start, opacity: 0 }
-                    }
+                    initial={reduce || !fresh ? false : { opacity: 1 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                     transition={{
-                      duration: reduce ? 0 : 0.45,
+                      duration: reduce ? 0 : 0.3,
                       ease: [0.23, 1, 0.32, 1],
                     }}
-                  />
+                  >
+                    <motion.path
+                      d={connector.d}
+                      fill="none"
+                      stroke={hovered ? "var(--color-ink)" : "var(--color-line)"}
+                      strokeWidth={connector.kind === "spouse" ? 2 : 1}
+                      strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
+                      initial={reduce || !fresh ? false : { d: start }}
+                      animate={{ d: connector.d }}
+                      transition={{
+                        duration: reduce ? 0 : 0.3,
+                        ease: [0.23, 1, 0.32, 1],
+                      }}
+                    />
+                    <path
+                      d={connector.d}
+                      fill="none"
+                      stroke="transparent"
+                      strokeWidth="16"
+                      style={{ pointerEvents: "stroke" }}
+                      aria-label={connector.label}
+                      onPointerEnter={() =>
+                        setHover({
+                          key,
+                          label: connector.label,
+                          x: mid.x,
+                          y: mid.y,
+                        })
+                      }
+                      onPointerLeave={() =>
+                        setHover((current) => (current?.key === key ? null : current))
+                      }
+                    />
+                  </motion.g>
                 );
               })}
             </AnimatePresence>
           </svg>
+          {hover ? (
+            <motion.div
+              className="vinculo-tip pointer-events-none absolute z-30"
+              style={{ left: hover.x, top: hover.y }}
+              initial={
+                reduce
+                  ? { opacity: 1, transform: "translate(-50%, -16px)" }
+                  : { opacity: 0, transform: "translate(-50%, -8px)" }
+              }
+              animate={{ opacity: 1, transform: "translate(-50%, -16px)" }}
+              transition={{
+                duration: reduce ? 0 : 0.18,
+                ease: [0.23, 1, 0.32, 1],
+              }}
+            >
+              {hover.label}
+            </motion.div>
+          ) : null}
           <AnimatePresence initial={false}>
             {layout.nodes.map((placed) => {
               const person = people.get(placed.id) ?? requirePerson(family, placed.id);

@@ -4,6 +4,8 @@ import { layoutPedigree } from "@/domain/layout";
 import {
   asPersonId,
   BRANCH_GUTTER,
+  PAIR_GAP,
+  SIBLING_GAP,
   type Connector,
   type PedigreeLayout,
   type PersonId,
@@ -106,5 +108,149 @@ describe("layout geometry", () => {
     const right = javier.x <= aurora.x ? aurora : javier;
     const gap = right.x - (left.x + left.width);
     expect(gap).toBeGreaterThanOrEqual(BRANCH_GUTTER);
+  });
+});
+
+const MANUEL_MARTINEZ = asPersonId("manuel-martinez-de-albeniz-albizu");
+const PHELIPA = asPersonId("phelipa-zufiaur-ybarreta");
+const BARBARA = asPersonId("barbara-martinez-de-albeniz");
+const MANUEL_ANTIA = asPersonId("manuel-antia-ruiz-de-eguino");
+const FRANCISCO_ANTIA = asPersonId("francisco-antia-zubicain");
+const VICENTA = asPersonId("vicenta-ruiz-de-eguino");
+const MATILDE = asPersonId("matilde-ochoa-palop");
+const JOSE = asPersonId("jose-ochoa-hidalgo");
+const MARTIN = asPersonId("martin-ochoa-hidalgo");
+const JOAQUIN = asPersonId("joaquin-antia");
+const JOSEFA = asPersonId("josefa-saez-de-eguilaz");
+
+function unitCenter(layout: PedigreeLayout, ids: PersonId[]): number {
+  const nodes = ids.map((id) => nodeById(layout, id));
+  const minX = Math.min(...nodes.map((node) => node.x));
+  const maxX = Math.max(...nodes.map((node) => node.x + node.width));
+  return (minX + maxX) / 2;
+}
+
+function gapBetween(a: PlacedNode, b: PlacedNode): number {
+  const left = a.x <= b.x ? a : b;
+  const right = a.x <= b.x ? b : a;
+  return right.x - (left.x + left.width);
+}
+
+describe("layout symmetry", () => {
+  it("centers Manuel × Phelipa on Bárbara, not left of her", () => {
+    const layout = layoutPedigree(family, ANDRES, []);
+    const manuel = nodeById(layout, MANUEL_MARTINEZ);
+    const phelipa = nodeById(layout, PHELIPA);
+    const left = manuel.x <= phelipa.x ? manuel : phelipa;
+    const right = manuel.x <= phelipa.x ? phelipa : manuel;
+    const child = nodeCenter(nodeById(layout, BARBARA)).x;
+    expect((left.x + right.x + right.width) / 2).toBeCloseTo(child, 5);
+    expect((left.x + left.width + right.x) / 2).toBeCloseTo(child, 5);
+  });
+
+  it("centers Manuel × Phelipa on Bárbara when she is the focus", () => {
+    const layout = layoutPedigree(family, BARBARA, []);
+    const manuel = nodeById(layout, MANUEL_MARTINEZ);
+    const phelipa = nodeById(layout, PHELIPA);
+    const barbara = nodeById(layout, BARBARA);
+    const left = manuel.x <= phelipa.x ? manuel : phelipa;
+    const right = manuel.x <= phelipa.x ? phelipa : manuel;
+    const boundsCenter = (left.x + right.x + right.width) / 2;
+    const barMid = (left.x + left.width + right.x) / 2;
+    const child = barbara.x + barbara.width / 2;
+    expect(boundsCenter).toBe(child);
+    expect(barMid).toBe(child);
+    expect(gapBetween(manuel, phelipa)).toBe(PAIR_GAP);
+    for (let i = 0; i < layout.nodes.length; i += 1) {
+      for (let j = i + 1; j < layout.nodes.length; j += 1) {
+        const a = layout.nodes[i];
+        const b = layout.nodes[j];
+        const hit = !(
+          a.x + a.width <= b.x ||
+          b.x + b.width <= a.x ||
+          a.y + a.height <= b.y ||
+          b.y + b.height <= a.y
+        );
+        expect(hit, `${a.id} overlaps ${b.id}`).toBe(false);
+      }
+    }
+  });
+
+  it("centers Francisco × Vicenta on Manuel Antia", () => {
+    const layout = layoutPedigree(family, ANDRES, []);
+    const couple = unitCenter(layout, [FRANCISCO_ANTIA, VICENTA]);
+    const child = nodeCenter(nodeById(layout, MANUEL_ANTIA));
+    expect(couple).toBeCloseTo(child.x, 0);
+  });
+
+  it("keeps the two in-law couples from overlapping", () => {
+    const layout = layoutPedigree(family, ANDRES, []);
+    const left = [nodeById(layout, FRANCISCO_ANTIA), nodeById(layout, VICENTA)];
+    const right = [nodeById(layout, MANUEL_MARTINEZ), nodeById(layout, PHELIPA)];
+    const leftRight = Math.max(...left.map((node) => node.x + node.width));
+    const rightLeft = Math.min(...right.map((node) => node.x));
+    expect(rightLeft - leftRight).toBeGreaterThanOrEqual(SIBLING_GAP);
+  });
+
+  it("does not overlap person cards", () => {
+    const layout = layoutPedigree(family, ANDRES, [JAVIER]);
+    for (let i = 0; i < layout.nodes.length; i += 1) {
+      for (let j = i + 1; j < layout.nodes.length; j += 1) {
+        const a = layout.nodes[i];
+        const b = layout.nodes[j];
+        const hit = !(
+          a.x + a.width <= b.x ||
+          b.x + b.width <= a.x ||
+          a.y + a.height <= b.y ||
+          b.y + b.height <= a.y
+        );
+        expect(hit, `${a.id} overlaps ${b.id}`).toBe(false);
+      }
+    }
+  });
+
+  it("keeps spouses closer than siblings and does not draw them as siblings", () => {
+    expect(PAIR_GAP).toBeLessThan(SIBLING_GAP);
+    const layout = layoutPedigree(family, ANDRES, [JAVIER]);
+    const joaquin = nodeById(layout, JOAQUIN);
+    const josefa = nodeById(layout, JOSEFA);
+    const francisco = nodeById(layout, JAVIER);
+    const matilde = nodeById(layout, MATILDE);
+    expect(gapBetween(joaquin, josefa)).toBe(PAIR_GAP);
+    expect(gapBetween(francisco, matilde)).toBeGreaterThanOrEqual(SIBLING_GAP);
+    expect(gapBetween(francisco, matilde)).toBeGreaterThan(gapBetween(joaquin, josefa));
+    const spouse = layout.connectors.find(
+      (item) =>
+        item.kind === "spouse" &&
+        ((item.fromId === BARBARA && item.toId === MANUEL_ANTIA) ||
+          (item.fromId === MANUEL_ANTIA && item.toId === BARBARA)),
+    );
+    const falseSibling = layout.connectors.find(
+      (item) =>
+        item.kind === "spouse" &&
+        ((item.fromId === JAVIER && item.toId === MATILDE) ||
+          (item.fromId === MATILDE && item.toId === JAVIER)),
+    );
+    expect(spouse).toBeDefined();
+    expect(falseSibling).toBeUndefined();
+  });
+
+  it("labels parent, spouse and isolated sibling edges in Spanish", () => {
+    const layout = layoutPedigree(family, ANDRES, [MARTIN]);
+    expect(connectorFor(layout, PHELIPA, BARBARA).label).toBe("madre · hija");
+    expect(connectorFor(layout, MANUEL_MARTINEZ, BARBARA).label).toBe("padre · hija");
+    const spouse = layout.connectors.find(
+      (item) =>
+        item.kind === "spouse" &&
+        ((item.fromId === MANUEL_MARTINEZ && item.toId === PHELIPA) ||
+          (item.fromId === PHELIPA && item.toId === MANUEL_MARTINEZ)),
+    );
+    expect(spouse?.label).toBe("cónyuge");
+    const jose = layout.connectors.find(
+      (item) =>
+        item.kind === "sibling" &&
+        (item.fromId === JOSE || item.toId === JOSE),
+    );
+    expect(jose?.label).toBe("hermanos");
   });
 });

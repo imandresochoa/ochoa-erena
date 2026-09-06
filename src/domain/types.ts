@@ -53,11 +53,12 @@ export type PlacedNode = {
 };
 
 export type Connector = {
-  kind: "parent" | "spouse";
+  kind: "parent" | "spouse" | "sibling";
   certainty: Certainty;
   fromId: PersonId;
   toId: PersonId;
   d: string;
+  label: string;
 };
 
 export type PedigreeLayout = {
@@ -70,9 +71,9 @@ export type PointerKind = "tap" | "pan";
 export const NODE_HEIGHT = 38;
 export const NODE_PAD_X = 16;
 export const CHAR_WIDTH = 8;
-export const ROW_GAP = 135;
-export const PAIR_GAP = 80;
-export const SIBLING_GAP = 24;
+export const ROW_GAP = 148;
+export const PAIR_GAP = 64;
+export const SIBLING_GAP = 96;
 export const BRANCH_GUTTER = 280;
 export const PAN_TAP_PX = 8;
 export const DEFAULT_FOCUS_NAME = "Andrés Martín Ochoa Erena";
