@@ -1,13 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useRef } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
+import {
+  collapsePath,
+  expandPinId,
+  firstPathPoint,
+  pinExpandedLayout,
+  plusOrigin,
+} from "@/domain/expand-motion";
 import { hasExpandableSiblings, requirePerson } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
 import { addPan, classifyPointer } from "@/domain/view";
-import { NODE_HEIGHT, type PersonId, type Vec } from "@/domain/types";
+import { NODE_HEIGHT, type PedigreeLayout, type PersonId, type Vec } from "@/domain/types";
 
 type Props = {
   focusId: PersonId;
@@ -21,6 +28,10 @@ type Props = {
   onExpand: (id: PersonId) => void;
 };
 
+function connectorKey(connector: PedigreeLayout["connectors"][number]): string {
+  return `${connector.kind}:${connector.fromId}:${connector.toId}`;
+}
+
 export function TreeCanvas({
   focusId,
   selectedId,
@@ -33,10 +44,39 @@ export function TreeCanvas({
   onExpand,
 }: Props) {
   const reduce = useReducedMotion();
-  const layout = useMemo(
+  const packed = useMemo(
     () => layoutPedigree(family, focusId, expandedIds),
     [focusId, expandedIds],
   );
+  const view = useRef<{
+    key: string;
+    layout: PedigreeLayout;
+    expanded: PersonId[];
+    pinId: PersonId | null;
+  }>({ key: "", layout: packed, expanded: [], pinId: null });
+  const enterOrigins = useRef(new Map<PersonId, { x: number; y: number }>());
+  const connectorOrigins = useRef(new Map<string, { x: number; y: number }>());
+  const seenConnectors = useRef(new Set<string>());
+  const viewKey = `${focusId}|${expandedIds.join(",")}|${entering ? "1" : "0"}`;
+  if (view.current.key !== viewKey) {
+    const restaurar = !entering && view.current.expanded.length > 0 && expandedIds.length === 0;
+    const pinId = restaurar ? null : expandPinId(view.current.expanded, expandedIds);
+    view.current = {
+      key: viewKey,
+      layout:
+        !entering && pinId
+          ? pinExpandedLayout(view.current.layout, packed, pinId)
+          : packed,
+      expanded: [...expandedIds],
+      pinId,
+    };
+  }
+  const layout = view.current.layout;
+  const pinId = view.current.pinId;
+  const pinNode = pinId
+    ? layout.nodes.find((node) => node.id === pinId)
+    : undefined;
+  const pinOrigin = pinNode ? plusOrigin(pinNode) : null;
   const people = useMemo(
     () => new Map(family.people.map((person) => [person.id, person])),
     [],
@@ -60,6 +100,17 @@ export function TreeCanvas({
 
   useEffect(() => {
     seenIds.current = new Set(layout.nodes.map((node) => node.id));
+    seenConnectors.current = new Set(layout.connectors.map((item) => connectorKey(item)));
+    for (const id of [...enterOrigins.current.keys()]) {
+      if (!seenIds.current.has(id)) {
+        enterOrigins.current.delete(id);
+      }
+    }
+    for (const id of [...connectorOrigins.current.keys()]) {
+      if (!seenConnectors.current.has(id)) {
+        connectorOrigins.current.delete(id);
+      }
+    }
   }, [layout]);
 
   useEffect(() => {
@@ -69,7 +120,7 @@ export function TreeCanvas({
     }
     function onMove(event: PointerEvent) {
       const active = drag.current;
-    if (!active || event.pointerId !== active.pointerId) {
+      if (!active || event.pointerId !== active.pointerId) {
         return;
       }
       const delta = { x: event.clientX - active.x, y: event.clientY - active.y };
@@ -162,34 +213,72 @@ export function TreeCanvas({
               pointerEvents: "none",
             }}
           >
-            {layout.connectors.map((connector) => (
-              <path
-                key={`${connector.kind}-${connector.fromId}-${connector.toId}`}
-                d={connector.d}
-                fill="none"
-                stroke="var(--color-line)"
-                strokeWidth="1"
-                strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
-              />
-            ))}
+            <AnimatePresence initial={false}>
+              {layout.connectors.map((connector) => {
+                const key = connectorKey(connector);
+                const fresh = !entering && !seenConnectors.current.has(key);
+                if (fresh && pinOrigin) {
+                  connectorOrigins.current.set(key, pinOrigin);
+                }
+                const origin =
+                  connectorOrigins.current.get(key) ??
+                  pinOrigin ??
+                  firstPathPoint(connector.d);
+                const start = collapsePath(connector.d, origin);
+                return (
+                  <motion.path
+                    key={key}
+                    d={connector.d}
+                    fill="none"
+                    stroke="var(--color-line)"
+                    strokeWidth="1"
+                    strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
+                    initial={
+                      reduce || !fresh ? false : { d: start, opacity: 1 }
+                    }
+                    animate={{ d: connector.d, opacity: 1 }}
+                    exit={
+                      reduce
+                        ? { opacity: 0 }
+                        : { d: start, opacity: 0 }
+                    }
+                    transition={{
+                      duration: reduce ? 0 : 0.45,
+                      ease: [0.23, 1, 0.32, 1],
+                    }}
+                  />
+                );
+              })}
+            </AnimatePresence>
           </svg>
-          {layout.nodes.map((placed) => {
-            const person = people.get(placed.id) ?? requirePerson(family, placed.id);
-            return (
-              <PersonNode
-                key={placed.id}
-                person={person}
-                placed={placed}
-                selected={placed.id === selectedId}
-                showPlus={hasExpandableSiblings(family, placed.id, expandedIds)}
-                coarsePointer={coarsePointer}
-                fresh={!entering && known.size > 0 && !known.has(placed.id)}
-                panned={panned}
-                onSelect={() => onSelect(placed.id)}
-                onExpand={() => onExpand(placed.id)}
-              />
-            );
-          })}
+          <AnimatePresence initial={false}>
+            {layout.nodes.map((placed) => {
+              const person = people.get(placed.id) ?? requirePerson(family, placed.id);
+              const fresh = !entering && known.size > 0 && !known.has(placed.id);
+              if (fresh && pinOrigin) {
+                enterOrigins.current.set(placed.id, pinOrigin);
+              }
+              const origin =
+                enterOrigins.current.get(placed.id) ??
+                pinOrigin ??
+                plusOrigin(placed);
+              return (
+                <PersonNode
+                  key={placed.id}
+                  person={person}
+                  placed={placed}
+                  selected={placed.id === selectedId}
+                  showPlus={hasExpandableSiblings(family, placed.id, expandedIds)}
+                  coarsePointer={coarsePointer}
+                  fresh={fresh}
+                  origin={origin}
+                  panned={panned}
+                  onSelect={() => onSelect(placed.id)}
+                  onExpand={() => onExpand(placed.id)}
+                />
+              );
+            })}
+          </AnimatePresence>
         </div>
       </motion.div>
       <div className="fog-edge" data-entering={entering ? "true" : "false"} />

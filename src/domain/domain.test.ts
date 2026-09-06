@@ -3,8 +3,15 @@ import { parseFamily } from "@/domain/parse";
 import { foldAccents, findExactName, suggestPeople } from "@/domain/search";
 import { LEGEND_ITEMS } from "@/domain/legend";
 import { hasExpandableSiblings, siblingsOf, visiblePeople } from "@/domain/graph";
+import { family } from "@/data/family";
+import { pinExpandedLayout, plusOrigin } from "@/domain/expand-motion";
 import { layoutPedigree, measureNodeWidth } from "@/domain/layout";
-import { asPersonId, DEFAULT_FOCUS_NAME, ROW_GAP } from "@/domain/types";
+import {
+  asPersonId,
+  DEFAULT_FOCUS_NAME,
+  NODE_HEIGHT,
+  ROW_GAP,
+} from "@/domain/types";
 import { classifyPointer, isRestored, needsRestaurar, restorePan } from "@/domain/view";
 import { WELCOME_INTRODUCTION } from "@/domain/welcome";
 
@@ -126,6 +133,42 @@ describe("layout", () => {
 
   it("matches Figma node width for the default name", () => {
     expect(measureNodeWidth(DEFAULT_FOCUS_NAME)).toBe(240);
+  });
+});
+
+describe("expand motion", () => {
+  const andres = asPersonId("andres-martin-ochoa-erena");
+  const francisco = asPersonId("francisco-javier-ochoa-palop");
+  const matilde = asPersonId("matilde-ochoa-palop");
+
+  it("pins Francisco at the closed plus after his lane opens", () => {
+    const closed = layoutPedigree(family, andres, []);
+    const opened = layoutPedigree(family, andres, [francisco]);
+    const pinned = pinExpandedLayout(closed, opened, francisco);
+    const closedFrancisco = closed.nodes.find((node) => node.id === francisco);
+    const pinnedFrancisco = pinned.nodes.find((node) => node.id === francisco);
+    expect(closedFrancisco).toBeDefined();
+    expect(pinnedFrancisco).toBeDefined();
+    expect(pinnedFrancisco?.x).toBe(closedFrancisco?.x);
+    expect(pinnedFrancisco?.y).toBe(closedFrancisco?.y);
+    expect(pinned.nodes.some((node) => node.id === matilde)).toBe(true);
+  });
+
+  it("puts Matilde enter origin on Francisco plus", () => {
+    const closed = layoutPedigree(family, andres, []);
+    const opened = layoutPedigree(family, andres, [francisco]);
+    const pinned = pinExpandedLayout(closed, opened, francisco);
+    const node = pinned.nodes.find((item) => item.id === francisco);
+    expect(node).toBeDefined();
+    expect(plusOrigin(node!)).toEqual({
+      x: node!.x,
+      y: node!.y + NODE_HEIGHT / 2,
+    });
+    const closedFrancisco = closed.nodes.find((item) => item.id === francisco);
+    expect(plusOrigin(node!)).toEqual({
+      x: closedFrancisco!.x,
+      y: closedFrancisco!.y + NODE_HEIGHT / 2,
+    });
   });
 });
 

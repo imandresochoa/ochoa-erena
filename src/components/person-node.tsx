@@ -11,6 +11,7 @@ type Props = {
   showPlus: boolean;
   coarsePointer: boolean;
   fresh: boolean;
+  origin: { x: number; y: number };
   panned: { current: boolean };
   onSelect: () => void;
   onExpand: () => void;
@@ -23,31 +24,32 @@ export function PersonNode({
   showPlus,
   coarsePointer,
   fresh,
+  origin,
   panned,
   onSelect,
   onExpand,
 }: Props) {
   const reduce = useReducedMotion();
   const plusOnSelect = coarsePointer && selected;
+  const start = {
+    x: origin.x,
+    y: origin.y - placed.height / 2,
+  };
+  const move = {
+    duration: reduce ? 0 : 0.45,
+    ease: [0.23, 1, 0.32, 1] as const,
+  };
 
   return (
     <motion.div
       className="person-node group/node absolute"
       data-person-id={person.id}
       data-reduced={reduce ? "true" : "false"}
-      style={{ left: placed.x, top: placed.y, width: placed.width, height: placed.height }}
-      initial={
-        fresh
-          ? reduce
-            ? { opacity: 0 }
-            : { opacity: 0, transform: "translateX(-8px)" }
-          : { opacity: 1, transform: "translateX(0px)" }
-      }
-      animate={{ opacity: 1, transform: "translateX(0px)" }}
-      transition={{
-        duration: reduce ? 0.2 : 0.22,
-        ease: [0.23, 1, 0.32, 1],
-      }}
+      style={{ left: 0, top: 0, width: placed.width, height: placed.height }}
+      initial={fresh && !reduce ? { opacity: 0, x: start.x, y: start.y } : false}
+      animate={{ opacity: 1, x: placed.x, y: placed.y }}
+      exit={reduce ? { opacity: 0 } : { opacity: 0, x: start.x, y: start.y }}
+      transition={move}
     >
       {showPlus ? (
         <button
