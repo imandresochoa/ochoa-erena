@@ -3,6 +3,10 @@ import type { Person, PersonLink, PersonSource } from "./types";
 
 export const ANDRES_NOTICE_EMAIL = "Andresmoer@gmail.com";
 
+export type FichaDoubt = {
+  label: "Dudoso";
+};
+
 export type Ficha = {
   displayName: string;
   lifeProse: string | null;
@@ -11,6 +15,7 @@ export type Ficha = {
   sources: PersonSource[];
   files: readonly never[];
   noticeMailto: string | null;
+  doubt: FichaDoubt | null;
 };
 
 type LifeClause =
@@ -85,6 +90,12 @@ export function leftoverLinks(links: PersonLink[], sources: PersonSource[]): Per
   return links.filter((link) => !link.href || !hrefs.has(link.href));
 }
 
+export function fichaDoubt(person: Person): FichaDoubt | null {
+  return person.marks.includes("C") || person.marks.includes("N")
+    ? { label: "Dudoso" }
+    : null;
+}
+
 export function fichaFromPerson(person: Person): Ficha {
   const summary = person.summary.trim() ? person.summary : null;
   const links = person.links;
@@ -98,5 +109,6 @@ export function fichaFromPerson(person: Person): Ficha {
     sources,
     files: [],
     noticeMailto: thin ? noticeMailto(person.displayName) : null,
+    doubt: fichaDoubt(person),
   };
 }

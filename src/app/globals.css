@@ -220,6 +220,19 @@ button.ghost-btn.ficha-back {
   white-space: nowrap;
 }
 
+.ficha-doubt {
+  display: inline-flex;
+  align-items: center;
+  background: transparent;
+  color: var(--color-muted-ink);
+  border: 1px dashed var(--color-muted-ink);
+  border-radius: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
 .plus-cut {
   position: absolute;
   top: 50%;

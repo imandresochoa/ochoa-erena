@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { family } from "@/data/family";
 import {
   ANDRES_NOTICE_EMAIL,
+  fichaDoubt,
   fichaFromPerson,
   leftoverLinks,
 } from "@/domain/ficha";
@@ -310,6 +311,124 @@ describe("fichaFromPerson", () => {
     expect(ficha.sources).toEqual([FRANCISCO_SOURCE]);
     expect(ficha.links).toEqual(francisco!.links);
     expect(ficha.links[0]?.href).toBe(FRANCISCO_HREF);
+  });
+
+  it("forwards Dudoso when marks include C or N", () => {
+    expect(
+      fichaFromPerson(person({ displayName: "José Ochoa Hidalgo", marks: ["C"] })).doubt,
+    ).toEqual({ label: "Dudoso" });
+    expect(
+      fichaFromPerson(person({ displayName: "Bruno Guillerna Ochoa", marks: ["N"] })).doubt,
+    ).toEqual({ label: "Dudoso" });
+  });
+
+  it("forwards null doubt when marks have no C or N", () => {
+    expect(
+      fichaFromPerson(person({ displayName: "Andrés Martín Ochoa Erena", marks: ["TO"] }))
+        .doubt,
+    ).toBeNull();
+    expect(
+      fichaFromPerson(
+        person({ displayName: "Joaquín Antia Martínez de Albéniz", marks: ["H"] }),
+      ).doubt,
+    ).toBeNull();
+  });
+
+  it("forwards snapshot doubt from the same C or N predicate", () => {
+    for (const item of family.people) {
+      expect(fichaFromPerson(item).doubt).toEqual(fichaDoubt(item));
+    }
+  });
+});
+
+describe("fichaDoubt", () => {
+  it("returns Dudoso when marks include C", () => {
+    expect(fichaDoubt(person({ displayName: "José Ochoa Hidalgo", marks: ["C"] }))).toEqual({
+      label: "Dudoso",
+    });
+  });
+
+  it("returns Dudoso when marks include N", () => {
+    expect(
+      fichaDoubt(person({ displayName: "Bruno Guillerna Ochoa", marks: ["N"] })),
+    ).toEqual({ label: "Dudoso" });
+  });
+
+  it("returns Dudoso when C or N is mixed with other marks", () => {
+    expect(
+      fichaDoubt(person({ displayName: "José Ochoa Hidalgo", marks: ["TO", "C", "H"] })),
+    ).toEqual({ label: "Dudoso" });
+    expect(
+      fichaDoubt(person({ displayName: "Bruno Guillerna Ochoa", marks: ["H", "TO", "N"] })),
+    ).toEqual({ label: "Dudoso" });
+  });
+
+  it("returns null for H alone", () => {
+    expect(
+      fichaDoubt(person({ displayName: "Joaquín Antia Martínez de Albéniz", marks: ["H"] })),
+    ).toBeNull();
+  });
+
+  it("returns null for TO alone", () => {
+    expect(
+      fichaDoubt(person({ displayName: "Andrés Martín Ochoa Erena", marks: ["TO"] })),
+    ).toBeNull();
+  });
+
+  it("returns null for TO and AEC", () => {
+    expect(
+      fichaDoubt(person({ displayName: "Antonio Erena Camacho", marks: ["TO", "AEC"] })),
+    ).toBeNull();
+  });
+
+  it("does not infer Dudoso from a source marked H", () => {
+    expect(
+      fichaDoubt(
+        person({
+          displayName: "Francisco Javier Ochoa Palop",
+          marks: ["TO"],
+          sources: [FRANCISCO_SOURCE],
+        }),
+      ),
+    ).toBeNull();
+  });
+
+  it("flags every snapshot person with C or N and nobody else", () => {
+    for (const item of family.people) {
+      const dudoso = item.marks.includes("C") || item.marks.includes("N");
+      if (dudoso) {
+        expect(fichaDoubt(item)).toEqual({ label: "Dudoso" });
+      } else {
+        expect(fichaDoubt(item)).toBeNull();
+      }
+    }
+  });
+
+  it("flags José, Juan, Josefa, and Bruno as Dudoso", () => {
+    for (const id of [
+      "jose-ochoa-hidalgo",
+      "juan-ochoa-de-eguiara",
+      "josefa-saez-de-eguilaz",
+      "bruno-guillerna-ochoa",
+    ]) {
+      const item = family.people.find((entry) => entry.id === id);
+      expect(item).toBeDefined();
+      expect(fichaDoubt(item!)).toEqual({ label: "Dudoso" });
+    }
+  });
+
+  it("does not flag Andrés, Francisco, Joaquín, Andrés Erena, or Capilla", () => {
+    for (const id of [
+      "andres-martin-ochoa-erena",
+      "francisco-javier-ochoa-palop",
+      "joaquin-antia",
+      "andres-erena",
+      "capilla-liebana",
+    ]) {
+      const item = family.people.find((entry) => entry.id === id);
+      expect(item).toBeDefined();
+      expect(fichaDoubt(item!)).toBeNull();
+    }
   });
 });
 

@@ -34,9 +34,13 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
 
   return (
     <motion.aside
-      aria-label={
-        grado ? `Ficha de ${ficha.displayName}, ${grado}` : `Ficha de ${ficha.displayName}`
-      }
+      aria-label={[
+        `Ficha de ${ficha.displayName}`,
+        ficha.doubt?.label,
+        grado,
+      ]
+        .filter(Boolean)
+        .join(", ")}
       className={`absolute z-30 flex flex-col overflow-hidden border-[var(--color-line)] bg-[rgb(244_242_239_/_0.8)] p-2.5 backdrop-blur-[15px] ${
         narrow
           ? "inset-x-0 bottom-0 max-h-[70dvh] border-t"
@@ -60,7 +64,22 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
       </div>
       <div className="font-satoshi flex flex-1 flex-col gap-8 overflow-auto p-[25px] text-base leading-[1.4]">
         <div className="flex flex-col gap-1">
-          <p className="type-title text-[var(--color-ink)]">{ficha.displayName}</p>
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+            <p className="type-title text-[var(--color-ink)]">{ficha.displayName}</p>
+            {ficha.doubt ? (
+              <motion.span
+                className="ficha-doubt"
+                initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
+                transition={{
+                  duration: reduce ? 0.16 : 0.24,
+                  ease: EASE_OUT,
+                }}
+              >
+                {ficha.doubt.label}
+              </motion.span>
+            ) : null}
+          </div>
           {grado ? (
             <motion.p
               key={grado}
