@@ -192,6 +192,12 @@ button.chrome-ctl-plain:disabled {
   transform: scale(0.97);
 }
 
+button.ghost-btn.ficha-back {
+  padding: 8px;
+  gap: 4px;
+  line-height: 1;
+}
+
 .legend-menu {
   border: 0;
   box-shadow: none;
