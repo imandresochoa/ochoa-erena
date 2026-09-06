@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
+import { connectorStroke, paintConnectors } from "@/domain/connector-paint";
 import {
   collapsePath,
   expandPinId,
@@ -272,7 +273,10 @@ export function TreeCanvas({
             }}
           >
             <AnimatePresence initial={false}>
-              {layout.connectors.map((connector) => {
+              {paintConnectors(
+                layout.connectors,
+                (connector) => connectorKey(connector) === hover?.key,
+              ).map((connector) => {
                 const key = connectorKey(connector);
                 const fresh = !entering && !seenConnectors.current.has(key);
                 if (fresh && pinOrigin) {
@@ -288,6 +292,7 @@ export function TreeCanvas({
                 return (
                   <motion.g
                     key={key}
+                    style={{ zIndex: hovered ? 1 : 0 }}
                     initial={reduce || !fresh ? false : { opacity: 1 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -299,7 +304,7 @@ export function TreeCanvas({
                     <motion.path
                       d={connector.d}
                       fill="none"
-                      stroke={hovered ? "var(--color-ink)" : "var(--color-line)"}
+                      stroke={connectorStroke(hovered)}
                       strokeWidth={connector.kind === "spouse" ? 2 : 1}
                       strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
                       initial={reduce || !fresh ? false : { d: start }}
@@ -336,13 +341,13 @@ export function TreeCanvas({
           {hover ? (
             <motion.div
               className="vinculo-tip pointer-events-none absolute z-30"
-              style={{ left: hover.x, top: hover.y }}
-              initial={
-                reduce
-                  ? { opacity: 1, transform: "translate(-50%, -16px)" }
-                  : { opacity: 0, transform: "translate(-50%, -8px)" }
-              }
-              animate={{ opacity: 1, transform: "translate(-50%, -16px)" }}
+              style={{
+                left: hover.x,
+                top: hover.y,
+                transform: "translate(-50%, -50%)",
+              }}
+              initial={{ opacity: reduce ? 1 : 0 }}
+              animate={{ opacity: 1 }}
               transition={{
                 duration: reduce ? 0 : 0.18,
                 ease: [0.23, 1, 0.32, 1],
