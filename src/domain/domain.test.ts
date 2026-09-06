@@ -15,11 +15,13 @@ import {
 import {
   classifyPointer,
   clampZoom,
+  closeFicha,
   DEFAULT_ZOOM,
   fichaPersonAfterPointer,
   focusPerson,
   isRestored,
   needsRestaurar,
+  openFicha,
   restorePan,
   stepZoom,
   wheelZoom,
@@ -256,6 +258,65 @@ describe("focus", () => {
     const closed = { ...view, selectedId: null };
     expect(focusPerson(closed, francisco).selectedId).toBeNull();
     expect(focusPerson(closed, andres).selectedId).toBeNull();
+  });
+});
+
+describe("ficha", () => {
+  const andres = asPersonId("andres");
+  const francisco = asPersonId("francisco");
+  const view = {
+    focusId: andres,
+    selectedId: andres,
+    expandedIds: [francisco],
+    pan: { x: 120, y: -40 },
+    entering: true,
+    zoom: 0.8,
+  };
+
+  it("opening another person only writes selectedId", () => {
+    expect(openFicha(view, francisco)).toEqual({
+      focusId: andres,
+      selectedId: francisco,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("opening the focused person only writes selectedId", () => {
+    const closed = { ...view, selectedId: null };
+    expect(openFicha(closed, andres)).toEqual({
+      focusId: andres,
+      selectedId: andres,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("closing clears selectedId and keeps expand, focus, pan, and zoom", () => {
+    expect(closeFicha(view)).toEqual({
+      focusId: andres,
+      selectedId: null,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("open then close returns to the same graph camera with selectedId null", () => {
+    const opened = openFicha({ ...view, selectedId: null }, francisco);
+    expect(closeFicha(opened)).toEqual({
+      focusId: andres,
+      selectedId: null,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
   });
 });
 
