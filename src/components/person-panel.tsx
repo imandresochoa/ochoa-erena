@@ -1,5 +1,8 @@
 "use client";
 
+import { motion, useReducedMotion } from "motion/react";
+import { ChevronLeftIcon } from "@/components/chevron-left-icon";
+import { fichaFromPerson } from "@/domain/ficha";
 import type { Person } from "@/domain/types";
 
 type Props = {
@@ -8,48 +11,63 @@ type Props = {
   onBack: () => void;
 };
 
-function lifeLine(person: Person): string {
-  return [person.place, person.birth?.text, person.death?.text].filter(Boolean).join(" · ");
-}
+const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 
 export function PersonPanel({ person, narrow, onBack }: Props) {
-  const facts = lifeLine(person);
+  const reduce = useReducedMotion();
+  const ficha = fichaFromPerson(person);
+  const hidden = reduce
+    ? { opacity: 0 }
+    : narrow
+      ? { opacity: 0, y: "100%" }
+      : { opacity: 0, x: "100%" };
+  const shown = reduce
+    ? { opacity: 1 }
+    : narrow
+      ? { opacity: 1, y: 0 }
+      : { opacity: 1, x: 0 };
 
   return (
-    <aside
+    <motion.aside
+      aria-label={`Ficha de ${ficha.displayName}`}
       className={`absolute z-30 flex flex-col overflow-hidden border-[var(--color-line)] bg-[rgb(244_242_239_/_0.8)] p-2.5 backdrop-blur-[15px] ${
         narrow
           ? "inset-x-0 bottom-0 max-h-[70dvh] border-t"
           : "top-0 right-0 h-full w-[min(518px,38vw)] border-l"
       }`}
+      initial={hidden}
+      animate={shown}
+      exit={hidden}
+      transition={{
+        duration: reduce ? 0.2 : 0.26,
+        ease: EASE_OUT,
+      }}
     >
       <div className="sticky top-0 py-2.5">
-        <button
-          type="button"
-          onClick={onBack}
-          className="ghost-btn gap-1 py-1 pr-3"
-        >
-          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-            <path d="M12.5 5 L7.5 10 L12.5 15" stroke="#1a1a1a" strokeWidth="1.2" />
-          </svg>
+        <button type="button" onClick={onBack} className="ghost-btn gap-1 py-1 pr-3">
+          <span className="relative size-5 overflow-clip" aria-hidden="true">
+            <ChevronLeftIcon />
+          </span>
           Volver
         </button>
       </div>
       <div className="font-satoshi flex flex-1 flex-col gap-8 overflow-auto p-[25px] text-base leading-[1.4]">
         <div className="flex flex-col gap-1">
-          <p className="text-[var(--color-ink)]">{person.displayName}</p>
-          {facts ? <p className="text-[var(--color-muted-ink)]">{facts}</p> : null}
+          <p className="text-[var(--color-ink)]">{ficha.displayName}</p>
+          {ficha.lifeLine ? (
+            <p className="text-[var(--color-muted-ink)]">{ficha.lifeLine}</p>
+          ) : null}
         </div>
-        <div className="flex flex-col gap-1">
-          <p className="text-[var(--color-ink)]">Resumen</p>
-          <p className="text-[var(--color-muted-ink)]">
-            {person.summary || "Sin resumen en el snapshot."}
-          </p>
-        </div>
-        {person.links.length > 0 ? (
+        {ficha.summary ? (
+          <div className="flex flex-col gap-1">
+            <p className="text-[var(--color-ink)]">Resumen</p>
+            <p className="text-[var(--color-muted-ink)]">{ficha.summary}</p>
+          </div>
+        ) : null}
+        {ficha.links.length > 0 ? (
           <div className="flex flex-col gap-1">
             <p className="text-[var(--color-ink)]">Enlaces de interés</p>
-            {person.links.map((link) =>
+            {ficha.links.map((link) =>
               link.href ? (
                 <a
                   key={link.label}
@@ -68,7 +86,12 @@ export function PersonPanel({ person, narrow, onBack }: Props) {
             )}
           </div>
         ) : null}
+        {ficha.noticeMailto ? (
+          <a href={ficha.noticeMailto} className="ink-btn w-fit px-4 py-2">
+            Avisar a Andrés
+          </a>
+        ) : null}
       </div>
-    </aside>
+    </motion.aside>
   );
 }

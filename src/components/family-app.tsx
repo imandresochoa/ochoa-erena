@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { AnimatePresence } from "motion/react";
 import { LandingScreen } from "@/components/landing-screen";
 import { LegendMenu } from "@/components/legend-menu";
 import { PersonPanel } from "@/components/person-panel";
@@ -151,17 +152,20 @@ export function FamilyApp() {
           />
         </div>
       </div>
-      {selected ? (
-        <PersonPanel
-          person={selected}
-          narrow={narrow}
-          onBack={() =>
-            setScreen((current) =>
-              current.kind === "tree" ? { ...current, selectedId: null } : current,
-            )
-          }
-        />
-      ) : null}
+      <AnimatePresence>
+        {selected ? (
+          <PersonPanel
+            key="ficha"
+            person={selected}
+            narrow={narrow}
+            onBack={() =>
+              setScreen((current) =>
+                current.kind === "tree" ? { ...current, selectedId: null } : current,
+              )
+            }
+          />
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
