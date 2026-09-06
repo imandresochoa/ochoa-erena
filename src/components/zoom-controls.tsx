@@ -14,24 +14,15 @@ type Props = {
 };
 
 export function ZoomControls({ zoom, onZoom }: Props) {
-  const [pressed, setPressed] = useState(false);
+  const [label, setLabel] = useState<string | null>(null);
   const hide = useRef<number>(0);
 
-  function showPercent() {
+  function showAfter(next: number) {
     window.clearTimeout(hide.current);
-    setPressed(true);
+    setLabel(zoomPercentText(next));
+    hide.current = window.setTimeout(() => setLabel(null), 700);
+    onZoom(next);
   }
-
-  function hidePercent() {
-    window.clearTimeout(hide.current);
-    hide.current = window.setTimeout(() => setPressed(false), 700);
-  }
-
-  const press = {
-    onPointerDown: showPercent,
-    onPointerUp: hidePercent,
-    onPointerCancel: hidePercent,
-  };
 
   return (
     <div className="flex flex-col items-end gap-4">
@@ -40,14 +31,13 @@ export function ZoomControls({ zoom, onZoom }: Props) {
         className="chrome-ctl min-w-[14px]"
         aria-label="Acercar"
         disabled={zoom >= ZOOM_MAX}
-        onClick={() => onZoom(stepZoom(zoom, 1))}
-        {...press}
+        onClick={() => showAfter(stepZoom(zoom, 1))}
       >
         +
       </button>
-      {pressed ? (
+      {label ? (
         <span className="text-[12px] leading-[1.4] text-[var(--color-muted-ink)]">
-          {zoomPercentText(zoom)}
+          {label}
         </span>
       ) : null}
       <button
@@ -55,8 +45,7 @@ export function ZoomControls({ zoom, onZoom }: Props) {
         className="chrome-ctl min-w-[14px]"
         aria-label="Alejar"
         disabled={zoom <= ZOOM_MIN}
-        onClick={() => onZoom(stepZoom(zoom, -1))}
-        {...press}
+        onClick={() => showAfter(stepZoom(zoom, -1))}
       >
         −
       </button>
