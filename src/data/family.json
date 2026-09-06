@@ -104,7 +104,16 @@
       "displayName": "Manuel Palop Fuentes",
       "marks": ["TO", "H"],
       "summary": "Hermano de Matilde Palop Fuentes, según Cordobapedia y Andrés. Veterinario titular: Ceuta 1973, Obejo 1975. Colegiado honorífico 1985. «Número uno de su promoción»: solo oral. Padres no asignados.",
-      "links": []
+      "links": [
+        {
+          "label": "BOE-A-1973-43637, Ceuta",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1973-43637"
+        },
+        {
+          "label": "BOE-A-1975-20929, Obejo",
+          "href": "https://www.boe.es/diario_boe/txt.php?id=BOE-A-1975-20929"
+        }
+      ]
     },
     {
       "id": "pedro-palop-fuentes",
@@ -123,7 +132,12 @@
       "displayName": "Rafael Ochoa Hidalgo",
       "marks": ["TO", "H"],
       "summary": "Hermano de Martín Ochoa Hidalgo. Expediente en la Escuela Normal de Maestros, 1929; el catálogo AHUS lo liga a Posadas. Padres no asignados.",
-      "links": []
+      "links": [
+        {
+          "label": "AHUS, Escuela Normal 1929",
+          "href": "https://ahus.us.es/index.php/ochoa-hidalgo-rafael"
+        }
+      ]
     },
     {
       "id": "jose-ochoa-hidalgo",
@@ -207,7 +221,12 @@
       "death": { "year": 1926, "approx": true, "text": "muerte ~1926 [TO]" },
       "place": "Vitoria-Gasteiz",
       "summary": "Bisabuelo de Andrés. Andrés confirma: Martín María (AHDV 61790) es el bisabuelo oral Martín Ochoa Antía. Fue ingeniero, según casa. Autia (Docutren) = Antía sigue como hipótesis.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 61790",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=61790"
+        }
+      ]
     },
     {
       "id": "josefa-hidalgo-de-la-vega",
@@ -222,7 +241,12 @@
       "marks": ["H"],
       "birth": { "year": 1863, "approx": false, "text": "baut. 1863-04-25, San Miguel" },
       "summary": "Hermana de Martín María. Capitulaciones de 1884 con Emeterio Guillerna (ESC,24187).",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 135757",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135757"
+        }
+      ]
     },
     {
       "id": "emeterio-guillerna",
@@ -237,7 +261,12 @@
       "marks": ["H", "TO", "N"],
       "birth": { "year": 1885, "approx": false, "text": "baut. 1885-10-07, San Pedro, Vitoria" },
       "summary": "Sobrino de Martín María, hijo de Gregoria. La casa lo dio por hermano: confusión. Paso a América: CEMLA 0 pasajeros.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 69059",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=69059"
+        }
+      ]
     },
     {
       "id": "heliodoro-palop-padron",
@@ -259,6 +288,26 @@
       "marks": ["TO", "H"],
       "place": "Torredonjimeno",
       "summary": "Bisabuelo materno. Cartulina DNSD E0020546: natural de Torredonjimeno, deportado por desafecto. Expediente de expropiación rústica. La familia no reconoce el oficio de cartero.",
+      "links": [
+        {
+          "label": "PARES DNSD E0020546",
+          "href": "https://pares.mcu.es/ParesBusquedas20/catalogo/show/12457735"
+        }
+      ]
+    },
+    {
+      "id": "andres-erena",
+      "displayName": "Andrés Erena",
+      "marks": ["AEC"],
+      "summary": "Padre de Antonio Erena Liébana, según el árbol oral que firma Antonio Erena Camacho. Zapatero. Sin partida.",
+      "links": []
+    },
+    {
+      "id": "capilla-liebana",
+      "displayName": "Capilla Liébana",
+      "marks": ["AEC"],
+      "place": "Jamilena",
+      "summary": "Madre de Antonio Erena Liébana, según el árbol oral que firma Antonio Erena Camacho. De Jamilena. Sin partida.",
       "links": []
     },
     {
@@ -301,7 +350,12 @@
       "birth": { "year": 1838, "approx": false, "text": "baut. 1838-12-08, Albéniz" },
       "place": "Albéniz, Aspárrena",
       "summary": "Tatarabuela. Bautizada en San Juan Bautista, Albéniz. Se casa en Albéniz el 24 de septiembre de 1855.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 13023",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=13023"
+        }
+      ]
     },
     {
       "id": "juan-ochoa-de-eguiara",
@@ -317,7 +371,12 @@
       "birth": { "year": 1790, "approx": false, "text": "baut. 1790-02-26, Andoin" },
       "place": "Andoin, Aspárrena",
       "summary": "Madre de Juan José. El índice le da el segundo apellido Ruiz de Savando. Encaje Savando / Sabando: hipótesis.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 29971",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29971"
+        }
+      ]
     },
     {
       "id": "joaquin-antia",
@@ -326,7 +385,12 @@
       "birth": { "year": 1804, "approx": false, "text": "baut. 1804-10-17, Albéniz" },
       "place": "Albéniz, Aspárrena",
       "summary": "Padre de María Concepción. Bautizado en San Juan Bautista, Albéniz.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 12723",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=12723"
+        }
+      ]
     },
     {
       "id": "josefa-saez-de-eguilaz",
@@ -339,8 +403,15 @@
       "id": "manuel-antia-ruiz-de-eguino",
       "displayName": "Manuel Antia Ruiz de Eguino",
       "marks": ["H"],
+      "birth": { "year": 1771, "approx": false, "text": "baut. 1771-05-03, Albéniz" },
+      "place": "Albéniz, Aspárrena",
       "summary": "Padre de Joaquín Antia. Entra en Andrés por la confirmación de Martín María.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 7758",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=7758"
+        }
+      ]
     },
     {
       "id": "barbara-martinez-de-albeniz",
@@ -349,7 +420,12 @@
       "birth": { "year": 1773, "approx": false, "text": "baut. 1773-01-23, Albéniz" },
       "place": "Albéniz",
       "summary": "Madre de Joaquín Antia. María Bárbara Inés Ildefonsa Martínez de Albéniz Zufiaur, baut. 1773-01-23, Albéniz, AHDV 8055. Entra en Andrés por la confirmación de Martín María.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 8055",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=8055"
+        }
+      ]
     },
     {
       "id": "francisco-antia-zubicain",
@@ -376,8 +452,15 @@
       "id": "phelipa-zufiaur-ybarreta",
       "displayName": "Phelipa Zufiaur Ybarreta",
       "marks": ["H"],
+      "birth": { "year": 1743, "approx": false, "text": "baut. 1743-01-07, Egino" },
+      "place": "Egino, Aspárrena",
       "summary": "Madre de Bárbara Martínez de Albéniz Zufiaur. Quinta abuela en la rama Albéniz, según el índice AHDV.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372"
+        }
+      ]
     },
     {
       "id": "antonio-martinez-de-ezcurra",
@@ -471,7 +554,12 @@
       "marks": ["H"],
       "birth": { "year": 1859, "approx": false, "text": "1859-07-14, San Miguel" },
       "summary": "Hermano de Martín María según el índice AHDV.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 134606",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=134606"
+        }
+      ]
     },
     {
       "id": "candida-ochoa-antia",
@@ -487,7 +575,12 @@
       "marks": ["H"],
       "birth": { "year": 1865, "approx": false, "text": "1865-09-04, San Miguel" },
       "summary": "Hermana de Martín María. Bautizada el mismo día que Cándida.",
-      "links": []
+      "links": [
+        {
+          "label": "AHDV 135977",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=135977"
+        }
+      ]
     },
     {
       "id": "francisco-ochoa-antia",
@@ -567,6 +660,9 @@
     { "kind": "parent", "from": "antonio-erena-liebana", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "parent", "from": "dolores-lopez-martos", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "spouse", "from": "antonio-erena-liebana", "to": "dolores-lopez-martos", "certainty": "confirmed" },
+    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "hypothesis" },
 
     { "kind": "parent", "from": "antonio-camacho-liebana", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
     { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
