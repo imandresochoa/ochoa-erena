@@ -127,7 +127,7 @@ body {
   border: 0;
   border-radius: 0;
   outline: none;
-  transition: background-color 140ms ease, transform 160ms ease;
+  transition: background-color 140ms ease, transform 160ms ease-out;
 }
 
 .ink-btn:active {
@@ -146,7 +146,7 @@ body {
   border: 0;
   border-radius: 0;
   outline: none;
-  transition: background-color 140ms ease, transform 160ms ease;
+  transition: background-color 140ms ease, transform 160ms ease-out;
 }
 
 .ghost-btn:active {
