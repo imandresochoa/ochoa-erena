@@ -5,7 +5,7 @@ import { LEGEND_ITEMS } from "@/domain/legend";
 import { hasExpandableSiblings, siblingsOf, visiblePeople } from "@/domain/graph";
 import { family } from "@/data/family";
 import { pinExpandedLayout, plusOrigin } from "@/domain/expand-motion";
-import { layoutPedigree, measureNodeWidth } from "@/domain/layout";
+import { layoutHouseCanvas, layoutPedigree, measureNodeWidth } from "@/domain/layout";
 import {
   asPersonId,
   DEFAULT_FOCUS_NAME,
@@ -19,6 +19,7 @@ import {
   DEFAULT_ZOOM,
   fichaPersonAfterPointer,
   focusPerson,
+  framePerson,
   isRestored,
   needsRestaurar,
   openFicha,
@@ -234,32 +235,37 @@ describe("focus", () => {
     zoom: 0.8,
   };
 
-  it("focusing another person recenters, clears selection and expansions, and keeps zoom", () => {
-    expect(focusPerson(view, francisco)).toEqual({
-      focusId: francisco,
-      selectedId: null,
-      expandedIds: [],
-      pan: { x: 0, y: 0 },
-      entering: false,
-      zoom: 0.8,
-    });
+  it("focusing another person keeps expansions, closes ficha, frames them, and keeps zoom", () => {
+    const next = focusPerson(view, francisco, fixture);
+    expect(next.focusId).toBe(francisco);
+    expect(next.selectedId).toBeNull();
+    expect(next.expandedIds).toEqual([francisco]);
+    expect(next.entering).toBe(false);
+    expect(next.zoom).toBe(0.8);
+    expect(next.pan).toEqual(
+      framePerson(layoutHouseCanvas(fixture, francisco, next.expandedIds), francisco, 0.8),
+    );
   });
 
-  it("focusing the same person keeps selection, expansions, and zoom but zeros pan", () => {
-    expect(focusPerson(view, andres)).toEqual({
+  it("focusing the same person keeps selection, expansions, and zoom and frames them", () => {
+    const next = focusPerson(view, andres, fixture);
+    expect(next).toEqual({
       focusId: andres,
       selectedId: andres,
       expandedIds: [francisco],
-      pan: { x: 0, y: 0 },
+      pan: { x: expect.any(Number), y: expect.any(Number) },
       entering: false,
       zoom: 0.8,
     });
+    expect(next.pan).toEqual(
+      framePerson(layoutHouseCanvas(fixture, andres, next.expandedIds), andres, 0.8),
+    );
   });
 
   it("does not open a ficha when focusing from the chrome", () => {
     const closed = { ...view, selectedId: null };
-    expect(focusPerson(closed, francisco).selectedId).toBeNull();
-    expect(focusPerson(closed, andres).selectedId).toBeNull();
+    expect(focusPerson(closed, francisco, fixture).selectedId).toBeNull();
+    expect(focusPerson(closed, andres, fixture).selectedId).toBeNull();
   });
 });
 

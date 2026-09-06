@@ -30,6 +30,7 @@ const antonioLiebana = asPersonId("antonio-erena-liebana");
 const andresErena = asPersonId("andres-erena");
 const capilla = asPersonId("capilla-liebana");
 const mercedes = asPersonId("mercedes-vinas-lopez");
+const mercedesOchoa = asPersonId("mercedes-ochoa-erena");
 const antonioCamacho = asPersonId("antonio-erena-camacho");
 const silvia = asPersonId("silvia-erena-camacho");
 const andresCamacho = asPersonId("andres-erena-camacho");
@@ -73,24 +74,27 @@ function certainties(people: FichaKinPerson[]): Certainty[] {
 }
 
 describe("fichaKin on the real family", () => {
-  it("lists both parents of Andrés as confirmed and leaves children and siblings empty", () => {
+  it("lists both parents of Andrés as confirmed and Mercedes as his sister", () => {
     expect(fichaKin(family, andres)).toEqual({
       parents: [
         kin(francisco, "Francisco Javier Ochoa Palop"),
         kin(mariaAurora, "María Aurora Erena Camacho"),
       ],
       children: [],
-      siblings: [],
+      siblings: [kin(mercedesOchoa, "Mercedes Ochoa Erena")],
     });
   });
 
-  it("lists Francisco Javier with his parents, Andrés as child, and Matilde as confirmed sister", () => {
+  it("lists Francisco Javier with his parents, Andrés and Mercedes as children, and Matilde as confirmed sister", () => {
     expect(fichaKin(family, francisco)).toEqual({
       parents: [
         kin(martinHidalgo, "Martín Ochoa Hidalgo"),
         kin(matildePalop, "Matilde Palop Fuentes"),
       ],
-      children: [kin(andres, "Andrés Martín Ochoa Erena")],
+      children: [
+        kin(andres, "Andrés Martín Ochoa Erena"),
+        kin(mercedesOchoa, "Mercedes Ochoa Erena"),
+      ],
       siblings: [kin(matilde, "Matilde Ochoa Palop")],
     });
   });
@@ -116,9 +120,9 @@ describe("fichaKin on the real family", () => {
     expect(matildeKin.siblings).toEqual([kin(francisco, "Francisco Javier Ochoa Palop")]);
   });
 
-  it("does not invent Mercedes as a sibling of Andrés", () => {
+  it("does not invent Mercedes Viñas López as a sibling of Andrés", () => {
     const andresKin = fichaKin(family, andres);
-    expect(andresKin.siblings).toEqual([]);
+    expect(andresKin.siblings).toEqual([kin(mercedesOchoa, "Mercedes Ochoa Erena")]);
     expect(ids([...andresKin.parents, ...andresKin.children, ...andresKin.siblings])).not.toContain(
       mercedes,
     );

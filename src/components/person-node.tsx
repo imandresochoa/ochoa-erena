@@ -23,7 +23,6 @@ export function PersonNode({
   placed,
   selected,
   expand,
-  coarsePointer,
   fresh,
   origin,
   panned,
@@ -31,7 +30,6 @@ export function PersonNode({
   onExpand,
 }: Props) {
   const reduce = useReducedMotion();
-  const plusOnSelect = coarsePointer && selected;
   const start = {
     x: origin.x,
     y: origin.y - placed.height / 2,
@@ -57,11 +55,11 @@ export function PersonNode({
           type="button"
           data-expand="true"
           data-side={expand.side}
-          data-on={plusOnSelect ? "true" : "false"}
+          data-on="true"
           aria-label={
             expand.kind === "minus"
-              ? `Ocultar hermanos de ${person.displayName}`
-              : `Mostrar hermanos de ${person.displayName}`
+              ? `Ocultar la rama de ${person.displayName}`
+              : `Mostrar la rama de ${person.displayName}`
           }
           className={
             expand.side === "right"

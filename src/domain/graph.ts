@@ -1,5 +1,6 @@
 import {
   asPersonId,
+  DEFAULT_FOCUS_ID,
   type Certainty,
   type Edge,
   type FamilyGraph,
@@ -120,8 +121,65 @@ export function visiblePeople(
     for (const sibling of siblingsOf(graph, expanded)) {
       visible.add(sibling);
     }
+    for (const child of childrenOf(graph, expanded)) {
+      visible.add(child);
+    }
   }
   return visible;
+}
+
+export function canvasVisible(
+  graph: FamilyGraph,
+  focusId: PersonId,
+  expandedIds: readonly PersonId[],
+): Set<PersonId> {
+  const visible = visiblePeople(graph, DEFAULT_FOCUS_ID, expandedIds);
+  visible.add(focusId);
+  for (const child of childrenOf(graph, focusId)) {
+    visible.add(child);
+  }
+  const spouse = spouseOf(graph, focusId);
+  if (spouse) {
+    visible.add(spouse);
+  }
+  return visible;
+}
+
+export function expansionsToReveal(
+  graph: FamilyGraph,
+  targetId: PersonId,
+): PersonId[] {
+  const opened: PersonId[] = [];
+  const seen = new Set<PersonId>();
+
+  const visibleNow = () => visiblePeople(graph, DEFAULT_FOCUS_ID, opened);
+
+  const reveal = (id: PersonId) => {
+    if (seen.has(id) || visibleNow().has(id)) {
+      return;
+    }
+    seen.add(id);
+    for (const sibling of siblingsOf(graph, id)) {
+      if (visibleNow().has(sibling)) {
+        if (!opened.includes(sibling)) {
+          opened.push(sibling);
+        }
+        return;
+      }
+    }
+    const parents = parentsOf(graph, id);
+    for (const parent of parents) {
+      reveal(parent);
+    }
+    const visible = visibleNow();
+    const opener = parents.find((parent) => visible.has(parent));
+    if (opener && !opened.includes(opener)) {
+      opened.push(opener);
+    }
+  };
+
+  reveal(targetId);
+  return opened;
 }
 
 export function hasExpandableSiblings(
@@ -172,12 +230,14 @@ export function expandControl(
   id: PersonId,
   expandedIds: readonly PersonId[],
 ): ExpandControl | null {
-  const visible = visiblePeople(graph, focusId, expandedIds);
+  const visible = canvasVisible(graph, focusId, expandedIds);
   const side = siblingExpandSide(graph, focusId, id, visible);
   if (expandedIds.includes(id)) {
     return { kind: "minus", side };
   }
-  if (siblingsOf(graph, id).some((sibling) => !visible.has(sibling))) {
+  const hiddenSibling = siblingsOf(graph, id).some((sibling) => !visible.has(sibling));
+  const hiddenChild = childrenOf(graph, id).some((child) => !visible.has(child));
+  if (hiddenSibling || hiddenChild) {
     return { kind: "plus", side };
   }
   return null;

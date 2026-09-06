@@ -158,6 +158,13 @@ describe("title type scale", () => {
     expect(introClass.split(/\s+/)).not.toContain("type-title");
   });
 
+  it("keeps the expand plus painted when a branch is still collapsed", () => {
+    const node = read("../components/person-node.tsx");
+    expect(node).toContain('data-expand="true"');
+    expect(node).toContain('data-on="true"');
+    expect(node).not.toContain("plusOnSelect");
+  });
+
   it("does not mark landing input or error text as title", () => {
     const inputClass = classOf(landing, 'aria-label="Nombre"');
     expect(inputClass.length).toBeGreaterThan(0);

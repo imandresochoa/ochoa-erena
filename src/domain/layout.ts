@@ -1,5 +1,13 @@
 import { ochoaCrest, placeCrestAboveCluster } from "./crest";
-import { childrenOf, parentsOf, siblingsOf, spouseEdge, spouseOf, visiblePeople } from "./graph";
+import {
+  canvasVisible,
+  childrenOf,
+  parentsOf,
+  siblingsOf,
+  spouseEdge,
+  spouseOf,
+  visiblePeople,
+} from "./graph";
 import { vinculoLabel } from "./vinculo";
 import {
   BRANCH_GUTTER,
@@ -9,6 +17,7 @@ import {
   ROW_GAP,
   SIBLING_GAP,
   asPersonId,
+  DEFAULT_FOCUS_ID,
   type Connector,
   type FamilyGraph,
   type PedigreeLayout,
@@ -63,14 +72,12 @@ function generationMap(
       gen.set(spouse, currentGen);
       queue.push(spouse);
     }
-    if (current === focusId) {
-      for (const child of childrenOf(graph, current)) {
-        if (!visible.has(child) || gen.has(child)) {
-          continue;
-        }
-        gen.set(child, currentGen + 1);
-        queue.push(child);
+    for (const child of childrenOf(graph, current)) {
+      if (!visible.has(child) || gen.has(child)) {
+        continue;
       }
+      gen.set(child, currentGen + 1);
+      queue.push(child);
     }
   }
   for (const expanded of expandedIds) {
@@ -585,12 +592,33 @@ function centerAlign(nodes: PlacedNode[], centerX: number): PlacedNode[] {
   return shiftNodes(nodes, centerX - (minX + maxX) / 2);
 }
 
-export function layoutPedigree(
+function pinFocusOrigin(nodes: PlacedNode[], focusId: PersonId): PlacedNode[] {
+  const focus = nodes.find((node) => node.id === focusId);
+  if (!focus) {
+    return centerAlign(nodes, 0);
+  }
+  return shiftNodes(nodes, -nodeCenter(focus).x);
+}
+
+export function layoutHouseCanvas(
   graph: FamilyGraph,
   focusId: PersonId,
   expandedIds: readonly PersonId[],
 ): PedigreeLayout {
-  const visible = visiblePeople(graph, focusId, expandedIds);
+  return layoutPedigree(
+    graph,
+    DEFAULT_FOCUS_ID,
+    expandedIds,
+    canvasVisible(graph, focusId, expandedIds),
+  );
+}
+
+export function layoutPedigree(
+  graph: FamilyGraph,
+  focusId: PersonId,
+  expandedIds: readonly PersonId[],
+  visible = visiblePeople(graph, focusId, expandedIds),
+): PedigreeLayout {
   const gens = generationMap(graph, focusId, visible, expandedIds);
   const seeds = houseSeeds(graph, focusId);
   const maternalSeed = seeds.maternal;
@@ -681,10 +709,10 @@ export function layoutPedigree(
     restByGen.set(generation, row);
   }
   for (const [generation, ids] of restByGen) {
-    const restNodes = centerAlign(
-      packSequence(rowOrder(graph, ids, focusId), byId, graph, generation),
-      0,
-    );
+    const packed = packSequence(rowOrder(graph, ids, focusId), byId, graph, generation);
+    const restNodes = ids.includes(focusId)
+      ? pinFocusOrigin(packed, focusId)
+      : centerAlign(packed, 0);
     for (const node of restNodes) {
       placed.set(node.id, node);
     }
