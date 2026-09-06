@@ -51,10 +51,25 @@ describe("title type scale", () => {
   it("marks person-panel titles with type-title", () => {
     expect(classOf(panel, ">{ficha.displayName}<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, "key={grado}").split(/\s+/)).toContain("type-title");
-    expect(classOf(panel, ">{ficha.lifeLine}<").split(/\s+/)).toContain("type-title");
-    expect(classOf(panel, ">Resumen<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Fuentes<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Enlaces de interés<").split(/\s+/)).toContain("type-title");
+  });
+
+  it("renders life prose as body copy, not a title dump", () => {
+    expect(panel).not.toMatch(/lifeLine/);
+    expect(panel).not.toContain("Resumen");
+    const lifeClass = classOf(panel, ">{ficha.lifeProse}<");
+    expect(lifeClass.length).toBeGreaterThan(0);
+    expect(lifeClass.split(/\s+/)).not.toContain("type-title");
+  });
+
+  it("keeps the kinship degree line before life prose and summary", () => {
+    const gradoAt = panel.indexOf("key={grado}");
+    const lifeAt = panel.indexOf(">{ficha.lifeProse}<");
+    const summaryAt = panel.indexOf(">{ficha.summary}<");
+    expect(gradoAt).toBeGreaterThan(-1);
+    expect(lifeAt).toBeGreaterThan(gradoAt);
+    expect(summaryAt).toBeGreaterThan(lifeAt);
   });
 
   it("marks welcome and landing page titles with type-title", () => {
