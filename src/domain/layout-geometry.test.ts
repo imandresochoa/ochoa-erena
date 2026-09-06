@@ -139,19 +139,28 @@ function gapBetween(a: PlacedNode, b: PlacedNode): number {
 describe("layout symmetry", () => {
   it("centers Manuel × Phelipa on Bárbara, not left of her", () => {
     const layout = layoutPedigree(family, ANDRES, []);
-    const couple = unitCenter(layout, [MANUEL_MARTINEZ, PHELIPA]);
-    const child = nodeCenter(nodeById(layout, BARBARA));
-    expect(couple).toBeCloseTo(child.x, 0);
+    const manuel = nodeById(layout, MANUEL_MARTINEZ);
+    const phelipa = nodeById(layout, PHELIPA);
+    const left = manuel.x <= phelipa.x ? manuel : phelipa;
+    const right = manuel.x <= phelipa.x ? phelipa : manuel;
+    const child = nodeCenter(nodeById(layout, BARBARA)).x;
+    expect((left.x + right.x + right.width) / 2).toBeCloseTo(child, 5);
+    expect((left.x + left.width + right.x) / 2).toBeCloseTo(child, 5);
   });
 
   it("centers Manuel × Phelipa on Bárbara when she is the focus", () => {
     const layout = layoutPedigree(family, BARBARA, []);
-    const couple = unitCenter(layout, [MANUEL_MARTINEZ, PHELIPA]);
-    const child = nodeCenter(nodeById(layout, BARBARA));
-    expect(couple).toBeCloseTo(child.x, 0);
-    expect(gapBetween(nodeById(layout, MANUEL_MARTINEZ), nodeById(layout, PHELIPA))).toBe(
-      PAIR_GAP,
-    );
+    const manuel = nodeById(layout, MANUEL_MARTINEZ);
+    const phelipa = nodeById(layout, PHELIPA);
+    const barbara = nodeById(layout, BARBARA);
+    const left = manuel.x <= phelipa.x ? manuel : phelipa;
+    const right = manuel.x <= phelipa.x ? phelipa : manuel;
+    const boundsCenter = (left.x + right.x + right.width) / 2;
+    const barMid = (left.x + left.width + right.x) / 2;
+    const child = barbara.x + barbara.width / 2;
+    expect(boundsCenter).toBe(child);
+    expect(barMid).toBe(child);
+    expect(gapBetween(manuel, phelipa)).toBe(PAIR_GAP);
     for (let i = 0; i < layout.nodes.length; i += 1) {
       for (let j = i + 1; j < layout.nodes.length; j += 1) {
         const a = layout.nodes[i];

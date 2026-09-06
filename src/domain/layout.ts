@@ -257,6 +257,26 @@ function growHouse(
   return house;
 }
 
+function coupleCardWidth(
+  id: PersonId,
+  partner: PersonId | undefined,
+  byId: Map<PersonId, Person>,
+  graph: FamilyGraph,
+): number {
+  const person = byId.get(id);
+  if (!person) {
+    return 0;
+  }
+  let width = measureNodeWidth(person.displayName);
+  if (partner && spouseEdge(graph, id, partner)) {
+    const other = byId.get(partner);
+    if (other) {
+      width = Math.max(width, measureNodeWidth(other.displayName));
+    }
+  }
+  return width;
+}
+
 function packSequence(
   ids: PersonId[],
   byId: Map<PersonId, Person>,
@@ -265,13 +285,21 @@ function packSequence(
 ): PlacedNode[] {
   const placed: PlacedNode[] = [];
   let x = 0;
-  for (const id of ids) {
+  for (let i = 0; i < ids.length; i += 1) {
+    const id = ids[i];
     const person = byId.get(id);
     if (!person) {
       continue;
     }
-    const width = measureNodeWidth(person.displayName);
     const prev = placed[placed.length - 1];
+    const next = ids[i + 1];
+    const partner =
+      prev && spouseEdge(graph, prev.id, id)
+        ? prev.id
+        : next && spouseEdge(graph, id, next)
+          ? next
+          : undefined;
+    const width = coupleCardWidth(id, partner, byId, graph);
     if (prev) {
       const couple = Boolean(spouseEdge(graph, prev.id, id));
       x = prev.x + prev.width + (couple ? PAIR_GAP : SIBLING_GAP);
@@ -444,8 +472,9 @@ function placeHouse(
       if (!person) {
         continue;
       }
-      const width = measureNodeWidth(person.displayName);
       const spouse = spouseOf(graph, id);
+      const partnerInRow = spouse && ordered.includes(spouse) ? spouse : undefined;
+      const width = coupleCardWidth(id, partnerInRow, byId, graph);
       const spouseNode = spouse ? placed.get(spouse) : undefined;
       let x = 0;
       if (spouse && spouseNode) {
