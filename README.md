@@ -2,7 +2,7 @@
 
 A web app for the Ochoa Erena family tree. The first screen is a short welcome text. **Continuar** opens the name field. Type a name. Press **Entrar**. The tree comes out of fog, centered on that person.
 
-Press **+** on a name to show brothers and sisters. Press **Restaurar** at the bottom to collapse them and recenter. Drag the canvas on desktop and on a phone. **Leyenda** (top right) opens the style key. Unconfirmed links use a dashed line.
+Press **+** on a name to show brothers and sisters. Press **Restaurar** at the bottom to collapse them and recenter. Drag the canvas on desktop and on a phone. **Leyenda** (top right) opens the style key. Unconfirmed links use a dashed line. Confirmed parent/child links with a large time gap use a dotted line.
 
 This snapshot comes from the private `second-brain` notes in `familia/` (`arbol.md`, `README.md`, `historia.md`, `fuentes.md`). The app does not fetch GitHub at runtime.
 

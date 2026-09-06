@@ -5,7 +5,11 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { PersonNode } from "@/components/person-node";
 import { family } from "@/data/family";
-import { connectorStroke, paintConnectors } from "@/domain/connector-paint";
+import {
+  connectorDasharray,
+  connectorStroke,
+  paintConnectors,
+} from "@/domain/connector-paint";
 import { ochoaCrest } from "@/domain/crest";
 import {
   collapsePath,
@@ -314,7 +318,18 @@ export function TreeCanvas({
                       fill="none"
                       stroke={connectorStroke(hovered)}
                       strokeWidth={connector.kind === "spouse" ? 2 : 1}
-                      strokeDasharray={connector.certainty === "hypothesis" ? "4 4" : undefined}
+                      strokeDasharray={connectorDasharray({
+                        kind: connector.kind,
+                        certainty: connector.certainty,
+                        parentBirthYear:
+                          connector.kind === "parent"
+                            ? people.get(connector.fromId)?.birth?.year
+                            : undefined,
+                        childBirthYear:
+                          connector.kind === "parent"
+                            ? people.get(connector.toId)?.birth?.year
+                            : undefined,
+                      })}
                       initial={reduce || !fresh ? false : { d: start }}
                       animate={{ d: connector.d }}
                       transition={{
