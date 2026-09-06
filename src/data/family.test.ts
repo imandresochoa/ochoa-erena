@@ -13,6 +13,7 @@ type RawPerson = {
   id: string;
   displayName: string;
   summary: string;
+  marks?: string[];
   links?: RawLink[];
   sources?: RawSource[];
   files?: unknown;
