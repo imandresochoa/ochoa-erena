@@ -131,6 +131,10 @@ button.chrome-ctl {
   position: relative;
 }
 
+button.chrome-ctl:disabled {
+  opacity: 0.35;
+}
+
 button.chrome-ctl::after {
   content: "";
   position: absolute;
@@ -232,7 +236,7 @@ button.chrome-ctl::after {
     background: var(--color-node-hover);
   }
 
-  .chrome-ctl:hover {
+  .chrome-ctl:hover:not(:disabled) {
     color: var(--color-ink);
     border-bottom-color: var(--color-ink);
   }

@@ -13,7 +13,12 @@ import {
 } from "@/domain/expand-motion";
 import { hasExpandableSiblings, requirePerson } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
-import { addPan, classifyPointer, fichaPersonAfterPointer } from "@/domain/view";
+import {
+  addPan,
+  classifyPointer,
+  fichaPersonAfterPointer,
+  wheelZoom,
+} from "@/domain/view";
 import {
   asPersonId,
   NODE_HEIGHT,
@@ -27,9 +32,11 @@ type Props = {
   selectedId: PersonId | null;
   expandedIds: PersonId[];
   pan: Vec;
+  zoom: number;
   entering: boolean;
   coarsePointer: boolean;
   onPan: (next: Vec) => void;
+  onZoom: (zoom: number) => void;
   onSelect: (id: PersonId) => void;
   onExpand: (id: PersonId) => void;
 };
@@ -43,9 +50,11 @@ export function TreeCanvas({
   selectedId,
   expandedIds,
   pan,
+  zoom,
   entering,
   coarsePointer,
   onPan,
+  onZoom,
   onSelect,
   onExpand,
 }: Props) {
@@ -98,12 +107,16 @@ export function TreeCanvas({
   const panned = useRef(false);
   const seenIds = useRef(new Set<PersonId>());
   const onPanRef = useRef(onPan);
+  const onZoomRef = useRef(onZoom);
   const onSelectRef = useRef(onSelect);
   const panRef = useRef(pan);
+  const zoomRef = useRef(zoom);
   const frame = useRef<HTMLDivElement>(null);
   onPanRef.current = onPan;
+  onZoomRef.current = onZoom;
   onSelectRef.current = onSelect;
   panRef.current = pan;
+  zoomRef.current = zoom;
 
   const known = seenIds.current;
 
@@ -157,6 +170,10 @@ export function TreeCanvas({
     }
     function onWheel(event: WheelEvent) {
       event.preventDefault();
+      if (event.metaKey || event.ctrlKey) {
+        onZoomRef.current(wheelZoom(zoomRef.current, event.deltaY));
+        return;
+      }
       onPanRef.current(
         addPan(panRef.current, { x: -event.deltaX, y: -event.deltaY }),
       );
@@ -216,7 +233,7 @@ export function TreeCanvas({
         <div
           className="absolute top-1/2 left-1/2"
           style={{
-            transform: `translate(${pan.x}px, ${pan.y - NODE_HEIGHT / 2}px)`,
+            transform: `translate(${pan.x}px, ${pan.y - NODE_HEIGHT / 2}px) scale(${zoom})`,
           }}
         >
           <svg

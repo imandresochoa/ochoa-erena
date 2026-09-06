@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { family } from "@/data/family";
 import { findExactName, suggestPeople } from "@/domain/search";
 import type { Person } from "@/domain/types";
@@ -16,8 +16,18 @@ export function FocusPicker({ focus, onPick }: Props) {
   const input = useRef<HTMLInputElement>(null);
   const editing = draft !== null;
   const query = draft ?? focus.displayName;
-  const suggestions = editing ? suggestPeople(family.people, query, 8) : [];
+  const rawSuggestions = editing ? suggestPeople(family.people, query, 8) : [];
+  const exactCurrent = query.trim() !== "" && findExactName([focus], query) === focus;
+  const suggestions = exactCurrent
+    ? rawSuggestions.filter((person) => person.id !== focus.id)
+    : rawSuggestions;
   const showList = suggestions.length > 0;
+
+  useLayoutEffect(() => {
+    if (editing) {
+      input.current?.select();
+    }
+  }, [editing]);
 
   function close() {
     setDraft(null);
@@ -41,6 +51,10 @@ export function FocusPicker({ focus, onPick }: Props) {
     }
     const exact = findExactName(family.people, query);
     if (exact) {
+      if (exact.id === focus.id) {
+        cancel();
+        return;
+      }
       pick(exact);
       return;
     }
@@ -79,7 +93,9 @@ export function FocusPicker({ focus, onPick }: Props) {
           className="chrome-ctl col-start-1 row-start-1 w-full min-w-0"
           onFocus={() => {
             if (!editing) {
-              setDraft("");
+              setDraft(focus.displayName);
+            } else {
+              input.current?.select();
             }
           }}
           onChange={(event) => {
