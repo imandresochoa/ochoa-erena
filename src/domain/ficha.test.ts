@@ -117,15 +117,19 @@ describe("fichaFromPerson", () => {
     expect(fichaFromPerson(gregoria!).lifeProse).toBe("Baut. 25 de abril de 1863.");
   });
 
-  it("keeps Andrés on the snapshot place and refuses the Figma mock date", () => {
+  it("keeps Andrés on the snapshot place and the confirmed birth day", () => {
     const andres = family.people.find(
       (item) => item.id === "andres-martin-ochoa-erena",
     );
     expect(andres).toBeDefined();
     const ficha = fichaFromPerson(andres!);
     expect(ficha.displayName).toBe("Andrés Martín Ochoa Erena");
-    expect(ficha.lifeProse).toBe("De Jaén.");
-    expect(ficha.lifeProse).not.toContain("1995");
+    expect(ficha.lifeProse).toBe("De Jaén. Nació 12 de noviembre de 1995.");
+    expect(andres!.birth).toEqual({
+      year: 1995,
+      approx: false,
+      text: "1995-11-12 [CONF Andrés 2026-09-06]",
+    });
     expect(ficha.summary).toBe(andres!.summary);
     expect(ficha.links).toEqual([]);
     expect(ficha.sources).toEqual([]);

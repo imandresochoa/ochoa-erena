@@ -12,7 +12,10 @@ const MATILDE = asPersonId("matilde-ochoa-palop");
 
 describe("expandControl", () => {
   it("shows plus only when collapsed siblings remain", () => {
-    expect(expandControl(family, ANDRES, ANDRES, [])).toBeNull();
+    expect(expandControl(family, ANDRES, ANDRES, [])).toEqual({
+      kind: "plus",
+      side: "left",
+    });
     expect(expandControl(family, ANDRES, JAVIER, [])).toEqual({
       kind: "plus",
       side: "left",

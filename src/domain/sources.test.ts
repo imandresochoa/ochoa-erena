@@ -28,10 +28,10 @@ function domainPerson(id: string) {
 }
 
 describe("family sources", () => {
-  it("keeps 61 people and fills sources after parse", () => {
-    expect(family.people).toHaveLength(61);
+  it("keeps 63 people and fills sources after parse", () => {
+    expect(family.people).toHaveLength(63);
     const raw = rawPeople();
-    expect(raw).toHaveLength(61);
+    expect(raw).toHaveLength(63);
     for (const person of family.people) {
       const json = raw.find((item) => item.id === person.id);
       if (!Array.isArray(json?.sources)) {
