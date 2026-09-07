@@ -13,6 +13,7 @@ describe("person panel copy layout", () => {
       ">{ficha.summary}<",
       ">Fuentes<",
       ">Enlaces de interés<",
+      ">Archivos<",
       "ficha.noticeMailto",
     ].map((marker) => panel.indexOf(marker));
     for (const at of order) {
@@ -53,5 +54,50 @@ describe("person panel copy layout", () => {
     expect(panel).toMatch(/reduce \? \{ opacity: 0 \}/);
     expect(panel).toMatch(/reduce \? \{ opacity: 1 \}/);
     expect(panel).toMatch(/translateY\(6px\)/);
+  });
+
+  it("gates Archivos on ficha.files.length", () => {
+    expect(panel).toMatch(/ficha\.files\.length\s*>\s*0/);
+  });
+
+  it("maps ficha.files to blank-target noreferrer links", () => {
+    const filesAt = panel.indexOf("ficha.files.map");
+    const noticeAt = panel.indexOf("ficha.noticeMailto");
+    expect(filesAt).toBeGreaterThan(-1);
+    expect(noticeAt).toBeGreaterThan(filesAt);
+    const fileRows = panel.slice(filesAt, noticeAt);
+    expect(fileRows).toMatch(/href=\{file\.href\}/);
+    expect(fileRows).toMatch(/\{file\.label\}/);
+    expect(fileRows).toMatch(/target="_blank"/);
+    expect(fileRows).toMatch(/rel="noreferrer"/);
+  });
+
+  it("animates Archivos with reduced motion like Fuentes", () => {
+    const filesAt = panel.indexOf("ficha.files.length");
+    const noticeAt = panel.indexOf("ficha.noticeMailto");
+    expect(filesAt).toBeGreaterThan(-1);
+    const archivos = panel.slice(filesAt, noticeAt);
+    expect(archivos).toMatch(/motion\.div/);
+    expect(archivos).toMatch(/motion\.a/);
+    expect(archivos).toMatch(/reduce \? \{ opacity: 0 \}/);
+    expect(archivos).toMatch(/reduce \? \{ opacity: 1 \}/);
+    expect(archivos).toMatch(/translateY\(6px\)/);
+  });
+
+  it("does not invent Pulse, lorem, or fake PDF tiles in Archivos", () => {
+    expect(panel).not.toMatch(/\bPulse\b/);
+    expect(panel).not.toMatch(/lorem/i);
+    expect(panel).not.toMatch(/\.pdf/i);
+    expect(panel).not.toMatch(/Documento 1|Acta de nacimiento/i);
+  });
+
+  it("does not move Fuentes catalog URLs into Archivos", () => {
+    const archivosAt = panel.indexOf(">Archivos<");
+    const noticeAt = panel.indexOf("ficha.noticeMailto");
+    expect(archivosAt).toBeGreaterThan(-1);
+    const archivos = panel.slice(archivosAt, noticeAt);
+    expect(archivos).not.toMatch(
+      /pares\.mcu\.es|ahdv-geah\.org|ahus\.us\.es|bibliotecavirtualmadrid/,
+    );
   });
 });

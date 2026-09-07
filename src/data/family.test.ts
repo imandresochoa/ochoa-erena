@@ -288,6 +288,12 @@ describe("family snapshot", () => {
     }
   });
 
+  it("parses every snapshot person with empty files", () => {
+    for (const person of family.people) {
+      expect(person.files).toEqual([]);
+    }
+  });
+
   it("keeps #20 catalog URLs on people who already named those ids", () => {
     expect(hrefsOf("juan-jose-ochoa-de-eguiara")).toEqual([
       "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802997",

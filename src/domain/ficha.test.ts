@@ -38,7 +38,17 @@ const ANTONIO_SOURCES = [
   },
 ];
 
-function person(partial: Partial<Person> & Pick<Person, "displayName">): Person {
+function person(
+  partial: Partial<Person> &
+    Pick<Person, "displayName"> & {
+      files?: Array<{
+        label: string;
+        href: string;
+        visibility: "public" | "private";
+        locked: boolean;
+      }>;
+    },
+): Person {
   return {
     id: asPersonId(partial.id ?? "thin"),
     displayName: partial.displayName,
@@ -50,6 +60,7 @@ function person(partial: Partial<Person> & Pick<Person, "displayName">): Person 
     summary: partial.summary ?? "",
     links: partial.links ?? [],
     sources: partial.sources ?? [],
+    files: partial.files ?? [],
   };
 }
 
@@ -291,6 +302,146 @@ describe("fichaFromPerson", () => {
     expect(
       fichaFromPerson(person({ displayName: "Andrés Martín Ochoa Erena" })).sources,
     ).toEqual([]);
+  });
+
+  it("keeps empty files empty", () => {
+    expect(
+      fichaFromPerson(person({ displayName: "Andrés Martín Ochoa Erena", files: [] })).files,
+    ).toEqual([]);
+  });
+
+  it("projects only public unlocked files as label and href", () => {
+    const ficha = fichaFromPerson(
+      person({
+        displayName: "Francisco Javier Ochoa Palop",
+        files: [
+          {
+            label: "Acta",
+            href: "https://files.test/acta.pdf",
+            visibility: "public",
+            locked: false,
+          },
+        ],
+      }),
+    );
+    expect(ficha.files).toEqual([{ label: "Acta", href: "https://files.test/acta.pdf" }]);
+  });
+
+  it("hides a locked public file", () => {
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Francisco Javier Ochoa Palop",
+          files: [
+            {
+              label: "Carta",
+              href: "https://files.test/carta.pdf",
+              visibility: "public",
+              locked: true,
+            },
+          ],
+        }),
+      ).files,
+    ).toEqual([]);
+  });
+
+  it("hides a private unlocked file", () => {
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Francisco Javier Ochoa Palop",
+          files: [
+            {
+              label: "Nota",
+              href: "https://files.test/nota.pdf",
+              visibility: "private",
+              locked: false,
+            },
+          ],
+        }),
+      ).files,
+    ).toEqual([]);
+  });
+
+  it("hides a private locked file", () => {
+    expect(
+      fichaFromPerson(
+        person({
+          displayName: "Francisco Javier Ochoa Palop",
+          files: [
+            {
+              label: "Diario",
+              href: "https://files.test/diario.pdf",
+              visibility: "private",
+              locked: true,
+            },
+          ],
+        }),
+      ).files,
+    ).toEqual([]);
+  });
+
+  it("keeps only public unlocked files in source order", () => {
+    const ficha = fichaFromPerson(
+      person({
+        displayName: "Francisco Javier Ochoa Palop",
+        files: [
+          {
+            label: "Carta",
+            href: "https://files.test/carta.pdf",
+            visibility: "public",
+            locked: true,
+          },
+          {
+            label: "Acta",
+            href: "https://files.test/acta.pdf",
+            visibility: "public",
+            locked: false,
+          },
+          {
+            label: "Nota",
+            href: "https://files.test/nota.pdf",
+            visibility: "private",
+            locked: false,
+          },
+          {
+            label: "Padron",
+            href: "https://files.test/padron.pdf",
+            visibility: "public",
+            locked: false,
+          },
+          {
+            label: "Diario",
+            href: "https://files.test/diario.pdf",
+            visibility: "private",
+            locked: true,
+          },
+        ],
+      }),
+    );
+    expect(ficha.files).toEqual([
+      { label: "Acta", href: "https://files.test/acta.pdf" },
+      { label: "Padron", href: "https://files.test/padron.pdf" },
+    ]);
+  });
+
+  it("never invents files on snapshot fichas", () => {
+    for (const item of family.people) {
+      expect(fichaFromPerson(item).files, item.displayName).toEqual([]);
+    }
+  });
+
+  it("does not invent files from links or sources", () => {
+    const ficha = fichaFromPerson(
+      person({
+        displayName: "Antonio Erena Camacho",
+        links: ANTONIO_LINKS,
+        sources: ANTONIO_SOURCES,
+      }),
+    );
+    expect(ficha.files).toEqual([]);
+    expect(ficha.links).toEqual(ANTONIO_LINKS);
+    expect(ficha.sources).toEqual(ANTONIO_SOURCES);
   });
 
   it("opens a notice from empty summary and empty links even when sources exist", () => {

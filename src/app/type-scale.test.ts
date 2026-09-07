@@ -70,6 +70,7 @@ describe("title type scale", () => {
     expect(classOf(panel, "key={grado}").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Fuentes<").split(/\s+/)).toContain("type-title");
     expect(classOf(panel, ">Enlaces de interés<").split(/\s+/)).toContain("type-title");
+    expect(classOf(panel, ">Archivos<").split(/\s+/)).toContain("type-title");
   });
 
   it("renders life prose as body copy, not a title dump", () => {
@@ -105,7 +106,7 @@ describe("title type scale", () => {
     expect(summaryClass.split(/\s+/)).not.toContain("type-title");
     const leftoverRows = panel.slice(
       panel.indexOf("leftover.map"),
-      panel.indexOf("ficha.noticeMailto"),
+      panel.indexOf("ficha.files.length"),
     );
     expect(leftoverRows.length).toBeGreaterThan(0);
     expect(leftoverRows).not.toMatch(/\btype-title\b/);
@@ -115,6 +116,20 @@ describe("title type scale", () => {
     );
     expect(sourceRows.length).toBeGreaterThan(0);
     expect(sourceRows).not.toMatch(/\btype-title\b/);
+    const filesAt = panel.indexOf("ficha.files.map");
+    expect(filesAt).toBeGreaterThan(-1);
+    const fileRows = panel.slice(filesAt, panel.indexOf("ficha.noticeMailto"));
+    expect(fileRows.length).toBeGreaterThan(0);
+    expect(fileRows).not.toMatch(/\btype-title\b/);
+  });
+
+  it("places Archivos after leftover links and before the notice", () => {
+    const enlacesAt = panel.indexOf(">Enlaces de interés<");
+    const archivosAt = panel.indexOf(">Archivos<");
+    const noticeAt = panel.indexOf("ficha.noticeMailto");
+    expect(enlacesAt).toBeGreaterThan(-1);
+    expect(archivosAt).toBeGreaterThan(enlacesAt);
+    expect(noticeAt).toBeGreaterThan(archivosAt);
   });
 
   it("marks person-panel kin titles Padres, Hijos, and Hermanos with type-title", () => {
