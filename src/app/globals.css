@@ -105,6 +105,16 @@ body {
   }
 }
 
+@media (max-width: 800px) {
+  .fog-edge {
+    box-shadow: none;
+  }
+
+  .fog-edge[data-entering="true"] {
+    animation: none;
+  }
+}
+
 .neblina {
   background:
     linear-gradient(
