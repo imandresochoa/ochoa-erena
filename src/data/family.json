@@ -1515,7 +1515,7 @@
       "branch": "lateral",
       "todo": "tronco: paint a lateral fog/neblina zone on the juan-jose / juan-ochoa cluster; center label Sel de Egiara; tap opens the history panel (vinculaciones + historia 1444–1477). Do not draw parent lines.",
       "summary": "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.",
-      "history": "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.\n\nEn Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+      "history": "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.\n\nEn Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.\n\nUna fuente secundaria (Bergarako baserriak – Egiara Gañekoa) menciona que una rama de este solar pasó a Álava con el apellido Ochoa de Eguiara (Ozaeta / Barrundia), y cita a Manuel Antonio Ochoa de Eguiara (baut. Zalduendo 1740, hidalguía 1793). El bisabuelo Martín María Ochoa de Eguiyara Antia vino de Álava (Aspárrena–Vitoria). Eso da coherencia geográfica con esa mención de una rama a Álava como Ochoa de Eguiara. Sigue siendo posibilidad / mención: no es filiación confirmada al sel de Bergara del siglo XV ni a Manuel Antonio.",
       "anchors": ["juan-jose-ochoa-de-eguiara", "juan-ochoa-de-eguiara"],
       "vinculaciones": [
         {
@@ -1529,6 +1529,10 @@
         {
           "label": "Sin filiación al siglo XV",
           "note": "No hay aristas padre–hijo hacia 1444–1477. El sel no es un padre de Juan ni de Juan José."
+        },
+        {
+          "label": "Mención Álava (posibilidad)",
+          "note": "Bergarako baserriak (Egiara Gañekoa) menciona una rama a Álava bajo Ochoa de Eguiara (Ozaeta / Barrundia) y cita a Manuel Antonio Ochoa de Eguiara (baut. Zalduendo 1740, hidalguía 1793). El bisabuelo Martín María vino de Álava (Aspárrena–Vitoria): coherencia geográfica con esa nota, no filiación al Bergara del siglo XV ni a Manuel Antonio."
         }
       ],
       "links": [
@@ -1543,6 +1547,10 @@
         {
           "label": "Sancho el Sabio, sentencia 1447",
           "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131"
+        },
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa"
         }
       ],
       "sources": [
@@ -1561,6 +1569,92 @@
         {
           "label": "Sancho el Sabio, sentencia 1447",
           "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
+          "kind": "web",
+          "mark": "H"
+        },
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa",
+          "kind": "web",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "manuel-antonio-ochoa-de-eguiara",
+      "kind": "solar",
+      "displayName": "Manuel Antonio Ochoa de Eguiara",
+      "place": "Ozaeta, Barrundia",
+      "zone": "fog",
+      "branch": "lateral",
+      "todo": "tronco: paint as a lateral fog context chip near Sel de Egiara; tap opens the ficha. Link to the sel as context. Do not draw parent lines.",
+      "summary": "Mención de Bergarako baserriak: una rama del solar pasó a Álava con el apellido Ochoa de Eguiara. Bautizado en Zalduondo en 1740, hidalguía 1793. Vecino de Ozaeta, hermandad de Barrundia. La vinculación es posibilidad / rama a Álava / nombre del solar. El nexo con el Sel de Egiara es de contexto, no una filiación.",
+      "history": "Bergarako baserriak (Egiara Gañekoa) menciona que una rama del solar pasó a Álava y se apellidó Ochoa de Eguiara, vecinos de Ozaeta en la hermandad de Barrundia. Cita a Manuel Antonio Ochoa de Eguiara, bautizado en Zalduondo el 26 de diciembre de 1740, con expediente de hidalguía en 1793 ante la Sala de Bizkaia en la Real Chancillería de Valladolid. El nexo con el Sel de Egiara es de contexto, no una arista padre–hijo. No es padre del tronco de Aspárrena.",
+      "anchors": ["juan-jose-ochoa-de-eguiara", "juan-ochoa-de-eguiara"],
+      "vinculaciones": [
+        {
+          "label": "Quién",
+          "note": "Manuel Antonio Ochoa de Eguiara. Baut. Zalduondo 1740. Hidalguía 1793. Vecino de Ozaeta, hermandad de Barrundia."
+        },
+        {
+          "label": "Vinculación (posibilidad)",
+          "note": "Rama a Álava bajo el apellido Ochoa de Eguiara, según Bergarako baserriak. Nombre del solar, no una partida de padre–hijo."
+        },
+        {
+          "label": "Al sel (contexto)",
+          "note": "El nexo con el Sel de Egiara es de contexto. No hay arista padre hacia el tronco de Aspárrena."
+        }
+      ],
+      "links": [
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa",
+          "kind": "web",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "juan-jose-de-eguiara-y-eguren",
+      "kind": "solar",
+      "displayName": "Juan José de Eguiara y Eguren",
+      "place": "México",
+      "zone": "fog",
+      "branch": "lateral",
+      "todo": "tronco: paint as a lateral fog context chip near Sel de Egiara; tap opens the ficha. Keep unfused from juan-jose-ochoa-de-eguiara. Do not draw parent lines.",
+      "summary": "Polígrafo de México. Hijo de Nicolás de Eguiara y Eguren, de la casa solar de Bergara. No es el Juan José Ochoa de Eguiara de Aspárrena. La vinculación es solar / topónimo de Bergara por el padre. Sin filiación al tronco de Aspárrena.",
+      "history": "Bergarako baserriak cita a Juan José de Eguiara y Eguren, polígrafo de México, de orígenes bergareses. Su padre, Nicolás de Eguiara y Eguren, de la casa solar homónima, emigró a México a finales del siglo XVII. Esta ficha no se funde con Juan José Ochoa de Eguiara (Egino, 1828). El nexo es el solar / topónimo de Bergara, no una cadena padre–hijo hasta Aspárrena.",
+      "anchors": ["juan-jose-ochoa-de-eguiara", "juan-ochoa-de-eguiara"],
+      "vinculaciones": [
+        {
+          "label": "Quién",
+          "note": "Juan José de Eguiara y Eguren, polígrafo de México. Hijo de Nicolás de Eguiara y Eguren."
+        },
+        {
+          "label": "Solar Bergara",
+          "note": "La casa solar de Egiara / Eguiara Suso entra por el padre Nicolás. Eso es topónimo / solar, no una filiación al tronco de Aspárrena."
+        },
+        {
+          "label": "Sin fusión",
+          "note": "No es el Juan José Ochoa de Eguiara de Aspárrena (Egino, 1828). Las fichas quedan aparte."
+        }
+      ],
+      "links": [
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Bergarako baserriak, Egiara Gañekoa",
+          "href": "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa",
           "kind": "web",
           "mark": "H"
         }
