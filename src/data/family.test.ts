@@ -37,6 +37,50 @@ function hrefsOf(id: string): string[] {
     .filter((href): href is string => Boolean(href));
 }
 
+function parentEdge(from: string, to: string) {
+  return family.edges.find(
+    (edge) => edge.kind === "parent" && edge.from === from && edge.to === to,
+  );
+}
+
+function spouseEdge(a: string, b: string) {
+  return family.edges.find(
+    (edge) =>
+      edge.kind === "spouse" &&
+      ((edge.from === a && edge.to === b) || (edge.from === b && edge.to === a)),
+  );
+}
+
+function siblingEdge(a: string, b: string) {
+  return family.edges.find(
+    (edge) =>
+      edge.kind === "sibling" &&
+      ((edge.from === a && edge.to === b) || (edge.from === b && edge.to === a)),
+  );
+}
+
+const PRODUCT_JARGON =
+  /\[TO\]|CONF Andrés|tradición oral|fuente oral de Andrés|según Andrés/i;
+
+const TOUCHED_OCHOA_EGUIARA = [
+  "juan-jose-ochoa-de-eguiara",
+  "juan-ochoa-de-eguiara",
+  "martina-martinez-de-ezcurra",
+  "martin-maria-ochoa-de-eguiyara-antia",
+  "martin-ochoa-hidalgo",
+  "phelipa-zufiaur-ybarreta",
+  "manuel-ochoa-de-yara",
+  "maria-ruiz-de-gauna",
+  "martin-ochoa-lara",
+  "josepha-lopez-de-munain",
+  "juan-antonio-ruiz-de-gauna",
+  "mariana-ervina",
+  "manuela-yaza-ruiz-de-gauna",
+  "jorge-antonio-eyara",
+  "martin-zufiaur",
+  "maria-ruiz-de-ibarreta",
+];
+
 describe("family snapshot", () => {
   it("loads Andrés as the default focus", () => {
     expect(defaultPerson?.displayName).toBe(DEFAULT_FOCUS_NAME);
@@ -122,7 +166,6 @@ describe("family snapshot", () => {
   });
 
   it("locks CONF Andrés 2026-09-06: parents of Francisco Javier are confirmed", () => {
-    const stamp = "[CONF Andrés 2026-09-06]";
     const father = family.edges.find(
       (edge) =>
         edge.kind === "parent" &&
@@ -137,9 +180,12 @@ describe("family snapshot", () => {
     );
     expect(father?.certainty).toBe("confirmed");
     expect(mother?.certainty).toBe("confirmed");
-    expect(rawPerson("francisco-javier-ochoa-palop").summary).toContain(stamp);
-    expect(rawPerson("martin-ochoa-hidalgo").summary).toContain(stamp);
-    expect(rawPerson("matilde-palop-fuentes").summary).toContain(stamp);
+    expect(rawPerson("francisco-javier-ochoa-palop").summary).toContain(
+      "[CONF Andrés 2026-09-06]",
+    );
+    expect(rawPerson("matilde-palop-fuentes").summary).toContain(
+      "[CONF Andrés 2026-09-06]",
+    );
     for (const id of [
       "francisco-javier-ochoa-palop",
       "martin-ochoa-hidalgo",
@@ -151,7 +197,6 @@ describe("family snapshot", () => {
   });
 
   it("locks CONF Andrés 2026-09-06: Martín María is confirmed with a confirmed filial link", () => {
-    const stamp = "[CONF Andrés 2026-09-06]";
     const son = family.edges.find(
       (edge) =>
         edge.kind === "parent" &&
@@ -159,11 +204,8 @@ describe("family snapshot", () => {
         edge.to === "martin-ochoa-hidalgo",
     );
     expect(son?.certainty).toBe("confirmed");
-    expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").summary).toContain(
-      stamp,
-    );
     expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").summary).toMatch(
-      /Autia.*hipótesis/,
+      /Autia/,
     );
     expect(rawPerson("martin-maria-ochoa-de-eguiyara-antia").marks).not.toContain(
       "C",
@@ -196,18 +238,14 @@ describe("family snapshot", () => {
     expect(capilla?.certainty).toBe("hypothesis");
   });
 
-  it("keeps the snapshot size and does not invent people, Zufiaur, or files", () => {
-    expect(rawPeople()).toHaveLength(63);
-    expect(family.people).toHaveLength(63);
-    expect(family.edges).toHaveLength(100);
-    expect(
-      rawPeople().some(
-        (person) =>
-          person.id === "martin-zufiaur" ||
-          person.id === "maria-ruiz-de-ibarreta" ||
-          person.id === "irene-ochoa-hidalgo",
-      ),
-    ).toBe(false);
+  it("keeps the snapshot size and does not invent people or files", () => {
+    expect(rawPeople()).toHaveLength(73);
+    expect(family.people).toHaveLength(73);
+    expect(family.edges).toHaveLength(118);
+    expect(rawPeople().some((person) => person.id === "irene-ochoa-hidalgo")).toBe(
+      false,
+    );
+    expect(rawPeople().some((person) => /sendo/i.test(person.id))).toBe(false);
     for (const person of rawPeople()) {
       expect(person.files).toBeUndefined();
     }
@@ -322,7 +360,6 @@ describe("family snapshot", () => {
       "dolores-lopez-martos",
       "antonio-camacho-liebana",
       "mercedes-vinas-lopez",
-      "juan-ochoa-de-eguiara",
       "josefa-saez-de-eguilaz",
       "josefa-hidalgo-de-la-vega",
       "francisco-antia-zubicain",
@@ -360,5 +397,172 @@ describe("family snapshot", () => {
     ]) {
       expect(rawPerson(id).summary).toMatch(/no es partida|no es partida parroquial/i);
     }
+  });
+
+  it("extends the Aspárrena Ochoa trunk with named AHDV generations", () => {
+    expect(parentEdge("juan-ochoa-de-eguiara", "juan-jose-ochoa-de-eguiara")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("martina-martinez-de-ezcurra", "juan-jose-ochoa-de-eguiara")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("manuel-ochoa-de-yara", "juan-ochoa-de-eguiara")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(parentEdge("maria-ruiz-de-gauna", "juan-ochoa-de-eguiara")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(spouseEdge("manuel-ochoa-de-yara", "maria-ruiz-de-gauna")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("martin-ochoa-lara", "manuel-ochoa-de-yara")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("josepha-lopez-de-munain", "manuel-ochoa-de-yara")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(spouseEdge("martin-ochoa-lara", "josepha-lopez-de-munain")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("juan-antonio-ruiz-de-gauna", "maria-ruiz-de-gauna")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("mariana-ervina", "maria-ruiz-de-gauna")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("manuel-ochoa-de-yara", "manuela-yaza-ruiz-de-gauna")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("maria-ruiz-de-gauna", "manuela-yaza-ruiz-de-gauna")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(siblingEdge("juan-ochoa-de-eguiara", "manuela-yaza-ruiz-de-gauna")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(parentEdge("juan-ochoa-de-eguiara", "jorge-antonio-eyara")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(parentEdge("martina-martinez-de-ezcurra", "jorge-antonio-eyara")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(siblingEdge("juan-jose-ochoa-de-eguiara", "jorge-antonio-eyara")?.certainty).toBe(
+      "hypothesis",
+    );
+    expect(parentEdge("martin-zufiaur", "phelipa-zufiaur-ybarreta")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("maria-ruiz-de-ibarreta", "phelipa-zufiaur-ybarreta")?.certainty).toBe(
+      "confirmed",
+    );
+  });
+
+  it("keeps ten hypothesis edges and does not make the 1444 solar a father", () => {
+    const hip = family.edges.filter((edge) => edge.certainty === "hypothesis");
+    expect(hip).toHaveLength(10);
+    for (const person of family.people) {
+      expect(person.displayName).not.toMatch(/Sendo/i);
+      expect(person.id).not.toMatch(/sendo|1444/i);
+    }
+    expect(
+      family.edges.some((edge) => /sendo|1444/i.test(`${edge.from} ${edge.to}`)),
+    ).toBe(false);
+    expect(parentsOf(family, asPersonId("juan-ochoa-de-eguiara"))).toEqual([
+      asPersonId("manuel-ochoa-de-yara"),
+      asPersonId("maria-ruiz-de-gauna"),
+    ]);
+    expect(parentsOf(family, asPersonId("martin-ochoa-lara"))).toEqual([]);
+    expect(parentsOf(family, asPersonId("josepha-lopez-de-munain"))).toEqual([]);
+  });
+
+  it("records AHDV years, places, and catalog links on the new Aspárrena people", () => {
+    const manuel = family.people.find((person) => person.id === "manuel-ochoa-de-yara");
+    const maria = family.people.find((person) => person.id === "maria-ruiz-de-gauna");
+    const juan = family.people.find((person) => person.id === "juan-ochoa-de-eguiara");
+    const jorge = family.people.find((person) => person.id === "jorge-antonio-eyara");
+    const manuela = family.people.find(
+      (person) => person.id === "manuela-yaza-ruiz-de-gauna",
+    );
+    expect(manuel?.birth).toEqual({
+      year: 1759,
+      approx: false,
+      text: "baut. 1759-11-04, Zalduondo",
+    });
+    expect(manuel?.place).toBe("Zalduondo");
+    expect(maria?.birth).toEqual({
+      year: 1748,
+      approx: false,
+      text: "baut. 1748-04-07, Egino",
+    });
+    expect(maria?.place).toBe("Egino, Aspárrena");
+    expect(juan?.birth).toEqual({
+      year: 1786,
+      approx: true,
+      text: "candidato baut. 1786-02-09, Egino",
+    });
+    expect(jorge?.birth).toEqual({
+      year: 1814,
+      approx: false,
+      text: "baut. 1814-04-23, Andoin",
+    });
+    expect(manuela?.birth).toEqual({
+      year: 1789,
+      approx: false,
+      text: "baut. 1789-05-11, Egino",
+    });
+    expect(hrefsOf("manuel-ochoa-de-yara")).toEqual(
+      expect.arrayContaining([
+        "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=680327",
+        "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=167459",
+      ]),
+    );
+    expect(hrefsOf("maria-ruiz-de-gauna")).toContain(
+      "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400",
+    );
+    expect(hrefsOf("martin-ochoa-lara")).toEqual(
+      expect.arrayContaining([
+        "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=147634",
+        "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_difuntos.php?id_difunto=222064",
+      ]),
+    );
+    expect(hrefsOf("juan-ochoa-de-eguiara")).toEqual(
+      expect.arrayContaining([
+        "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802765",
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
+      ]),
+    );
+    expect(hrefsOf("jorge-antonio-eyara")).toContain(
+      "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29843",
+    );
+    const years = family.people
+      .filter((person) =>
+        [
+          "manuel-ochoa-de-yara",
+          "maria-ruiz-de-gauna",
+          "manuela-yaza-ruiz-de-gauna",
+          "jorge-antonio-eyara",
+        ].includes(person.id),
+      )
+      .map((person) => person.birth?.year)
+      .filter((year): year is number => typeof year === "number");
+    expect(Math.min(...years)).toBe(1748);
+  });
+
+  it("writes reader prose on touched Ochoa and Eguiara cards, without oral jargon", () => {
+    for (const id of TOUCHED_OCHOA_EGUIARA) {
+      const person = rawPerson(id);
+      expect(person.summary, id).not.toMatch(PRODUCT_JARGON);
+      for (const source of person.sources ?? []) {
+        expect(source.label, `${id} ${source.label}`).not.toMatch(PRODUCT_JARGON);
+      }
+    }
+    expect(rawPerson("juan-jose-ochoa-de-eguiara").summary).toMatch(/Aspárrena|Egino/);
+    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/1444/);
+    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/1477|1447/);
+    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/Egiara|Eguiara Goitia/);
+    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(
+      /no (es|son) (una )?filiaci[oó]n|no (es|son) padres/i,
+    );
+    expect(rawPerson("martin-ochoa-lara").summary).toMatch(/Zalduondo|Lara|Munain/);
+    expect(rawPerson("phelipa-zufiaur-ybarreta").summary).toMatch(/Zufiaur|Ibarreta/);
   });
 });
