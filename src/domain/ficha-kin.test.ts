@@ -106,10 +106,10 @@ describe("fichaKin on the real family", () => {
     ]);
   });
 
-  it("marks both parents of Antonio Erena Liébana as confirmed", () => {
+  it("marks both parents of Antonio Erena Liébana as hypothesis", () => {
     expect(fichaKin(family, antonioLiebana).parents).toEqual([
-      kin(andresErena, "Andrés Erena"),
-      kin(capilla, "Capilla Liébana"),
+      kin(andresErena, "Andrés Erena", "hypothesis"),
+      kin(capilla, "Capilla Liébana", "hypothesis"),
     ]);
   });
 
