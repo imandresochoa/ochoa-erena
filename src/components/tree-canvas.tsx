@@ -308,7 +308,7 @@ export function TreeCanvas({
           y: event.clientY,
           pan,
           moved: false,
-          fichaId: raw,
+          fichaId: raw ?? null,
         };
         if (event.pointerType !== "touch") {
           event.currentTarget.setPointerCapture(event.pointerId);
