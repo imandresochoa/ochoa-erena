@@ -228,7 +228,7 @@ describe("family snapshot", () => {
     expect(jose?.certainty).toBe("hypothesis");
   });
 
-  it("locks Andrés maternal CONF through bisabuelos, including Erena × Liébana", () => {
+  it("locks Andrés maternal CONF through bisabuelos and keeps Erena × Capilla HIP", () => {
     expect(
       parentEdge("maria-aurora-erena-camacho", "andres-martin-ochoa-erena")
         ?.certainty,
@@ -261,13 +261,13 @@ describe("family snapshot", () => {
       spouseEdge("antonio-camacho-liebana", "mercedes-vinas-lopez")?.certainty,
     ).toBe("confirmed");
     expect(parentEdge("andres-erena", "antonio-erena-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(parentEdge("capilla-liebana", "antonio-erena-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(spouseEdge("andres-erena", "capilla-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(rawPerson("andres-erena").marks).toEqual(["AEC"]);
     expect(rawPerson("capilla-liebana").marks).toEqual(["AEC"]);
@@ -493,9 +493,9 @@ describe("family snapshot", () => {
     );
   });
 
-  it("keeps seven hypothesis edges above the bisabuelos and does not make the 1444 solar a father", () => {
+  it("keeps ten hypothesis edges above the bisabuelos and does not make the 1444 solar a father", () => {
     const hip = family.edges.filter((edge) => edge.certainty === "hypothesis");
-    expect(hip).toHaveLength(7);
+    expect(hip).toHaveLength(10);
     expect(
       hip.some(
         (edge) =>
@@ -504,7 +504,7 @@ describe("family snapshot", () => {
           edge.from === "capilla-liebana" ||
           edge.to === "capilla-liebana",
       ),
-    ).toBe(false);
+    ).toBe(true);
     for (const person of family.people) {
       expect(person.displayName).not.toMatch(/Sendo/i);
       expect(person.id).not.toMatch(/sendo|1444/i);
