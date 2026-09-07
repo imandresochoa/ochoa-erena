@@ -47,6 +47,16 @@ function orthogonalLane(from: Vec, to: Vec): string {
   return `M ${from.x} ${from.y} L ${from.x} ${laneY} L ${to.x} ${laneY} L ${to.x} ${to.y}`;
 }
 
+function parentLane(parent: PlacedNode, child: PlacedNode, soleParent: boolean): string {
+  if (!soleParent) {
+    return orthogonalLane(nodeCenter(parent), nodeCenter(child));
+  }
+  return orthogonalLane(
+    { x: parent.x + parent.width / 2, y: parent.y + parent.height },
+    { x: child.x + child.width / 2, y: child.y },
+  );
+}
+
 function generationMap(
   graph: FamilyGraph,
   focusId: PersonId,
@@ -834,12 +844,14 @@ export function layoutPedigree(
       const edge = graph.edges.find(
         (item) => item.kind === "parent" && item.from === parent.id && item.to === node.id,
       );
+      const soleParent =
+        parentsOf(graph, node.id).filter((id) => nodeMap.has(id)).length === 1;
       connectors.push({
         kind: "parent",
         certainty: edge?.certainty ?? "confirmed",
         fromId: parent.id,
         toId: node.id,
-        d: orthogonalLane(nodeCenter(parent), nodeCenter(node)),
+        d: parentLane(parent, node, soleParent),
         label: vinculoLabel(graph, "parent", parent.id, node.id),
       });
     }
