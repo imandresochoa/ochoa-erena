@@ -261,6 +261,18 @@ button.chrome-ctl-plain:disabled {
   transform: scale(0.97);
 }
 
+.crest-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  outline: none;
+  transition: transform 160ms ease-out;
+}
+
+.crest-btn:active {
+  transform: scale(0.97);
+}
+
 button.ghost-btn.ficha-back {
   padding: 8px;
   gap: 4px;
