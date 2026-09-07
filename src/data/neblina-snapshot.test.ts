@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import familyJson from "@/data/family.json";
 import { family } from "@/data/family";
 import { parentsOf } from "@/domain/graph";
+import { NEBLINA_COPY } from "@/domain/neblina";
 import { asPersonId } from "@/domain/types";
 
 type RawLife = { year?: number };
@@ -15,6 +16,22 @@ type RawEdge = {
   from?: string;
   to?: string;
 };
+type RawVinculo = { label?: string; note?: string };
+type RawLink = { label?: string; href?: string };
+type RawSource = RawLink & { kind?: string; mark?: string };
+type RawContext = {
+  id?: string;
+  kind?: string;
+  displayName?: string;
+  zone?: string;
+  branch?: string;
+  summary?: string;
+  history?: string;
+  anchors?: string[];
+  vinculaciones?: RawVinculo[];
+  links?: RawLink[];
+  sources?: RawSource[];
+};
 
 function rawPeople(): RawPerson[] {
   return familyJson.people as RawPerson[];
@@ -24,12 +41,16 @@ function rawEdges(): RawEdge[] {
   return familyJson.edges as RawEdge[];
 }
 
+function rawContexts(): RawContext[] {
+  return ((familyJson as { contexts?: RawContext[] }).contexts ?? []) as RawContext[];
+}
+
 function isSigloXvYear(year: number | undefined): boolean {
   return year !== undefined && year >= 1400 && year <= 1499;
 }
 
 describe("neblina does not invent siglo XV genealogy", () => {
-  it("keeps the snapshot size so this UI change adds no data rows", () => {
+  it("keeps the snapshot size so this UI change adds no people or edges", () => {
     expect(rawPeople()).toHaveLength(63);
     expect(family.people).toHaveLength(63);
     expect(rawEdges()).toHaveLength(100);
@@ -68,5 +89,57 @@ describe("neblina does not invent siglo XV genealogy", () => {
 
   it("leaves Juan Ochoa de Eguiara without invented parents", () => {
     expect(parentsOf(family, asPersonId("juan-ochoa-de-eguiara"))).toEqual([]);
+  });
+});
+
+describe("sel-de-egiara context payload", () => {
+  it("is a fog lateral context, not a person and not a parent edge", () => {
+    const raw = rawContexts().find((item) => item.id === "sel-de-egiara");
+    expect(raw).toBeDefined();
+    expect(raw?.kind).toBe("solar");
+    expect(raw?.displayName).toBe("Sel de Egiara");
+    expect(raw?.zone).toBe("fog");
+    expect(raw?.branch).toBe("lateral");
+    expect(raw?.anchors).toEqual([
+      "juan-jose-ochoa-de-eguiara",
+      "juan-ochoa-de-eguiara",
+    ]);
+    expect(rawPeople().some((person) => person.id === "sel-de-egiara")).toBe(false);
+    expect(
+      rawEdges().some(
+        (edge) => edge.from === "sel-de-egiara" || edge.to === "sel-de-egiara",
+      ),
+    ).toBe(false);
+    expect(family.contexts.map((item) => item.id)).toEqual(["sel-de-egiara"]);
+  });
+
+  it("carries the canónico lead, historia, vinculaciones, and link-only sources", () => {
+    const raw = rawContexts().find((item) => item.id === "sel-de-egiara");
+    const parsed = family.contexts.find((item) => item.id === "sel-de-egiara");
+    expect(raw?.summary).toBe(NEBLINA_COPY);
+    expect(parsed?.summary).toBe(NEBLINA_COPY);
+    expect(raw?.history).toMatch(/Yrízar/);
+    expect(raw?.history).toMatch(/1444/);
+    expect(raw?.history).toMatch(/1447/);
+    expect(raw?.history).toMatch(/1477/);
+    expect(raw?.history).toMatch(/Bergara/);
+    expect(raw?.history).toMatch(/no prueba/i);
+    const notes = (raw?.vinculaciones ?? []).map((item) => item.note).join(" ");
+    expect(notes).toMatch(/nombre compartido/i);
+    expect(notes).toMatch(/1828/);
+    expect(notes).toMatch(/no están definidas/i);
+    expect(JSON.stringify(raw)).not.toMatch(/fuente oral/i);
+    expect(raw?.sources?.every((source) => Boolean(source.href))).toBe(true);
+    expect(raw?.sources?.some((source) => source.mark === "TO")).toBe(false);
+    expect(raw?.links?.map((link) => link.href)).toEqual(
+      expect.arrayContaining([
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
+        "https://artxiboa.sanchoelsabio.eus/fss-ud677383",
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
+      ]),
+    );
+    expect(raw?.links?.some((link) => /1477|N3654/i.test(link.label ?? ""))).toBe(
+      true,
+    );
   });
 });

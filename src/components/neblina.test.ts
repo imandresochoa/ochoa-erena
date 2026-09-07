@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { NEBLINA_COPY, NEBLINA_LEGEND_ID } from "@/domain/neblina";
+import { NEBLINA_COPY, NEBLINA_LEAD_EMPHASIS, NEBLINA_LEGEND_ID } from "@/domain/neblina";
 
 function read(rel: string) {
   return readFileSync(path.join(import.meta.dirname, rel), "utf8");
@@ -9,25 +9,39 @@ function read(rel: string) {
 
 const canvas = read("./tree-canvas.tsx");
 const panel = read("./person-panel.tsx");
+const contextPanel = read("./context-panel.tsx");
+const app = read("./family-app.tsx");
 const legend = read("./legend-menu.tsx");
 const css = read("../app/globals.css");
 const paint = read("../domain/connector-paint.ts");
 
 describe("neblina UI surfaces", () => {
-  it("paints the canvas zone with the exact copy when layout.neblina is set", () => {
-    expect(canvas).toMatch(/from "@\/domain\/neblina"/);
-    expect(canvas).toContain("NEBLINA_COPY");
+  it("paints haze around the sel chip and keeps the lead off the canvas", () => {
     expect(canvas).toMatch(/layout\.neblina/);
+    expect(canvas).toMatch(/layout\.contextNodes/);
     expect(canvas).toMatch(/className=.*neblina/);
+    expect(canvas).toMatch(/data-context-id/);
+    expect(canvas).toContain("Sel de Egiara");
+    expect(canvas).not.toContain("NEBLINA_COPY");
     expect(NEBLINA_COPY).toBe(
       "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.",
     );
   });
 
-  it("shows the same copy on the ficha of a neblina root", () => {
-    expect(panel).toMatch(/showsNeblinaCopy/);
-    expect(panel).toContain("NEBLINA_COPY");
-    expect(panel).toMatch(/useReducedMotion/);
+  it("opens the sel ficha from data with lead, historia, vinculaciones, and links", () => {
+    expect(app).toMatch(/contextById|ContextPanel/);
+    expect(contextPanel).toContain("NEBLINA_COPY");
+    expect(contextPanel).toContain("NEBLINA_LEAD_EMPHASIS");
+    expect(contextPanel).toMatch(/Historia/);
+    expect(contextPanel).toMatch(/Vinculaciones/);
+    expect(contextPanel).toMatch(/context\.history/);
+    expect(contextPanel).toMatch(/context\.vinculaciones/);
+    expect(contextPanel).toMatch(/useReducedMotion/);
+    expect(contextPanel).not.toMatch(/fuente oral/i);
+    expect(contextPanel).not.toMatch(/FICHA_KIN/);
+    expect(contextPanel).not.toMatch(/gradoLabel/);
+    expect(NEBLINA_LEAD_EMPHASIS).toBe("sel de Egiara");
+    expect(panel).not.toMatch(/showsNeblinaCopy/);
   });
 
   it("adds neblina to the leyenda without a line-stroke sample", () => {
