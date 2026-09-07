@@ -260,6 +260,56 @@ describe("layoutHouseCanvas", () => {
     expect(darioCx).not.toBeCloseTo(andresCx, 5);
   });
 
+  it("hangs Darío on a Mercedes-only parent stub for Andrés and Mercedes focus", () => {
+    expect(parentsOf(family, DARIO)).toEqual([MERCEDES]);
+    const cases: { focus: PersonId; expanded: PersonId[] }[] = [
+      { focus: ANDRES, expanded: [ANDRES, MERCEDES] },
+      { focus: MERCEDES, expanded: [ANDRES] },
+      { focus: MERCEDES, expanded: [ANDRES, MERCEDES] },
+    ];
+    for (const { focus, expanded } of cases) {
+      const layout = layoutHouseCanvas(family, focus, expanded);
+      expectHouseKept(layout);
+      const andres = nodeById(layout, ANDRES);
+      const mercedes = nodeById(layout, MERCEDES);
+      const dario = nodeById(layout, DARIO);
+      expect(nodeCenter(dario).x).toBeCloseTo(nodeCenter(mercedes).x, 5);
+      expect(nodeCenter(dario).x).not.toBeCloseTo(nodeCenter(andres).x, 5);
+      expect(
+        layout.connectors.some(
+          (item) =>
+            item.kind === "parent" &&
+            item.fromId === ANDRES &&
+            item.toId === DARIO,
+        ),
+      ).toBe(false);
+      const edge = layout.connectors.find(
+        (item) =>
+          item.kind === "parent" &&
+          item.fromId === MERCEDES &&
+          item.toId === DARIO,
+      );
+      expect(edge, `missing Mercedes → Darío when focus is ${focus}`).toBeDefined();
+      const tokens = (edge?.d ?? "").trim().split(/[\s,]+/).filter(Boolean);
+      const points: { x: number; y: number }[] = [];
+      for (let i = 0; i < tokens.length; i += 1) {
+        if (tokens[i] === "M" || tokens[i] === "L") {
+          points.push({ x: Number(tokens[i + 1]), y: Number(tokens[i + 2]) });
+          i += 2;
+        }
+      }
+      expect(points.length).toBeGreaterThanOrEqual(2);
+      const mercedesCx = nodeCenter(mercedes).x;
+      const andresCx = nodeCenter(andres).x;
+      for (const point of points) {
+        expect(point.x).toBeCloseTo(mercedesCx, 5);
+        expect(point.x).not.toBeCloseTo(andresCx, 5);
+      }
+      expect(points[0].y).toBeCloseTo(mercedes.y + mercedes.height, 5);
+      expect(points[points.length - 1].y).toBeCloseTo(dario.y, 5);
+    }
+  });
+
   it("keeps the Ochoa crest when Aurora is the focus", () => {
     const layout = layoutHouseCanvas(family, AURORA, []);
     expect(layout.crests).toHaveLength(1);
