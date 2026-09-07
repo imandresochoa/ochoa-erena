@@ -60,7 +60,15 @@ function siblingEdge(a: string, b: string) {
 }
 
 const PRODUCT_JARGON =
-  /\[TO\]|CONF Andrés|tradición oral|fuente oral de Andrés|según Andrés/i;
+  /\[TO\]|CONF Andrés|tradición oral|fuente oral|árbol oral|según Andrés/i;
+
+const SEL_LEAD =
+  "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.";
+
+const SEL_BODY = [
+  "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.",
+  "En Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+].join("\n\n");
 
 const TOUCHED_OCHOA_EGUIARA = [
   "juan-jose-ochoa-de-eguiara",
@@ -209,27 +217,60 @@ describe("family snapshot", () => {
     );
   });
 
-  it("leaves other real hypotheses in place after the CONF Andrés trunk lock", () => {
+  it("leaves José Ochoa Hidalgo as the remaining near-trunk hypothesis", () => {
     const jose = family.edges.find(
       (item) =>
         item.kind === "sibling" &&
         (item.from === "jose-ochoa-hidalgo" || item.to === "jose-ochoa-hidalgo"),
     );
-    const andresErena = family.edges.find(
-      (edge) =>
-        edge.kind === "parent" &&
-        edge.from === "andres-erena" &&
-        edge.to === "antonio-erena-liebana",
-    );
-    const capilla = family.edges.find(
-      (edge) =>
-        edge.kind === "parent" &&
-        edge.from === "capilla-liebana" &&
-        edge.to === "antonio-erena-liebana",
-    );
     expect(jose?.certainty).toBe("hypothesis");
-    expect(andresErena?.certainty).toBe("hypothesis");
-    expect(capilla?.certainty).toBe("hypothesis");
+  });
+
+  it("locks Andrés maternal CONF through bisabuelos, including Erena × Liébana", () => {
+    expect(
+      parentEdge("maria-aurora-erena-camacho", "andres-martin-ochoa-erena")
+        ?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("nicomedes-andres-erena-lopez", "maria-aurora-erena-camacho")
+        ?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("aurora-camacho-vinas", "maria-aurora-erena-camacho")?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("antonio-erena-liebana", "nicomedes-andres-erena-lopez")
+        ?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("dolores-lopez-martos", "nicomedes-andres-erena-lopez")
+        ?.certainty,
+    ).toBe("confirmed");
+    expect(
+      spouseEdge("antonio-erena-liebana", "dolores-lopez-martos")?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("antonio-camacho-liebana", "aurora-camacho-vinas")?.certainty,
+    ).toBe("confirmed");
+    expect(
+      parentEdge("mercedes-vinas-lopez", "aurora-camacho-vinas")?.certainty,
+    ).toBe("confirmed");
+    expect(
+      spouseEdge("antonio-camacho-liebana", "mercedes-vinas-lopez")?.certainty,
+    ).toBe("confirmed");
+    expect(parentEdge("andres-erena", "antonio-erena-liebana")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(parentEdge("capilla-liebana", "antonio-erena-liebana")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(spouseEdge("andres-erena", "capilla-liebana")?.certainty).toBe(
+      "confirmed",
+    );
+    expect(rawPerson("andres-erena").marks).toEqual(["AEC"]);
+    expect(rawPerson("capilla-liebana").marks).toEqual(["AEC"]);
+    expect(rawPerson("andres-erena").summary).toMatch(/Zapatero|Sin partida/);
+    expect(rawPerson("capilla-liebana").summary).toMatch(/Jamilena|Sin partida/);
   });
 
   it("keeps the snapshot size and does not invent people or files", () => {
@@ -450,9 +491,18 @@ describe("family snapshot", () => {
     );
   });
 
-  it("keeps ten hypothesis edges and does not make the 1444 solar a father", () => {
+  it("keeps seven hypothesis edges above the bisabuelos and does not make the 1444 solar a father", () => {
     const hip = family.edges.filter((edge) => edge.certainty === "hypothesis");
-    expect(hip).toHaveLength(10);
+    expect(hip).toHaveLength(7);
+    expect(
+      hip.some(
+        (edge) =>
+          edge.from === "andres-erena" ||
+          edge.to === "andres-erena" ||
+          edge.from === "capilla-liebana" ||
+          edge.to === "capilla-liebana",
+      ),
+    ).toBe(false);
     for (const person of family.people) {
       expect(person.displayName).not.toMatch(/Sendo/i);
       expect(person.id).not.toMatch(/sendo|1444/i);
@@ -580,6 +630,7 @@ describe("family snapshot", () => {
         todo?: string;
         summary?: string;
         history?: string;
+        anchors?: string[];
         vinculaciones?: Array<{ label?: string; note?: string }>;
         links?: RawLink[];
         sources?: RawSource[];
@@ -599,14 +650,24 @@ describe("family snapshot", () => {
     expect(sel?.kind).toBe("solar");
     expect(sel?.zone).toBe("fog");
     expect(sel?.branch).toBe("lateral");
+    expect(sel?.summary).toBe(SEL_LEAD);
+    expect(sel?.history).toBe(SEL_BODY);
     expect(sel?.todo).toMatch(/neblina|fog/i);
     expect(sel?.todo).toMatch(/tronco/i);
-    expect(sel?.history).toMatch(/1444/);
-    expect(sel?.history).toMatch(/1447/);
-    expect(sel?.history).toMatch(/1477/);
+    expect(sel?.anchors).toEqual([
+      "juan-jose-ochoa-de-eguiara",
+      "juan-ochoa-de-eguiara",
+    ]);
     expect(sel?.summary).not.toMatch(PRODUCT_JARGON);
     expect(sel?.history).not.toMatch(PRODUCT_JARGON);
     expect(sel?.vinculaciones.length).toBeGreaterThanOrEqual(3);
+    const vinculoText = (sel?.vinculaciones ?? [])
+      .map((item) => `${item.label} ${item.note}`)
+      .join(" ");
+    expect(vinculoText).toMatch(/nombre compartido/i);
+    expect(vinculoText).toMatch(/Juan José|1828/);
+    expect(vinculoText).toMatch(/HIP|hipótesis/i);
+    expect(vinculoText).toMatch(/padre|filiaci[oó]n|siglo XV|s\.XV/i);
     for (const item of sel?.vinculaciones ?? []) {
       expect(item.label.length).toBeGreaterThan(0);
       expect(item.note.length).toBeGreaterThan(0);
@@ -616,8 +677,8 @@ describe("family snapshot", () => {
     expect((rawSel?.links ?? []).map((link) => link.href)).toEqual(
       expect.arrayContaining([
         "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
+        "https://artxiboa.sanchoelsabio.eus/fss-ud677383",
         "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
-        "https://catalogo.sanchoelsabio.eus/Record/AtoM-673530",
       ]),
     );
   });

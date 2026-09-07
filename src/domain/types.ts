@@ -65,6 +65,7 @@ export type FamilyContext = {
   todo: string;
   summary: string;
   history: string;
+  anchors?: PersonId[];
   vinculaciones: ContextVinculo[];
   links: PersonLink[];
   sources: PersonSource[];

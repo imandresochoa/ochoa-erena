@@ -115,7 +115,7 @@ describe("default house", () => {
   it("names Andrés as the canvas root", () => {
     expect(DEFAULT_FOCUS_ID).toBe(defaultPerson?.id);
     expect(requirePerson(family, DEFAULT_FOCUS_ID).displayName).toBe(DEFAULT_FOCUS_NAME);
-    expect(house.size).toBe(37);
+    expect(house.size).toBe(45);
   });
 });
 
