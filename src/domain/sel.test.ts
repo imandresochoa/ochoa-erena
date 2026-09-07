@@ -4,6 +4,7 @@ import { pinExpandedLayout } from "@/domain/expand-motion";
 import { parentsOf } from "@/domain/graph";
 import { layoutHouseCanvas, layoutPedigree } from "@/domain/layout";
 import {
+  SEL_BREAK_GAP,
   SEL_ID,
   SEL_LEAD_EMPHASIS,
   SEL_SUMMARY,
@@ -113,6 +114,35 @@ describe("house canvas sel node", () => {
       ),
     ).toBe(false);
     expect(pedigree.contextNodes).toEqual(layout.contextNodes);
+  });
+
+  it("opens a larger break above the caserío than below it", () => {
+    const layout = layoutHouseCanvas(family, DEFAULT_FOCUS_ID, []);
+    const sel = layout.contextNodes[0]!;
+    const martin = layout.nodes.find((node) => node.id === MARTIN_MARIA)!;
+    const parents = parentsOf(family, MARTIN_MARIA)
+      .map((id) => layout.nodes.find((node) => node.id === id))
+      .filter((node): node is NonNullable<typeof node> => Boolean(node));
+    const parentBottom = Math.max(...parents.map((node) => node.y + node.height));
+    const gapAbove = sel.y - parentBottom;
+    const gapBelow = martin.y - (sel.y + sel.height);
+    expect(gapAbove).toBeGreaterThan(gapBelow);
+  });
+
+  it("lifts only the Basque branch by SEL_BREAK_GAP, leaving the maternal side put", () => {
+    const layout = layoutHouseCanvas(family, DEFAULT_FOCUS_ID, []);
+    const byId = new Map(layout.nodes.map((node) => [node.id, node]));
+    const parentGap = (id: ReturnType<typeof asPersonId>) => {
+      const child = byId.get(id)!;
+      const parents = parentsOf(family, id)
+        .map((pid) => byId.get(pid))
+        .filter((node): node is NonNullable<typeof node> => Boolean(node));
+      const parentBottom = Math.max(...parents.map((node) => node.y + node.height));
+      return child.y - parentBottom;
+    };
+    const basqueGap = parentGap(MARTIN_MARIA);
+    const maternalGap = parentGap(ANDRES);
+    expect(basqueGap - maternalGap).toBe(SEL_BREAK_GAP);
   });
 
   it("shifts the sel node with the expand pin the same way as the crest", () => {

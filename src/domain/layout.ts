@@ -1,5 +1,5 @@
 import { ochoaCrest, placeCrestAboveCluster } from "./crest";
-import { placeSelNode } from "./sel";
+import { placeSelNode, selAnchorId, selBranchAbove, SEL_BREAK_GAP } from "./sel";
 import {
   canvasVisible,
   childrenOf,
@@ -811,6 +811,18 @@ export function layoutPedigree(
       const packed = packSequence(groupIds, byId, graph, generation);
       for (const node of settleInRow(packed, placed, generation, centerX)) {
         placed.set(node.id, node);
+      }
+    }
+  }
+
+  // Lift only Martín María's Basque ancestry so a clear vertical break opens
+  // between the sel de Egiara threshold and the old, uncertain lineage above.
+  const anchorId = selAnchorId(graph);
+  if (anchorId !== undefined && placed.has(anchorId)) {
+    for (const id of selBranchAbove(graph, anchorId, gens)) {
+      const node = placed.get(id);
+      if (node !== undefined) {
+        placed.set(id, { ...node, y: node.y - SEL_BREAK_GAP });
       }
     }
   }
