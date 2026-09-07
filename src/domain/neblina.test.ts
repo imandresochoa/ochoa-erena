@@ -41,7 +41,11 @@ describe("neblina copy", () => {
 describe("fog contexts", () => {
   it("reads the sel from data flags, not from a hardcoded person id", () => {
     const fog = fogContexts(family);
-    expect(fog.map((item) => item.id)).toEqual([SEL]);
+    expect(fog.map((item) => item.id)).toEqual([
+      SEL,
+      "manuel-antonio-ochoa-de-eguiara",
+      "juan-jose-de-eguiara-y-eguren",
+    ]);
     expect(fog[0]?.zone).toBe("fog");
     expect(fog[0]?.branch).toBe("lateral");
     expect(fog[0]?.anchors).toEqual([JUAN_JOSE, JUAN]);
@@ -76,10 +80,15 @@ describe("placeContextNodes", () => {
       { id: JUAN_JOSE, x: 200, y: 228, width: 180, height: 38, generation: -5 },
       { id: ANDRES, x: 0, y: 800, width: 80, height: 38, generation: 0 },
     ]);
-    expect(placed).toHaveLength(1);
+    expect(placed.map((item) => item.id)).toEqual([
+      SEL,
+      "manuel-antonio-ochoa-de-eguiara",
+      "juan-jose-de-eguiara-y-eguren",
+    ]);
     expect(placed[0]?.id).toBe(SEL);
     expect(placed[0]!.x + placed[0]!.width).toBeLessThanOrEqual(200);
     expect(placed[0]!.y).toBe(228);
+    expect(placed.every((item) => item.y === 228)).toBe(true);
     expect(placed[0]!.width).toBeGreaterThan(0);
     expect(placed[0]!.height).toBeGreaterThan(0);
   });
@@ -89,9 +98,10 @@ describe("placeContextNodes", () => {
       { id: JUAN, x: 200, y: 80, width: 160, height: 38, generation: -6 },
       { id: ANDRES, x: 0, y: 800, width: 80, height: 38, generation: 0 },
     ]);
-    expect(placed).toHaveLength(1);
+    expect(placed).toHaveLength(3);
     expect(placed[0]!.y).toBe(80);
     expect(placed[0]!.x + placed[0]!.width).toBeLessThanOrEqual(200);
+    expect(placed.every((item) => item.y === 80)).toBe(true);
   });
 
   it("places a later data mention beside the sel without covering it", () => {
@@ -208,8 +218,8 @@ describe("house canvas neblina", () => {
     const pinnedJavier = pinned.nodes.find((node) => node.id === JAVIER);
     expect(opened.neblina).not.toBeNull();
     expect(pinned.neblina).not.toBeNull();
-    expect(opened.contextNodes).toHaveLength(1);
-    expect(pinned.contextNodes).toHaveLength(1);
+    expect(opened.contextNodes).toHaveLength(3);
+    expect(pinned.contextNodes).toHaveLength(3);
     expect(openedJavier).toBeDefined();
     expect(pinnedJavier).toBeDefined();
     const dx = pinnedJavier!.x - openedJavier!.x;

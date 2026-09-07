@@ -112,7 +112,20 @@ describe("sel-de-egiara context payload", () => {
         (edge) => edge.from === "sel-de-egiara" || edge.to === "sel-de-egiara",
       ),
     ).toBe(false);
-    expect(family.contexts.map((item) => item.id)).toEqual(["sel-de-egiara"]);
+    for (const id of [
+      "manuel-antonio-ochoa-de-eguiara",
+      "juan-jose-de-eguiara-y-eguren",
+    ]) {
+      expect(rawPeople().some((person) => person.id === id)).toBe(false);
+      expect(
+        rawEdges().some((edge) => edge.from === id || edge.to === id),
+      ).toBe(false);
+    }
+    expect(family.contexts.map((item) => item.id)).toEqual([
+      "sel-de-egiara",
+      "manuel-antonio-ochoa-de-eguiara",
+      "juan-jose-de-eguiara-y-eguren",
+    ]);
   });
 
   it("carries the canónico lead, historia, vinculaciones, and link-only sources", () => {
@@ -124,12 +137,14 @@ describe("sel-de-egiara context payload", () => {
       [
         "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.",
         "En Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+        "Una fuente secundaria (Bergarako baserriak – Egiara Gañekoa) menciona que una rama de este solar pasó a Álava con el apellido Ochoa de Eguiara (Ozaeta / Barrundia), y cita a Manuel Antonio Ochoa de Eguiara (baut. Zalduendo 1740, hidalguía 1793). El bisabuelo Martín María Ochoa de Eguiyara Antia vino de Álava (Aspárrena–Vitoria). Eso da coherencia geográfica con esa mención de una rama a Álava como Ochoa de Eguiara. Sigue siendo posibilidad / mención: no es filiación confirmada al sel de Bergara del siglo XV ni a Manuel Antonio.",
       ].join("\n\n"),
     );
     expect((raw?.vinculaciones ?? []).map((item) => item.note)).toEqual([
       "Nombre compartido Ochoa / Eguiara–Egiara entre el sel (s. XV) y el tronco de Aspárrena.",
       "Tronco documentado con partidas hacia Juan José Ochoa de Eguiara (baut. 1828, Egino) y generaciones anteriores indexadas en AHDV (con tramos hipotéticos).",
       "Las aristas concretas que unan el sel del s. XV con ese tronco no están definidas.",
+      "Bergarako baserriak (Egiara Gañekoa) menciona una rama a Álava bajo Ochoa de Eguiara (Ozaeta / Barrundia) y cita a Manuel Antonio Ochoa de Eguiara (baut. Zalduendo 1740, hidalguía 1793). El bisabuelo Martín María vino de Álava (Aspárrena–Vitoria): coherencia geográfica con esa nota, no filiación al Bergara del siglo XV ni a Manuel Antonio.",
     ]);
     expect(JSON.stringify(raw)).not.toMatch(/fuente oral/i);
     expect(raw?.sources?.every((source) => Boolean(source.href))).toBe(true);
