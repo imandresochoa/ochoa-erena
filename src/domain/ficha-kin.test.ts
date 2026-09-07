@@ -171,6 +171,7 @@ describe("fichaKin on the real family", () => {
         summary: "Hijo de Mercedes Viñas López. Hermano de Andrés Martín Ochoa Erena.",
       })),
       edges: family.edges,
+      contexts: family.contexts,
     };
     for (const id of SNAPSHOT_IDS) {
       expect(fichaKin(misleading, id)).toEqual(fichaKin(family, id));
@@ -179,7 +180,7 @@ describe("fichaKin on the real family", () => {
   });
 
   it("keeps every group empty when the graph has no edges", () => {
-    const alone: FamilyGraph = { people: family.people, edges: [] };
+    const alone: FamilyGraph = { people: family.people, edges: [], contexts: [] };
     for (const item of family.people) {
       expect(fichaKin(alone, item.id)).toEqual(EMPTY);
     }
@@ -334,6 +335,7 @@ describe("fichaKin on small graphs", () => {
     });
     const graph: FamilyGraph = {
       people,
+      contexts: [],
       edges: [
         { kind: "parent", from: asPersonId("padre"), to: foco, certainty: "confirmed" },
         { kind: "parent", from: asPersonId("fantasma"), to: foco, certainty: "confirmed" },

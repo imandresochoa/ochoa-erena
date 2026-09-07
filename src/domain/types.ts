@@ -74,7 +74,7 @@ export type FamilyContext = {
 export type FamilyGraph = {
   people: Person[];
   edges: Edge[];
-  contexts?: FamilyContext[];
+  contexts: FamilyContext[];
 };
 
 export type Vec = { x: number; y: number };

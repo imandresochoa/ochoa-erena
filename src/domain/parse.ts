@@ -149,6 +149,11 @@ function readContext(value: unknown): FamilyContext {
   if (typeof value.place === "string" && value.place.length > 0) {
     context.place = value.place;
   }
+  if (Array.isArray(value.anchors)) {
+    context.anchors = value.anchors.map((item) =>
+      asPersonId(readString(item, "anchor")),
+    );
+  }
   return context;
 }
 
@@ -227,6 +232,11 @@ export function parseFamily(raw: unknown): FamilyGraph {
   for (const context of contexts) {
     if (ids.has(asPersonId(context.id))) {
       throw new Error(`Context id collides with a person ${context.id}`);
+    }
+    for (const anchor of context.anchors ?? []) {
+      if (!ids.has(anchor)) {
+        throw new Error(`Context ${context.id} anchors unknown person ${anchor}`);
+      }
     }
   }
   return { people, edges, contexts };
