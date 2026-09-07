@@ -567,6 +567,7 @@ export function TreeCanvas({
                 height={crest.height}
                 sizes={`${crest.width}px`}
                 className="h-full w-full object-contain"
+                draggable={false}
                 priority
               />
             </button>
