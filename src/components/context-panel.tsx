@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeftIcon } from "@/components/chevron-left-icon";
 import { leftoverLinks } from "@/domain/ficha";
-import { NEBLINA_COPY, NEBLINA_LEAD_EMPHASIS } from "@/domain/neblina";
+import { NEBLINA_LEAD_EMPHASIS } from "@/domain/neblina";
 import type { FamilyContext } from "@/domain/types";
 
 type Props = {
@@ -17,7 +17,7 @@ const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 export function ContextPanel({ context, narrow, onBack }: Props) {
   const reduce = useReducedMotion();
   const leftover = leftoverLinks(context.links, context.sources);
-  const [leadBefore, leadAfter] = NEBLINA_COPY.split(NEBLINA_LEAD_EMPHASIS);
+  const [leadBefore, leadAfter] = context.summary.split(NEBLINA_LEAD_EMPHASIS);
   const history = context.history
     .split(/\n{2,}/)
     .map((part) => part.trim())
@@ -86,7 +86,6 @@ export function ContextPanel({ context, narrow, onBack }: Props) {
             <p className="type-title text-[var(--color-ink)]">Vinculaciones</p>
             {context.vinculaciones.map((item) => (
               <p key={item.label} className="text-[var(--color-muted-ink)]">
-                <span className="text-[var(--color-ink)]">{item.label}. </span>
                 {item.note}
               </p>
             ))}
@@ -137,7 +136,7 @@ export function ContextPanel({ context, narrow, onBack }: Props) {
             )}
           </div>
         ) : null}
-        <p className="sr-only">{NEBLINA_COPY}</p>
+        <p className="sr-only">{context.summary}</p>
       </div>
     </motion.aside>
   );

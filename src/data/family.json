@@ -1520,15 +1520,15 @@
       "vinculaciones": [
         {
           "label": "Nombre compartido",
-          "note": "Hay Ochoa de Eguiara en el siglo XV y en Aspárrena. El nexo concreto es el nombre y el sel, no una filiación escrita."
+          "note": "Nombre compartido Ochoa / Eguiara–Egiara entre el sel (s. XV) y el tronco de Aspárrena."
         },
         {
-          "label": "Tronco Aspárrena",
-          "note": "El tronco documentado llega a Juan José Ochoa de Eguiara (1828). Más atrás el nexo es HIP / hipótesis, no una partida cerrada."
+          "label": "Tronco documentado",
+          "note": "Tronco documentado con partidas hacia Juan José Ochoa de Eguiara (baut. 1828, Egino) y generaciones anteriores indexadas en AHDV (con tramos hipotéticos)."
         },
         {
           "label": "Sin filiación al siglo XV",
-          "note": "No hay aristas padre–hijo hacia 1444–1477. El sel no es un padre de Juan ni de Juan José."
+          "note": "Las aristas concretas que unan el sel del s. XV con ese tronco no están definidas."
         },
         {
           "label": "Mención Álava (posibilidad)",
