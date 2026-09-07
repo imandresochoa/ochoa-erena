@@ -914,6 +914,6 @@ export function layoutPedigree(
     connectors,
     crests: crest ? [crest] : [],
     contextNodes,
-    neblina: placeNeblina(contextNodes),
+    neblina: placeNeblina(contextNodes, nodes),
   };
 }

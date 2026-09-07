@@ -484,11 +484,7 @@ export function TreeCanvas({
                 <button
                   type="button"
                   data-selected={placed.id === selectedId}
-                  className={`node-chip context-chip relative flex h-full w-full items-center justify-center px-4 py-2 text-center text-base leading-[1.4] whitespace-nowrap ${
-                    placed.id === selectedId
-                      ? "bg-[var(--color-ink)] text-[var(--color-canvas)]"
-                      : "bg-[var(--color-node)] text-[var(--color-ink)]"
-                  }`}
+                  className="context-label relative flex h-full w-full items-center justify-center text-center text-base leading-[1.4] whitespace-nowrap"
                   onClick={() => {
                     if (panned.current) {
                       return;
