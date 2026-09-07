@@ -16,12 +16,17 @@ const css = read("../app/globals.css");
 const paint = read("../domain/connector-paint.ts");
 
 describe("neblina UI surfaces", () => {
-  it("paints haze around the sel chip and keeps the lead off the canvas", () => {
+  it("paints a full-width cloud band and a plain-text sel, not a chip", () => {
     expect(canvas).toMatch(/layout\.neblina/);
     expect(canvas).toMatch(/layout\.contextNodes/);
     expect(canvas).toMatch(/className=.*neblina/);
     expect(canvas).toMatch(/data-context-id/);
     expect(canvas).toContain("Sel de Egiara");
+    expect(canvas).toMatch(/context-label/);
+    expect(canvas).not.toMatch(/context-chip/);
+    expect(canvas).not.toMatch(/node-chip/);
+    expect(canvas).not.toMatch(/bg-\[var\(--color-node\)\]/);
+    expect(canvas).not.toMatch(/bg-\[var\(--color-ink\)\]/);
     expect(canvas).not.toContain("NEBLINA_COPY");
     expect(NEBLINA_COPY).toBe(
       "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.",
@@ -54,8 +59,16 @@ describe("neblina UI surfaces", () => {
     );
   });
 
-  it("uses a soft haze and honors prefers-reduced-motion", () => {
+  it("uses a dissolving cloud band and honors prefers-reduced-motion", () => {
     expect(css).toMatch(/\.neblina\b/);
+    expect(css).not.toMatch(
+      /\.neblina\s*\{[^}]*(border-radius:\s*999px|border-radius:\s*9999px)/,
+    );
+    expect(css).toMatch(
+      /(-webkit-)?mask-image:\s*linear-gradient|mask-image:\s*linear-gradient/,
+    );
+    expect(css).toMatch(/neblina-breathe\s+4s/);
+    expect(canvas).toMatch(/className="neblina pointer-events-none/);
     expect(css).toMatch(/prefers-reduced-motion:\s*reduce/);
     const reduce = css.match(
       /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*)\}\s*$/,

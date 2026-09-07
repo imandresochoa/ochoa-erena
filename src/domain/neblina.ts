@@ -2,6 +2,7 @@ import { spouseOf } from "./graph";
 import {
   NODE_HEIGHT,
   NODE_PAD_X,
+  ROW_GAP,
   SIBLING_GAP,
   type FamilyContext,
   type FamilyGraph,
@@ -19,9 +20,9 @@ export const NEBLINA_COPY = `${NEBLINA_LEAD_BEFORE}${NEBLINA_LEAD_EMPHASIS}${NEB
 export const NEBLINA_LEGEND_ID = "neblina" as const;
 export const NEBLINA_LEGEND_LABEL = "neblina";
 
-export const NEBLINA_PAD = 24;
+export const NEBLINA_BAND_HEIGHT = 168;
 
-function measureChipWidth(name: string): number {
+function measureLabelWidth(name: string): number {
   return NODE_PAD_X * 2 + Math.round(name.length * 8.32);
 }
 
@@ -42,8 +43,15 @@ export function placeContextNodes(
   graph: FamilyGraph,
   nodes: readonly PlacedNode[],
 ): PlacedContext[] {
+  if (nodes.length === 0) {
+    return [];
+  }
+  const treeMin = Math.min(...nodes.map((node) => node.x));
+  const treeMax = Math.max(...nodes.map((node) => node.x + node.width));
+  const treeMid = (treeMin + treeMax) / 2;
   const placed: PlacedContext[] = [];
   const rowLeft = new Map<number, number>();
+  let leadPlaced = false;
   for (const context of fogContexts(graph)) {
     const anchor = (context.anchors ?? [])
       .map((id) => nodes.find((node) => node.id === id))
@@ -60,14 +68,26 @@ export function placeContextNodes(
       cluster.push(spouse);
     }
     const left = cluster.reduce((best, node) => (node.x < best.x ? node : best));
-    const width = measureChipWidth(context.displayName);
+    const width = measureLabelWidth(context.displayName);
+    const y = left.y - ROW_GAP / 2;
+    if (!leadPlaced) {
+      placed.push({
+        id: context.id,
+        x: treeMid - width / 2,
+        y,
+        width,
+        height: NODE_HEIGHT,
+      });
+      leadPlaced = true;
+      continue;
+    }
     const start = rowLeft.get(left.y) ?? left.x;
     const x = start - SIBLING_GAP - width;
     rowLeft.set(left.y, x);
     placed.push({
       id: context.id,
       x,
-      y: left.y,
+      y,
       width,
       height: NODE_HEIGHT,
     });
@@ -76,19 +96,21 @@ export function placeContextNodes(
 }
 
 export function placeNeblina(
-  chips: readonly Pick<PlacedContext, "x" | "y" | "width" | "height">[],
+  labels: readonly Pick<PlacedContext, "x" | "y" | "width" | "height">[],
+  tree: readonly { x: number; width: number }[] = [],
 ): PlacedNeblina | null {
-  if (chips.length === 0) {
+  if (labels.length === 0) {
     return null;
   }
-  const minX = Math.min(...chips.map((chip) => chip.x));
-  const minY = Math.min(...chips.map((chip) => chip.y));
-  const maxX = Math.max(...chips.map((chip) => chip.x + chip.width));
-  const maxY = Math.max(...chips.map((chip) => chip.y + chip.height));
+  const span = tree.length > 0 ? tree : labels;
+  const minX = Math.min(...span.map((box) => box.x));
+  const maxX = Math.max(...span.map((box) => box.x + box.width));
+  const minY = Math.min(...labels.map((label) => label.y));
+  const midY = minY + NODE_HEIGHT / 2;
   return {
-    x: minX - NEBLINA_PAD,
-    y: minY - NEBLINA_PAD,
-    width: maxX - minX + NEBLINA_PAD * 2,
-    height: maxY - minY + NEBLINA_PAD * 2,
+    x: minX,
+    y: midY - NEBLINA_BAND_HEIGHT / 2,
+    width: maxX - minX,
+    height: NEBLINA_BAND_HEIGHT,
   };
 }
