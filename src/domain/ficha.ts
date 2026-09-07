@@ -7,13 +7,18 @@ export type FichaDoubt = {
   label: "Dudoso";
 };
 
+export type FichaFile = {
+  label: string;
+  href: string;
+};
+
 export type Ficha = {
   displayName: string;
   lifeProse: string | null;
   summary: string | null;
   links: PersonLink[];
   sources: PersonSource[];
-  files: readonly never[];
+  files: FichaFile[];
   noticeMailto: string | null;
   doubt: FichaDoubt | null;
 };
@@ -100,6 +105,9 @@ export function fichaFromPerson(person: Person): Ficha {
   const summary = person.summary.trim() ? person.summary : null;
   const links = person.links;
   const sources = person.sources ?? [];
+  const files = person.files
+    .filter((file) => file.visibility === "public" && !file.locked)
+    .map(({ label, href }) => ({ label, href }));
   const thin = summary === null && links.length === 0;
   return {
     displayName: person.displayName,
@@ -107,7 +115,7 @@ export function fichaFromPerson(person: Person): Ficha {
     summary,
     links,
     sources,
-    files: [],
+    files,
     noticeMailto: thin ? noticeMailto(person.displayName) : null,
     doubt: fichaDoubt(person),
   };

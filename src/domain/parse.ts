@@ -8,7 +8,9 @@ import {
   type Edge,
   type FamilyContext,
   type FamilyGraph,
+  type FileVisibility,
   type Person,
+  type PersonFile,
   type PersonLink,
   type PersonSource,
   type SourceKind,
@@ -26,6 +28,7 @@ const SOURCE_KINDS = new Set<SourceKind>([
   "bvm",
   "web",
 ]);
+const FILE_VISIBILITIES = new Set<FileVisibility>(["public", "private"]);
 const CERTAINTY = new Set(["confirmed", "hypothesis"]);
 const CONTEXT_KINDS = new Set<ContextKind>(["solar"]);
 const CONTEXT_ZONES = new Set<ContextZone>(["fog"]);
@@ -101,6 +104,39 @@ function readSources(value: unknown): PersonSource[] {
   });
 }
 
+function readFiles(value: unknown): PersonFile[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+  return value.flatMap((item) => {
+    if (!isRecord(item)) {
+      return [];
+    }
+    if (typeof item.label !== "string" || item.label.length === 0) {
+      return [];
+    }
+    if (typeof item.href !== "string" || item.href.length === 0) {
+      return [];
+    }
+    if (
+      typeof item.visibility !== "string" ||
+      !FILE_VISIBILITIES.has(item.visibility as FileVisibility)
+    ) {
+      return [];
+    }
+    if (typeof item.locked !== "boolean") {
+      return [];
+    }
+    const file: PersonFile = {
+      label: item.label,
+      href: item.href,
+      visibility: item.visibility as FileVisibility,
+      locked: item.locked,
+    };
+    return [file];
+  });
+}
+
 function readVinculos(value: unknown): ContextVinculo[] {
   if (!Array.isArray(value)) {
     return [];
@@ -173,6 +209,7 @@ function readPerson(value: unknown): Person {
     summary: typeof value.summary === "string" ? value.summary : "",
     links: readLinks(value.links),
     sources: readSources(value.sources),
+    files: readFiles(value.files),
   };
   if (isRecord(value.birth) && typeof value.birth.year === "number") {
     person.birth = {

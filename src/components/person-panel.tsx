@@ -236,6 +236,37 @@ export function PersonPanel({ person, focusId, narrow, onBack }: Props) {
             )}
           </div>
         ) : null}
+        {ficha.files.length > 0 ? (
+          <motion.div
+            className="flex flex-col gap-1"
+            initial={reduce ? { opacity: 0 } : { opacity: 0, transform: "translateY(6px)" }}
+            animate={reduce ? { opacity: 1 } : { opacity: 1, transform: "translateY(0)" }}
+            transition={{
+              duration: reduce ? 0.16 : 0.24,
+              ease: EASE_OUT,
+            }}
+          >
+            <p className="type-title text-[var(--color-ink)]">Archivos</p>
+            {ficha.files.map((file, index) => (
+              <motion.a
+                key={file.href}
+                href={file.href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[var(--color-muted-ink)] underline-offset-2 hover:underline"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{
+                  duration: reduce ? 0.16 : 0.24,
+                  delay: reduce ? 0 : index * 0.02,
+                  ease: EASE_OUT,
+                }}
+              >
+                {file.label}
+              </motion.a>
+            ))}
+          </motion.div>
+        ) : null}
         {ficha.noticeMailto ? (
           <a href={ficha.noticeMailto} className="ink-btn w-fit px-4 py-2">
             Avisar a Andrés

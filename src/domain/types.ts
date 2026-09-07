@@ -26,6 +26,15 @@ export type PersonSource = {
   mark: SourceMark;
 };
 
+export type FileVisibility = "public" | "private";
+
+export type PersonFile = {
+  label: string;
+  href: string;
+  visibility: FileVisibility;
+  locked: boolean;
+};
+
 export type Person = {
   id: PersonId;
   displayName: string;
@@ -37,6 +46,7 @@ export type Person = {
   summary: string;
   links: PersonLink[];
   sources: PersonSource[];
+  files: PersonFile[];
 };
 
 export type Edge = {
