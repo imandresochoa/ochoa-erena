@@ -8,8 +8,8 @@ export const NEBLINA_LEGEND_ID = "neblina" as const;
 export const NEBLINA_LEGEND_LABEL = "neblina";
 
 export const NEBLINA_GAP = 8;
-export const NEBLINA_HEIGHT = 64;
-export const NEBLINA_MIN_WIDTH = 320;
+export const NEBLINA_HEIGHT = 96;
+export const NEBLINA_MIN_WIDTH = 360;
 
 const EGUIARA_NAME = /ochoa de (eguiara|eguiyara|egiara)/i;
 
