@@ -33,6 +33,7 @@ function confirmedOnly(graph: FamilyGraph): FamilyGraph {
   return {
     people: graph.people,
     edges: graph.edges.filter((edge) => edge.certainty === "confirmed"),
+    contexts: graph.contexts ?? [],
   };
 }
 
