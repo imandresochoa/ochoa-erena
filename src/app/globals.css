@@ -107,32 +107,52 @@ body {
 
 .neblina {
   background:
-    radial-gradient(ellipse 20% 90% at 4% 50%, rgb(192 184 165 / 0.5) 0%, transparent 72%),
-    radial-gradient(ellipse 16% 70% at 12% 36%, rgb(192 184 165 / 0.4) 0%, transparent 70%),
-    radial-gradient(ellipse 18% 95% at 20% 64%, rgb(192 184 165 / 0.36) 0%, transparent 68%),
-    radial-gradient(ellipse 14% 60% at 28% 42%, rgb(192 184 165 / 0.22) 0%, transparent 74%),
-    radial-gradient(ellipse 20% 90% at 96% 50%, rgb(192 184 165 / 0.5) 0%, transparent 72%),
-    radial-gradient(ellipse 16% 70% at 88% 36%, rgb(192 184 165 / 0.4) 0%, transparent 70%),
-    radial-gradient(ellipse 18% 95% at 80% 64%, rgb(192 184 165 / 0.36) 0%, transparent 68%),
-    radial-gradient(ellipse 14% 60% at 72% 42%, rgb(192 184 165 / 0.22) 0%, transparent 74%);
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0%,
-    #000 24%,
-    transparent 42%,
-    transparent 58%,
-    #000 76%,
-    #000 100%
-  );
-  mask-image: linear-gradient(
-    to right,
-    #000 0%,
-    #000 24%,
-    transparent 42%,
-    transparent 58%,
-    #000 76%,
-    #000 100%
-  );
+    radial-gradient(ellipse 18% 70% at 3% 50%, rgb(192 184 165 / 0.55) 0%, transparent 72%),
+    radial-gradient(ellipse 14% 55% at 10% 22%, rgb(192 184 165 / 0.42) 0%, transparent 70%),
+    radial-gradient(ellipse 16% 60% at 16% 78%, rgb(192 184 165 / 0.4) 0%, transparent 68%),
+    radial-gradient(ellipse 15% 65% at 22% 40%, rgb(192 184 165 / 0.36) 0%, transparent 70%),
+    radial-gradient(ellipse 13% 50% at 30% 68%, rgb(192 184 165 / 0.24) 0%, transparent 74%),
+    radial-gradient(ellipse 18% 70% at 97% 50%, rgb(192 184 165 / 0.55) 0%, transparent 72%),
+    radial-gradient(ellipse 14% 55% at 90% 22%, rgb(192 184 165 / 0.42) 0%, transparent 70%),
+    radial-gradient(ellipse 16% 60% at 84% 78%, rgb(192 184 165 / 0.4) 0%, transparent 68%),
+    radial-gradient(ellipse 15% 65% at 78% 40%, rgb(192 184 165 / 0.36) 0%, transparent 70%),
+    radial-gradient(ellipse 13% 50% at 70% 68%, rgb(192 184 165 / 0.24) 0%, transparent 74%);
+  -webkit-mask-image:
+    linear-gradient(
+      to right,
+      #000 0%,
+      #000 24%,
+      transparent 42%,
+      transparent 58%,
+      #000 76%,
+      #000 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 82%,
+      transparent 100%
+    );
+  mask-image:
+    linear-gradient(
+      to right,
+      #000 0%,
+      #000 24%,
+      transparent 42%,
+      transparent 58%,
+      #000 76%,
+      #000 100%
+    ),
+    linear-gradient(
+      to bottom,
+      transparent 0%,
+      #000 18%,
+      #000 82%,
+      transparent 100%
+    );
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
   animation: neblina-breathe 4s var(--ease-in-out) infinite alternate;
 }
 

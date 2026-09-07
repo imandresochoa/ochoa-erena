@@ -20,7 +20,7 @@ export const NEBLINA_COPY = `${NEBLINA_LEAD_BEFORE}${NEBLINA_LEAD_EMPHASIS}${NEB
 export const NEBLINA_LEGEND_ID = "neblina" as const;
 export const NEBLINA_LEGEND_LABEL = "neblina";
 
-export const NEBLINA_BAND_HEIGHT = 48;
+export const NEBLINA_BAND_HEIGHT = 168;
 
 function measureLabelWidth(name: string): number {
   return NODE_PAD_X * 2 + Math.round(name.length * 8.32);
@@ -106,9 +106,10 @@ export function placeNeblina(
   const minX = Math.min(...span.map((box) => box.x));
   const maxX = Math.max(...span.map((box) => box.x + box.width));
   const minY = Math.min(...labels.map((label) => label.y));
+  const midY = minY + NODE_HEIGHT / 2;
   return {
     x: minX,
-    y: minY + NODE_HEIGHT - NEBLINA_BAND_HEIGHT,
+    y: midY - NEBLINA_BAND_HEIGHT / 2,
     width: maxX - minX,
     height: NEBLINA_BAND_HEIGHT,
   };
