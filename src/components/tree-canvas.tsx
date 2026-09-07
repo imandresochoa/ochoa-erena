@@ -11,6 +11,7 @@ import {
   paintConnectors,
 } from "@/domain/connector-paint";
 import { ochoaCrest } from "@/domain/crest";
+import { NEBLINA_COPY } from "@/domain/neblina";
 import {
   collapsePath,
   expandPinId,
@@ -105,7 +106,11 @@ export function TreeCanvas({
   }
   const layout = view.current.layout;
   const svgBounds = useMemo(() => {
-    const boxes = [...layout.nodes, ...layout.crests];
+    const boxes = [
+      ...layout.nodes,
+      ...layout.crests,
+      ...(layout.neblina ? [layout.neblina] : []),
+    ];
     if (boxes.length === 0) {
       return { x: 0, y: 0, w: 1, h: 1 };
     }
@@ -433,6 +438,26 @@ export function TreeCanvas({
               }}
             >
               {hover.label}
+            </motion.div>
+          ) : null}
+
+          {layout.neblina ? (
+            <motion.div
+              className="neblina pointer-events-none absolute"
+              style={{
+                left: layout.neblina.x,
+                top: layout.neblina.y,
+                width: layout.neblina.width,
+                height: layout.neblina.height,
+              }}
+              initial={{ opacity: reduce ? 1 : 0 }}
+              animate={{ opacity: 1 }}
+              transition={{
+                duration: reduce ? 0 : 0.24,
+                ease: [0.23, 1, 0.32, 1],
+              }}
+            >
+              {NEBLINA_COPY}
             </motion.div>
           ) : null}
 

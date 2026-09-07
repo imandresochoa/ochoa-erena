@@ -52,6 +52,13 @@ export function pinExpandedLayout(
       x: crest.x + dx,
       y: crest.y + dy,
     })),
+    neblina: next.neblina
+      ? {
+          ...next.neblina,
+          x: next.neblina.x + dx,
+          y: next.neblina.y + dy,
+        }
+      : null,
   };
 }
 
