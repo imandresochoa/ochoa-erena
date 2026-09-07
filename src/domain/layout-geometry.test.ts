@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { family } from "@/data/family";
 import { parentsOf } from "@/domain/graph";
-import { layoutHouseCanvas, layoutPedigree } from "@/domain/layout";
+import { layoutPedigree } from "@/domain/layout";
 import {
   asPersonId,
   BRANCH_GUTTER,
@@ -19,8 +19,6 @@ const AURORA_ERENA = asPersonId("maria-aurora-erena-camacho");
 const AURORA_CAMACHO = asPersonId("aurora-camacho-vinas");
 const ANTONIO_CAMACHO = asPersonId("antonio-camacho-liebana");
 const MERCEDES_VINAS = asPersonId("mercedes-vinas-lopez");
-const MERCEDES = asPersonId("mercedes-ochoa-erena");
-const DARIO = asPersonId("dario-de-dios-ochoa");
 
 function nodeById(layout: PedigreeLayout, id: PersonId): PlacedNode {
   const node = layout.nodes.find((item) => item.id === id);
