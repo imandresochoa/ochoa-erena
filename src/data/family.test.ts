@@ -14,6 +14,8 @@ type RawPerson = {
   displayName: string;
   summary: string;
   marks?: string[];
+  birth?: { text?: string };
+  death?: { text?: string };
   links?: RawLink[];
   sources?: RawSource[];
   files?: unknown;
@@ -105,7 +107,7 @@ describe("family snapshot", () => {
     expect(mercedesPerson?.birth).toEqual({
       year: 1990,
       approx: false,
-      text: "1990-10-05 [CONF Andrés 2026-09-06]",
+      text: "1990-10-05",
     });
     expect(siblingsOf(family, andres)).toEqual([mercedes]);
     expect(siblingsOf(family, mercedes)).toContain(andres);
@@ -131,7 +133,7 @@ describe("family snapshot", () => {
     expect(darioPerson?.birth).toEqual({
       year: 2015,
       approx: false,
-      text: "2015-10-18 [CONF Andrés 2026-09-06]",
+      text: "2015-10-18",
     });
     expect(parentsOf(family, dario)).toEqual([mercedes]);
     expect(
@@ -613,6 +615,11 @@ describe("family snapshot", () => {
   it("keeps every person summary and source label free of oral jargon", () => {
     for (const person of rawPeople()) {
       expect(person.summary, person.id).not.toMatch(PRODUCT_JARGON);
+      expect(person.birth?.text, `${person.id} birth`).not.toMatch(PRODUCT_JARGON);
+      expect(person.death?.text, `${person.id} death`).not.toMatch(PRODUCT_JARGON);
+      for (const link of person.links ?? []) {
+        expect(link.label, `${person.id} ${link.label}`).not.toMatch(PRODUCT_JARGON);
+      }
       for (const source of person.sources ?? []) {
         expect(source.label, `${person.id} ${source.label}`).not.toMatch(PRODUCT_JARGON);
       }
