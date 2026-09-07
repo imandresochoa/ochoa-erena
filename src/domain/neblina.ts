@@ -43,6 +43,7 @@ export function placeContextNodes(
   nodes: readonly PlacedNode[],
 ): PlacedContext[] {
   const placed: PlacedContext[] = [];
+  const rowLeft = new Map<number, number>();
   for (const context of fogContexts(graph)) {
     const anchor = (context.anchors ?? [])
       .map((id) => nodes.find((node) => node.id === id))
@@ -60,9 +61,12 @@ export function placeContextNodes(
     }
     const left = cluster.reduce((best, node) => (node.x < best.x ? node : best));
     const width = measureChipWidth(context.displayName);
+    const start = rowLeft.get(left.y) ?? left.x;
+    const x = start - SIBLING_GAP - width;
+    rowLeft.set(left.y, x);
     placed.push({
       id: context.id,
-      x: left.x - SIBLING_GAP - width,
+      x,
       y: left.y,
       width,
       height: NODE_HEIGHT,
