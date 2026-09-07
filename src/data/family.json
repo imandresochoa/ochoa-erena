@@ -4,7 +4,7 @@
       "id": "andres-martin-ochoa-erena",
       "displayName": "Andrés Martín Ochoa Erena",
       "marks": ["TO"],
-      "birth": { "year": 1995, "approx": false, "text": "1995-11-12 [CONF Andrés 2026-09-06]" },
+      "birth": { "year": 1995, "approx": false, "text": "1995-11-12" },
       "place": "Jaén",
       "summary": "Nació en Jaén el 12 de noviembre de 1995. El árbol de esta casa es el suyo.",
       "links": []
@@ -13,7 +13,7 @@
       "id": "mercedes-ochoa-erena",
       "displayName": "Mercedes Ochoa Erena",
       "marks": ["TO"],
-      "birth": { "year": 1990, "approx": false, "text": "1990-10-05 [CONF Andrés 2026-09-06]" },
+      "birth": { "year": 1990, "approx": false, "text": "1990-10-05" },
       "summary": "Hermana de Andrés. Hija de Francisco Javier Ochoa Palop y María Aurora Erena Camacho. Madre de Darío de Dios Ochoa.",
       "links": []
     },
@@ -21,7 +21,7 @@
       "id": "dario-de-dios-ochoa",
       "displayName": "Darío de Dios Ochoa",
       "marks": ["TO"],
-      "birth": { "year": 2015, "approx": false, "text": "2015-10-18 [CONF Andrés 2026-09-06]" },
+      "birth": { "year": 2015, "approx": false, "text": "2015-10-18" },
       "summary": "Hijo de Mercedes Ochoa Erena. Primer apellido De Dios. Segundo apellido Ochoa. El nombre de pila del padre no está. No se inventa una persona padre.",
       "links": []
     },
@@ -358,7 +358,7 @@
       "displayName": "Martín María Ochoa de Eguiyara Antia",
       "marks": ["TO", "H"],
       "birth": { "year": 1874, "approx": false, "text": "baut. 1874-10-12, San Pedro, Vitoria" },
-      "death": { "year": 1926, "approx": true, "text": "muerte ~1926 [TO]" },
+      "death": { "year": 1926, "approx": true, "text": "muerte ~1926" },
       "place": "Vitoria-Gasteiz",
       "summary": "Bisabuelo. Bautizado en San Pedro de Vitoria-Gasteiz el 12 de octubre de 1874. Ingeniero. Hijo de Juan José Ochoa de Eguiara y María Concepción Antia. En un catálogo de obras de Posadas de 1915 el apellido se lee Autia: esa lectura queda abierta.",
       "links": [
@@ -1416,9 +1416,9 @@
     { "kind": "parent", "from": "antonio-erena-liebana", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "parent", "from": "dolores-lopez-martos", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "spouse", "from": "antonio-erena-liebana", "to": "dolores-lopez-martos", "certainty": "confirmed" },
-    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "confirmed" },
-    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "confirmed" },
-    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "confirmed" },
+    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "hypothesis" },
 
     { "kind": "parent", "from": "antonio-camacho-liebana", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
     { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },

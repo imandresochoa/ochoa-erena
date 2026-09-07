@@ -128,7 +128,7 @@ describe("fichaFromPerson", () => {
     expect(andres!.birth).toEqual({
       year: 1995,
       approx: false,
-      text: "1995-11-12 [CONF Andrés 2026-09-06]",
+      text: "1995-11-12",
     });
     expect(ficha.summary).toBe(andres!.summary);
     expect(ficha.links).toEqual([]);

@@ -14,6 +14,8 @@ type RawPerson = {
   displayName: string;
   summary: string;
   marks?: string[];
+  birth?: { text?: string };
+  death?: { text?: string };
   links?: RawLink[];
   sources?: RawSource[];
   files?: unknown;
@@ -105,7 +107,7 @@ describe("family snapshot", () => {
     expect(mercedesPerson?.birth).toEqual({
       year: 1990,
       approx: false,
-      text: "1990-10-05 [CONF Andrés 2026-09-06]",
+      text: "1990-10-05",
     });
     expect(siblingsOf(family, andres)).toEqual([mercedes]);
     expect(siblingsOf(family, mercedes)).toContain(andres);
@@ -131,7 +133,7 @@ describe("family snapshot", () => {
     expect(darioPerson?.birth).toEqual({
       year: 2015,
       approx: false,
-      text: "2015-10-18 [CONF Andrés 2026-09-06]",
+      text: "2015-10-18",
     });
     expect(parentsOf(family, dario)).toEqual([mercedes]);
     expect(
@@ -226,7 +228,7 @@ describe("family snapshot", () => {
     expect(jose?.certainty).toBe("hypothesis");
   });
 
-  it("locks Andrés maternal CONF through bisabuelos, including Erena × Liébana", () => {
+  it("locks Andrés maternal CONF through bisabuelos and keeps Erena × Capilla HIP", () => {
     expect(
       parentEdge("maria-aurora-erena-camacho", "andres-martin-ochoa-erena")
         ?.certainty,
@@ -259,13 +261,13 @@ describe("family snapshot", () => {
       spouseEdge("antonio-camacho-liebana", "mercedes-vinas-lopez")?.certainty,
     ).toBe("confirmed");
     expect(parentEdge("andres-erena", "antonio-erena-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(parentEdge("capilla-liebana", "antonio-erena-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(spouseEdge("andres-erena", "capilla-liebana")?.certainty).toBe(
-      "confirmed",
+      "hypothesis",
     );
     expect(rawPerson("andres-erena").marks).toEqual(["AEC"]);
     expect(rawPerson("capilla-liebana").marks).toEqual(["AEC"]);
@@ -491,9 +493,9 @@ describe("family snapshot", () => {
     );
   });
 
-  it("keeps seven hypothesis edges above the bisabuelos and does not make the 1444 solar a father", () => {
+  it("keeps ten hypothesis edges above the bisabuelos and does not make the 1444 solar a father", () => {
     const hip = family.edges.filter((edge) => edge.certainty === "hypothesis");
-    expect(hip).toHaveLength(7);
+    expect(hip).toHaveLength(10);
     expect(
       hip.some(
         (edge) =>
@@ -502,7 +504,7 @@ describe("family snapshot", () => {
           edge.from === "capilla-liebana" ||
           edge.to === "capilla-liebana",
       ),
-    ).toBe(false);
+    ).toBe(true);
     for (const person of family.people) {
       expect(person.displayName).not.toMatch(/Sendo/i);
       expect(person.id).not.toMatch(/sendo|1444/i);
@@ -613,6 +615,15 @@ describe("family snapshot", () => {
   it("keeps every person summary and source label free of oral jargon", () => {
     for (const person of rawPeople()) {
       expect(person.summary, person.id).not.toMatch(PRODUCT_JARGON);
+      if (person.birth?.text) {
+        expect(person.birth.text, `${person.id} birth`).not.toMatch(PRODUCT_JARGON);
+      }
+      if (person.death?.text) {
+        expect(person.death.text, `${person.id} death`).not.toMatch(PRODUCT_JARGON);
+      }
+      for (const link of person.links ?? []) {
+        expect(link.label, `${person.id} ${link.label}`).not.toMatch(PRODUCT_JARGON);
+      }
       for (const source of person.sources ?? []) {
         expect(source.label, `${person.id} ${source.label}`).not.toMatch(PRODUCT_JARGON);
       }
