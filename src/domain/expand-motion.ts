@@ -59,6 +59,11 @@ export function pinExpandedLayout(
           y: next.neblina.y + dy,
         }
       : null,
+    contextNodes: next.contextNodes.map((node) => ({
+      ...node,
+      x: node.x + dx,
+      y: node.y + dy,
+    })),
   };
 }
 

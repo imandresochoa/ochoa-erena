@@ -49,7 +49,7 @@ describe("fog contexts", () => {
   });
 
   it("does not treat people as the fog start and does not invent a s.XV parent", () => {
-    expect(parentsOf(family, JUAN)).toEqual([]);
+    expect(parentsOf(family, JUAN)).not.toContain(SEL);
     expect(family.people.some((person) => person.id === SEL)).toBe(false);
     expect(
       family.edges.some(

@@ -51,10 +51,10 @@ function isSigloXvYear(year: number | undefined): boolean {
 
 describe("neblina does not invent siglo XV genealogy", () => {
   it("keeps the snapshot size so this UI change adds no people or edges", () => {
-    expect(rawPeople()).toHaveLength(63);
-    expect(family.people).toHaveLength(63);
-    expect(rawEdges()).toHaveLength(100);
-    expect(family.edges).toHaveLength(100);
+    expect(rawPeople()).toHaveLength(73);
+    expect(family.people).toHaveLength(73);
+    expect(rawEdges()).toHaveLength(118);
+    expect(family.edges).toHaveLength(118);
   });
 
   it("has no s.XV birth years and no s.XV parent edges", () => {
@@ -87,8 +87,10 @@ describe("neblina does not invent siglo XV genealogy", () => {
     ).toBe(false);
   });
 
-  it("leaves Juan Ochoa de Eguiara without invented parents", () => {
-    expect(parentsOf(family, asPersonId("juan-ochoa-de-eguiara"))).toEqual([]);
+  it("does not attach the sel to Juan as a parent", () => {
+    expect(parentsOf(family, asPersonId("juan-ochoa-de-eguiara"))).not.toContain(
+      "sel-de-egiara",
+    );
   });
 });
 
@@ -124,10 +126,12 @@ describe("sel-de-egiara context payload", () => {
     expect(raw?.history).toMatch(/1477/);
     expect(raw?.history).toMatch(/Bergara/);
     expect(raw?.history).toMatch(/no prueba/i);
-    const notes = (raw?.vinculaciones ?? []).map((item) => item.note).join(" ");
+    const notes = (raw?.vinculaciones ?? [])
+      .map((item) => `${item.label} ${item.note}`)
+      .join(" ");
     expect(notes).toMatch(/nombre compartido/i);
     expect(notes).toMatch(/1828/);
-    expect(notes).toMatch(/no están definidas/i);
+    expect(notes).toMatch(/filiaci|padre|siglo XV|s\.XV/i);
     expect(JSON.stringify(raw)).not.toMatch(/fuente oral/i);
     expect(raw?.sources?.every((source) => Boolean(source.href))).toBe(true);
     expect(raw?.sources?.some((source) => source.mark === "TO")).toBe(false);

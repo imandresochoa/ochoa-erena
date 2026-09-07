@@ -1,53 +1,93 @@
-import { parentsOf } from "./graph";
-import type { FamilyGraph, PersonId, PlacedNode } from "./types";
+import { spouseOf } from "./graph";
+import {
+  NODE_HEIGHT,
+  NODE_PAD_X,
+  SIBLING_GAP,
+  type FamilyContext,
+  type FamilyGraph,
+  type PlacedContext,
+  type PlacedNeblina,
+  type PlacedNode,
+} from "./types";
 
-export const NEBLINA_COPY =
-  "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.";
+export const NEBLINA_LEAD_BEFORE =
+  "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el ";
+export const NEBLINA_LEAD_EMPHASIS = "sel de Egiara";
+export const NEBLINA_LEAD_AFTER = ".";
+export const NEBLINA_COPY = `${NEBLINA_LEAD_BEFORE}${NEBLINA_LEAD_EMPHASIS}${NEBLINA_LEAD_AFTER}`;
 
 export const NEBLINA_LEGEND_ID = "neblina" as const;
 export const NEBLINA_LEGEND_LABEL = "neblina";
 
-export const NEBLINA_GAP = 8;
-export const NEBLINA_HEIGHT = 96;
-export const NEBLINA_MIN_WIDTH = 360;
+export const NEBLINA_PAD = 24;
 
-const EGUIARA_NAME = /ochoa de (eguiara|eguiyara|egiara)/i;
-
-export function isOchoaDeEguiaraName(displayName: string): boolean {
-  return EGUIARA_NAME.test(displayName);
+function measureChipWidth(name: string): number {
+  return NODE_PAD_X * 2 + Math.round(name.length * 8.32);
 }
 
-export function neblinaRoots(graph: FamilyGraph): PersonId[] {
-  return graph.people
-    .filter(
-      (person) =>
-        isOchoaDeEguiaraName(person.displayName) &&
-        parentsOf(graph, person.id).length === 0,
-    )
-    .map((person) => person.id);
+export function fogContexts(graph: FamilyGraph): FamilyContext[] {
+  return (graph.contexts ?? []).filter(
+    (context) => context.zone === "fog" && context.branch === "lateral",
+  );
 }
 
-export function showsNeblinaCopy(graph: FamilyGraph, personId: PersonId): boolean {
-  return neblinaRoots(graph).includes(personId);
+export function contextById(
+  graph: FamilyGraph,
+  id: string,
+): FamilyContext | undefined {
+  return (graph.contexts ?? []).find((context) => context.id === id);
+}
+
+export function placeContextNodes(
+  graph: FamilyGraph,
+  nodes: readonly PlacedNode[],
+): PlacedContext[] {
+  const placed: PlacedContext[] = [];
+  for (const context of fogContexts(graph)) {
+    const anchors = nodes.filter((node) => context.anchors?.includes(node.id));
+    if (anchors.length === 0) {
+      continue;
+    }
+    const cluster: PlacedNode[] = [];
+    for (const anchor of anchors) {
+      cluster.push(anchor);
+      const spouseId = spouseOf(graph, anchor.id);
+      const spouse = spouseId
+        ? nodes.find((node) => node.id === spouseId)
+        : undefined;
+      if (spouse) {
+        cluster.push(spouse);
+      }
+    }
+    const oldestY = Math.min(...cluster.map((node) => node.y));
+    const row = cluster.filter((node) => node.y === oldestY);
+    const left = row.reduce((best, node) => (node.x < best.x ? node : best));
+    const width = measureChipWidth(context.displayName);
+    placed.push({
+      id: context.id,
+      x: left.x - SIBLING_GAP - width,
+      y: left.y,
+      width,
+      height: NODE_HEIGHT,
+    });
+  }
+  return placed;
 }
 
 export function placeNeblina(
-  nodes: readonly PlacedNode[],
-  rootIds: readonly PersonId[],
-): { x: number; y: number; width: number; height: number } | null {
-  const roots = nodes.filter((node) => rootIds.includes(node.id));
-  if (roots.length === 0) {
+  chips: readonly Pick<PlacedContext, "x" | "y" | "width" | "height">[],
+): PlacedNeblina | null {
+  if (chips.length === 0) {
     return null;
   }
-  const minX = Math.min(...roots.map((node) => node.x));
-  const maxX = Math.max(...roots.map((node) => node.x + node.width));
-  const minY = Math.min(...roots.map((node) => node.y));
-  const span = maxX - minX;
-  const width = Math.max(span, NEBLINA_MIN_WIDTH);
+  const minX = Math.min(...chips.map((chip) => chip.x));
+  const minY = Math.min(...chips.map((chip) => chip.y));
+  const maxX = Math.max(...chips.map((chip) => chip.x + chip.width));
+  const maxY = Math.max(...chips.map((chip) => chip.y + chip.height));
   return {
-    x: (minX + maxX) / 2 - width / 2,
-    y: minY - NEBLINA_GAP - NEBLINA_HEIGHT,
-    width,
-    height: NEBLINA_HEIGHT,
+    x: minX - NEBLINA_PAD,
+    y: minY - NEBLINA_PAD,
+    width: maxX - minX + NEBLINA_PAD * 2,
+    height: maxY - minY + NEBLINA_PAD * 2,
   };
 }

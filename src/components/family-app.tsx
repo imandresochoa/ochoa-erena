@@ -5,14 +5,16 @@ import { AnimatePresence } from "motion/react";
 import { FocusPicker } from "@/components/focus-picker";
 import { LandingScreen } from "@/components/landing-screen";
 import { LegendMenu } from "@/components/legend-menu";
+import { ContextPanel } from "@/components/context-panel";
 import { PersonPanel } from "@/components/person-panel";
 import { RestaurarButton } from "@/components/restaurar-button";
 import { TreeCanvas } from "@/components/tree-canvas";
 import { WelcomeScreen } from "@/components/welcome-screen";
 import { ZoomControls } from "@/components/zoom-controls";
 import { family } from "@/data/family";
-import { expansionsToReveal, requirePerson } from "@/domain/graph";
-import { DEFAULT_FOCUS_NAME, type Person } from "@/domain/types";
+import { expansionsToReveal, personById, requirePerson } from "@/domain/graph";
+import { contextById } from "@/domain/neblina";
+import { DEFAULT_FOCUS_NAME, asPersonId, type Person } from "@/domain/types";
 import {
   closeFicha,
   DEFAULT_ZOOM,
@@ -108,7 +110,13 @@ export function FamilyApp() {
   }
 
   const focus = requirePerson(family, screen.focusId);
-  const selected = screen.selectedId ? requirePerson(family, screen.selectedId) : null;
+  const selectedContext = screen.selectedId
+    ? contextById(family, screen.selectedId)
+    : undefined;
+  const selectedPerson =
+    !selectedContext && screen.selectedId
+      ? personById(family, asPersonId(screen.selectedId))
+      : undefined;
   const dirty = needsRestaurar(
     screen.expandedIds,
     expansionsToReveal(family, screen.focusId),
@@ -181,10 +189,23 @@ export function FamilyApp() {
         </div>
       </div>
       <AnimatePresence>
-        {selected ? (
+        {selectedContext ? (
+          <ContextPanel
+            key="ficha-context"
+            context={selectedContext}
+            narrow={narrow}
+            onBack={() =>
+              setScreen((current) =>
+                current.kind === "tree"
+                  ? { ...current, ...closeFicha(current) }
+                  : current,
+              )
+            }
+          />
+        ) : selectedPerson ? (
           <PersonPanel
             key="ficha"
-            person={selected}
+            person={selectedPerson}
             focusId={screen.focusId}
             narrow={narrow}
             onBack={() =>

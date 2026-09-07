@@ -11,7 +11,7 @@ import {
   paintConnectors,
 } from "@/domain/connector-paint";
 import { ochoaCrest } from "@/domain/crest";
-import { NEBLINA_COPY } from "@/domain/neblina";
+import { contextById } from "@/domain/neblina";
 import {
   collapsePath,
   expandPinId,
@@ -32,7 +32,6 @@ import {
   type PinchSession,
 } from "@/domain/view";
 import {
-  asPersonId,
   NODE_HEIGHT,
   type PedigreeLayout,
   type PersonId,
@@ -41,7 +40,7 @@ import {
 
 type Props = {
   focusId: PersonId;
-  selectedId: PersonId | null;
+  selectedId: string | null;
   expandedIds: PersonId[];
   pan: Vec;
   zoom: number;
@@ -49,7 +48,7 @@ type Props = {
   coarsePointer: boolean;
   onPan: (next: Vec) => void;
   onZoom: (zoom: number) => void;
-  onSelect: (id: PersonId) => void;
+  onSelect: (id: string) => void;
   onExpand: (id: PersonId) => void;
 };
 
@@ -109,6 +108,7 @@ export function TreeCanvas({
     const boxes = [
       ...layout.nodes,
       ...layout.crests,
+      ...layout.contextNodes,
       ...(layout.neblina ? [layout.neblina] : []),
     ];
     if (boxes.length === 0) {
@@ -141,7 +141,7 @@ export function TreeCanvas({
     y: number;
     pan: Vec;
     moved: boolean;
-    personId: PersonId | null;
+    fichaId: string | null;
   } | null>(null);
   const pinch = useRef<PinchSession | null>(null);
   const panned = useRef(false);
@@ -206,7 +206,7 @@ export function TreeCanvas({
       }
       drag.current = null;
       if (event.type === "pointerup" && !pinch.current) {
-        const id = fichaPersonAfterPointer(active.moved, active.personId);
+        const id = fichaPersonAfterPointer(active.moved, active.fichaId);
         if (id) {
           onSelectRef.current(id);
         }
@@ -298,15 +298,17 @@ export function TreeCanvas({
           return;
         }
         panned.current = false;
-        const host = target?.closest("[data-person-id]");
-        const raw = host?.getAttribute("data-person-id");
+        const host = target?.closest("[data-person-id], [data-context-id]");
+        const raw =
+          host?.getAttribute("data-person-id") ??
+          host?.getAttribute("data-context-id");
         drag.current = {
           pointerId: event.pointerId,
           x: event.clientX,
           y: event.clientY,
           pan,
           moved: false,
-          personId: raw ? asPersonId(raw) : null,
+          fichaId: raw,
         };
         if (event.pointerType !== "touch") {
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -456,10 +458,49 @@ export function TreeCanvas({
                 duration: reduce ? 0 : 0.24,
                 ease: [0.23, 1, 0.32, 1],
               }}
-            >
-              {NEBLINA_COPY}
-            </motion.div>
+            />
           ) : null}
+          {layout.contextNodes.map((placed) => {
+            const context = contextById(family, placed.id);
+            const label = context?.displayName || "Sel de Egiara";
+            return (
+              <motion.div
+                key={placed.id}
+                className="context-node absolute z-10"
+                data-context-id={placed.id}
+                style={{
+                  left: 0,
+                  top: 0,
+                  width: placed.width,
+                  height: placed.height,
+                }}
+                initial={reduce ? { opacity: 1 } : { opacity: 0 }}
+                animate={{ opacity: 1, x: placed.x, y: placed.y }}
+                transition={{
+                  duration: reduce ? 0 : 0.3,
+                  ease: [0.23, 1, 0.32, 1],
+                }}
+              >
+                <button
+                  type="button"
+                  data-selected={placed.id === selectedId}
+                  className={`node-chip context-chip relative flex h-full w-full items-center justify-center px-4 py-2 text-center text-base leading-[1.4] whitespace-nowrap ${
+                    placed.id === selectedId
+                      ? "bg-[var(--color-ink)] text-[var(--color-canvas)]"
+                      : "bg-[var(--color-node)] text-[var(--color-ink)]"
+                  }`}
+                  onClick={() => {
+                    if (panned.current) {
+                      return;
+                    }
+                    onSelect(placed.id);
+                  }}
+                >
+                  {label}
+                </button>
+              </motion.div>
+            );
+          })}
 
           {layout.crests.map((crest) => (
             <div
