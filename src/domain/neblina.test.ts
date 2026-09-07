@@ -70,7 +70,7 @@ describe("placeContextNodes", () => {
     ).toEqual([]);
   });
 
-  it("sits to the left of the oldest visible Eguiara anchor, not above as a parent", () => {
+  it("sits beside the preferred Juan José anchor, not above as a parent", () => {
     const placed = placeContextNodes(family, [
       { id: JUAN, x: 200, y: 80, width: 160, height: 38, generation: -6 },
       { id: JUAN_JOSE, x: 200, y: 228, width: 180, height: 38, generation: -5 },
@@ -79,9 +79,19 @@ describe("placeContextNodes", () => {
     expect(placed).toHaveLength(1);
     expect(placed[0]?.id).toBe(SEL);
     expect(placed[0]!.x + placed[0]!.width).toBeLessThanOrEqual(200);
-    expect(placed[0]!.y).toBe(80);
+    expect(placed[0]!.y).toBe(228);
     expect(placed[0]!.width).toBeGreaterThan(0);
     expect(placed[0]!.height).toBeGreaterThan(0);
+  });
+
+  it("falls back to Juan when Juan José is not on the canvas", () => {
+    const placed = placeContextNodes(family, [
+      { id: JUAN, x: 200, y: 80, width: 160, height: 38, generation: -6 },
+      { id: ANDRES, x: 0, y: 800, width: 80, height: 38, generation: 0 },
+    ]);
+    expect(placed).toHaveLength(1);
+    expect(placed[0]!.y).toBe(80);
+    expect(placed[0]!.x + placed[0]!.width).toBeLessThanOrEqual(200);
   });
 });
 
@@ -117,12 +127,15 @@ describe("house canvas neblina", () => {
     const pedigree = layoutPedigree(family, DEFAULT_FOCUS_ID, []);
     const sel = withAndres.contextNodes.find((node) => node.id === SEL);
     const juan = withAndres.nodes.find((node) => node.id === JUAN);
+    const juanJose = withAndres.nodes.find((node) => node.id === JUAN_JOSE);
     expect(withAndres.nodes.some((node) => node.id === JUAN)).toBe(true);
     expect(withAndres.nodes.some((node) => node.id === SEL)).toBe(false);
     expect(sel).toBeDefined();
     expect(juan).toBeDefined();
-    expect(sel!.x + sel!.width).toBeLessThanOrEqual(juan!.x);
-    expect(sel!.y).toBe(juan!.y);
+    expect(juanJose).toBeDefined();
+    expect(sel!.x + sel!.width).toBeLessThanOrEqual(juanJose!.x);
+    expect(sel!.y).toBe(juanJose!.y);
+    expect(sel!.y).not.toBe(juan!.y);
     expect(withAndres.neblina).not.toBeNull();
     expect(withAurora.neblina).not.toBeNull();
     expect(pedigree.neblina).toEqual(withAndres.neblina);
