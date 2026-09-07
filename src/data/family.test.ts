@@ -67,10 +67,17 @@ const PRODUCT_JARGON =
 const SEL_LEAD =
   "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.";
 
+const SEL_ALAVA_MENTION =
+  "Una fuente secundaria (Bergarako baserriak – Egiara Gañekoa) menciona que una rama de este solar pasó a Álava con el apellido Ochoa de Eguiara (Ozaeta / Barrundia), y cita a Manuel Antonio Ochoa de Eguiara (baut. Zalduendo 1740, hidalguía 1793). El bisabuelo Martín María Ochoa de Eguiyara Antia vino de Álava (Aspárrena–Vitoria). Eso da coherencia geográfica con esa mención de una rama a Álava como Ochoa de Eguiara. Sigue siendo posibilidad / mención: no es filiación confirmada al sel de Bergara del siglo XV ni a Manuel Antonio.";
+
 const SEL_BODY = [
   "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.",
   "En Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+  SEL_ALAVA_MENTION,
 ].join("\n\n");
+
+const BERGARA_BASERRIAK_HREF =
+  "https://sites.google.com/site/bergarakobaserriak/auzoak-barrios/elosua/egiara-gañekoa";
 
 const TOUCHED_OCHOA_EGUIARA = [
   "juan-jose-ochoa-de-eguiara",
@@ -696,7 +703,205 @@ describe("family snapshot", () => {
         "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
         "https://artxiboa.sanchoelsabio.eus/fss-ud677383",
         "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
+        BERGARA_BASERRIAK_HREF,
       ]),
     );
+  });
+
+  it("keeps the Bergarako Álava note as possibility, not a person or parent edge", () => {
+    const sel = family.contexts.find((item) => item.id === "sel-de-egiara");
+    const raw = familyJson as {
+      contexts?: Array<{
+        id?: string;
+        history?: string;
+        vinculaciones?: Array<{ label?: string; note?: string }>;
+        links?: RawLink[];
+        sources?: RawSource[];
+      }>;
+    };
+    const rawSel = raw.contexts?.find((item) => item.id === "sel-de-egiara");
+    const fichaCopy = [
+      sel?.summary,
+      sel?.history,
+      ...(sel?.vinculaciones ?? []).map((item) => `${item.label} ${item.note}`),
+    ].join("\n");
+
+    expect(sel?.history).toContain(SEL_ALAVA_MENTION);
+    expect(fichaCopy).toMatch(/posibilidad|menci[oó]n/i);
+    expect(fichaCopy).toMatch(/Bergarako baserriak/);
+    expect(fichaCopy).toMatch(/Ozaeta/);
+    expect(fichaCopy).toMatch(/Barrundia/);
+    expect(fichaCopy).toMatch(/Manuel Antonio Ochoa de Eguiara/);
+    expect(fichaCopy).toMatch(/Zalduendo 1740/);
+    expect(fichaCopy).toMatch(/hidalgu[ií]a 1793/);
+    expect(fichaCopy).toMatch(/Martín María/);
+    expect(fichaCopy).toMatch(/Aspárrena–Vitoria|Aspárrena-Vitoria/);
+    expect(fichaCopy).toMatch(/coherencia geogr[aá]fica/i);
+    expect(fichaCopy).toMatch(
+      /no (es )?filiaci[oó]n confirmada|no filiaci[oó]n/i,
+    );
+    expect(fichaCopy).toMatch(/siglo XV|s\.XV/i);
+    expect(fichaCopy).not.toMatch(PRODUCT_JARGON);
+
+    const alavaVinculo = (sel?.vinculaciones ?? []).find((item) =>
+      /[ÁA]lava/i.test(`${item.label} ${item.note}`),
+    );
+    expect(alavaVinculo?.label).toMatch(/posibilidad|menci[oó]n/i);
+    expect(alavaVinculo?.note).toMatch(/Manuel Antonio/);
+    expect(alavaVinculo?.note).toMatch(/Martín María/);
+    expect(alavaVinculo?.note).toMatch(/coherencia geogr[aá]fica/i);
+    expect(alavaVinculo?.note).toMatch(/no filiaci[oó]n/i);
+
+    expect((rawSel?.links ?? []).map((link) => link.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+    expect((rawSel?.sources ?? []).map((source) => source.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+
+    expect(
+      family.people.some((person) => /manuel-antonio/i.test(person.id)),
+    ).toBe(false);
+    expect(
+      family.people.some((person) =>
+        /Manuel Antonio Ochoa de Eguiara/i.test(person.displayName),
+      ),
+    ).toBe(false);
+    expect(family.people).toHaveLength(73);
+    expect(family.edges).toHaveLength(118);
+  });
+
+  it("stores Manuel Antonio and Juan José de Eguiara y Eguren as context nodes, not parents", () => {
+    const raw = familyJson as {
+      contexts?: Array<{
+        id?: string;
+        kind?: string;
+        displayName?: string;
+        place?: string;
+        zone?: string;
+        branch?: string;
+        summary?: string;
+        history?: string;
+        anchors?: string[];
+        vinculaciones?: Array<{ label?: string; note?: string }>;
+        links?: RawLink[];
+        sources?: RawSource[];
+      }>;
+    };
+
+    const manuel = family.contexts.find(
+      (item) => item.id === "manuel-antonio-ochoa-de-eguiara",
+    );
+    const juanJoseMx = family.contexts.find(
+      (item) => item.id === "juan-jose-de-eguiara-y-eguren",
+    );
+    const rawManuel = raw.contexts?.find(
+      (item) => item.id === "manuel-antonio-ochoa-de-eguiara",
+    );
+    const rawJuanJoseMx = raw.contexts?.find(
+      (item) => item.id === "juan-jose-de-eguiara-y-eguren",
+    );
+
+    expect(family.contexts.map((item) => item.id)).toEqual(
+      expect.arrayContaining([
+        "sel-de-egiara",
+        "manuel-antonio-ochoa-de-eguiara",
+        "juan-jose-de-eguiara-y-eguren",
+      ]),
+    );
+    expect(manuel).toBeDefined();
+    expect(juanJoseMx).toBeDefined();
+
+    for (const id of [
+      "manuel-antonio-ochoa-de-eguiara",
+      "juan-jose-de-eguiara-y-eguren",
+    ]) {
+      expect(family.people.some((person) => person.id === id)).toBe(false);
+      expect(
+        family.edges.some((edge) => edge.from === id || edge.to === id),
+      ).toBe(false);
+    }
+    expect(
+      family.people.some((person) => person.id === "nicolas-de-eguiara-y-eguren"),
+    ).toBe(false);
+    expect(juanJoseMx?.id).not.toBe("juan-jose-ochoa-de-eguiara");
+    expect(family.people).toHaveLength(73);
+    expect(family.edges).toHaveLength(118);
+
+    expect(manuel?.kind).toBe("solar");
+    expect(manuel?.zone).toBe("fog");
+    expect(manuel?.branch).toBe("lateral");
+    expect(manuel?.displayName).toBe("Manuel Antonio Ochoa de Eguiara");
+    expect(manuel?.place).toMatch(/Ozaeta|Barrundia|Zalduondo/);
+    expect(manuel?.anchors).toEqual([
+      "juan-jose-ochoa-de-eguiara",
+      "juan-ochoa-de-eguiara",
+    ]);
+
+    const manuelCopy = [
+      manuel?.summary,
+      manuel?.history,
+      ...(manuel?.vinculaciones ?? []).map((item) => `${item.label} ${item.note}`),
+    ].join("\n");
+    expect(manuelCopy).toMatch(/Zalduondo 1740|baut\. Zalduondo/);
+    expect(manuelCopy).toMatch(/hidalgu[ií]a 1793/);
+    expect(manuelCopy).toMatch(/Ozaeta/);
+    expect(manuelCopy).toMatch(/Barrundia/);
+    expect(manuelCopy).toMatch(/posibilidad|rama a Álava/i);
+    expect(manuelCopy).toMatch(/Sel de Egiara|sel de Egiara/);
+    expect(manuelCopy).toMatch(/contexto/);
+    expect(manuelCopy).toMatch(/no (es )?(una )?(filiaci[oó]n|padre)/i);
+    expect(manuelCopy).not.toMatch(PRODUCT_JARGON);
+    expect((manuel?.vinculaciones ?? []).length).toBeGreaterThanOrEqual(2);
+    for (const item of manuel?.vinculaciones ?? []) {
+      expect(item.note).not.toMatch(PRODUCT_JARGON);
+    }
+    expect((rawManuel?.links ?? []).map((link) => link.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+    expect((rawManuel?.sources ?? []).map((source) => source.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+    expect((rawManuel?.sources ?? []).every((source) => source.mark === "H")).toBe(
+      true,
+    );
+
+    expect(juanJoseMx?.kind).toBe("solar");
+    expect(juanJoseMx?.zone).toBe("fog");
+    expect(juanJoseMx?.branch).toBe("lateral");
+    expect(juanJoseMx?.displayName).toBe("Juan José de Eguiara y Eguren");
+    expect(juanJoseMx?.place).toMatch(/M[eé]xico/);
+    expect(juanJoseMx?.anchors).toEqual([
+      "juan-jose-ochoa-de-eguiara",
+      "juan-ochoa-de-eguiara",
+    ]);
+
+    const juanJoseCopy = [
+      juanJoseMx?.summary,
+      juanJoseMx?.history,
+      ...(juanJoseMx?.vinculaciones ?? []).map(
+        (item) => `${item.label} ${item.note}`,
+      ),
+    ].join("\n");
+    expect(juanJoseCopy).toMatch(/pol[ií]grafo/i);
+    expect(juanJoseCopy).toMatch(/Nicol[aá]s de Eguiara y Eguren/);
+    expect(juanJoseCopy).toMatch(/Bergara|solar/);
+    expect(juanJoseCopy).toMatch(/no (se )?funde|no es el Juan José Ochoa/i);
+    expect(juanJoseCopy).toMatch(/Aspárrena/);
+    expect(juanJoseCopy).toMatch(/no (hay )?filiaci[oó]n|sin filiaci[oó]n/i);
+    expect(juanJoseCopy).not.toMatch(PRODUCT_JARGON);
+    expect((juanJoseMx?.vinculaciones ?? []).length).toBeGreaterThanOrEqual(2);
+    for (const item of juanJoseMx?.vinculaciones ?? []) {
+      expect(item.note).not.toMatch(PRODUCT_JARGON);
+    }
+    expect((rawJuanJoseMx?.links ?? []).map((link) => link.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+    expect((rawJuanJoseMx?.sources ?? []).map((source) => source.href)).toContain(
+      BERGARA_BASERRIAK_HREF,
+    );
+    expect(
+      (rawJuanJoseMx?.sources ?? []).every((source) => source.mark === "H"),
+    ).toBe(true);
   });
 });
