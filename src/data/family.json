@@ -6,7 +6,7 @@
       "marks": ["TO"],
       "birth": { "year": 1995, "approx": false, "text": "1995-11-12 [CONF Andrés 2026-09-06]" },
       "place": "Jaén",
-      "summary": "Nació en Jaén el 12 de noviembre de 1995 [CONF Andrés 2026-09-06]. El árbol de esta casa es el suyo. Las marcas [TO] son su tradición oral.",
+      "summary": "Nació en Jaén el 12 de noviembre de 1995. El árbol de esta casa es el suyo.",
       "links": []
     },
     {
@@ -14,7 +14,7 @@
       "displayName": "Mercedes Ochoa Erena",
       "marks": ["TO"],
       "birth": { "year": 1990, "approx": false, "text": "1990-10-05 [CONF Andrés 2026-09-06]" },
-      "summary": "Hermana de Andrés. Hija de Francisco Javier Ochoa Palop y María Aurora Erena Camacho. Madre de Darío de Dios Ochoa. [CONF Andrés 2026-09-06].",
+      "summary": "Hermana de Andrés. Hija de Francisco Javier Ochoa Palop y María Aurora Erena Camacho. Madre de Darío de Dios Ochoa.",
       "links": []
     },
     {
@@ -22,7 +22,7 @@
       "displayName": "Darío de Dios Ochoa",
       "marks": ["TO"],
       "birth": { "year": 2015, "approx": false, "text": "2015-10-18 [CONF Andrés 2026-09-06]" },
-      "summary": "Hijo de Mercedes Ochoa Erena. Primer apellido De Dios. Segundo apellido Ochoa. El nombre de pila del padre no está. No se inventa una persona padre. [CONF Andrés 2026-09-06].",
+      "summary": "Hijo de Mercedes Ochoa Erena. Primer apellido De Dios. Segundo apellido Ochoa. El nombre de pila del padre no está. No se inventa una persona padre.",
       "links": []
     },
     {
@@ -31,7 +31,7 @@
       "marks": ["TO", "H"],
       "birth": { "year": 1961, "approx": true, "text": "~1961, Jaén" },
       "place": "Jaén",
-      "summary": "Padre de Andrés. En público, Javier Ochoa Palop, escritor, Jaén 1961. El nombre completo Francisco Javier y el sitio en el árbol son de casa. Sus padres, Martín Ochoa Hidalgo y Matilde Palop Fuentes, están confirmados [CONF Andrés 2026-09-06].",
+      "summary": "Padre de Andrés. En público, Javier Ochoa Palop, escritor, Jaén 1961. El nombre completo Francisco Javier y el sitio en el árbol son de casa. Sus padres son Martín Ochoa Hidalgo y Matilde Palop Fuentes.",
       "links": [
         {
           "label": "Javier Ochoa Palop, Jaén 1961",
@@ -81,7 +81,7 @@
       "id": "antonio-erena-camacho",
       "displayName": "Antonio Erena Camacho",
       "marks": ["TO", "AEC"],
-      "summary": "Hermano de María Aurora y tío materno de Andrés. Firma Geneanet aerec5 y publicaciones. El parentesco lo dice Andrés. El contenido del árbol lo firma él.",
+      "summary": "Hermano de María Aurora y tío materno de Andrés. Firma Geneanet aerec5 y publicaciones. El contenido del árbol lo firma él.",
       "links": [
         { "label": "Geneanet aerec5", "href": "https://gw.geneanet.org/aerec5" },
         { "label": "Bitácora In ictu oculi", "href": "http://antonioerena.blogspot.com/2019/01/" }
@@ -122,7 +122,7 @@
       "birth": { "year": 1917, "approx": true, "text": "~1917, Posadas" },
       "death": { "year": 1994, "approx": true, "text": "~1994" },
       "place": "Posadas",
-      "summary": "Abuelo paterno. Padre de Francisco Javier Ochoa Palop. Hijo de Martín María Ochoa de Eguiyara Antia. [CONF Andrés 2026-09-06]. Huérfano a los ~9 años (~1926). Presidente del Real Jaén, 1970-71 y 1971-72. Alférez provisional de Infantería. Coronel y Guerra Civil: solo tradición oral.",
+      "summary": "Abuelo paterno. Padre de Francisco Javier Ochoa Palop. Hijo de Martín María Ochoa de Eguiyara Antia. Quedó huérfano hacia 1926, a los nueve años. Presidente del Real Jaén en 1970-71 y 1971-72. Alférez provisional de Infantería.",
       "links": [
         {
           "label": "Presidentes del Real Jaén",
@@ -155,7 +155,7 @@
       "birth": { "year": 1919, "approx": true, "text": "~1919, Lopera" },
       "death": { "year": 1989, "approx": true, "text": "~1989" },
       "place": "Lopera",
-      "summary": "Abuela paterna. Madre de Francisco Javier Ochoa Palop. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos. [CONF Andrés 2026-09-06].",
+      "summary": "Abuela paterna. Madre de Francisco Javier Ochoa Palop. Esposa de Martín Ochoa Hidalgo. Hija de Heliodoro Palop Padrón y Matilde Fuentes López. Cordobapedia nombra a Manuel y Pedro como hermanos.",
       "links": [
         { "label": "Pedro Palop, Cordobapedia", "href": "https://cordobapedia.datta.capital/wiki/Pedro_Palop" }
       ],
@@ -172,7 +172,7 @@
       "id": "manuel-palop-fuentes",
       "displayName": "Manuel Palop Fuentes",
       "marks": ["TO", "H"],
-      "summary": "Hermano de Matilde Palop Fuentes, según Cordobapedia y Andrés. Veterinario titular: Ceuta 1973, Obejo 1975. Colegiado honorífico 1985. «Número uno de su promoción»: solo oral. Padres no asignados.",
+      "summary": "Hermano de Matilde Palop Fuentes, según Cordobapedia. Veterinario titular: Ceuta 1973, Obejo 1975. Colegiado honorífico 1985. Padres no asignados.",
       "links": [
         {
           "label": "BOE-A-1973-43637, Ceuta",
@@ -323,7 +323,7 @@
       "id": "patrocinio-erena",
       "displayName": "Patrocinio Erena",
       "marks": ["TO", "AEC"],
-      "summary": "Hermana de Andrés Erena López y tía de María Aurora. El parentesco lo decía ya Andrés. Según Geneanet aerec5. No es partida.",
+      "summary": "Hermana de Andrés Erena López y tía de María Aurora. Según Geneanet aerec5. No es partida.",
       "links": []
     },
     {
@@ -360,7 +360,7 @@
       "birth": { "year": 1874, "approx": false, "text": "baut. 1874-10-12, San Pedro, Vitoria" },
       "death": { "year": 1926, "approx": true, "text": "muerte ~1926 [TO]" },
       "place": "Vitoria-Gasteiz",
-      "summary": "Bisabuelo de Andrés. Andrés confirma [CONF Andrés 2026-09-06]: Martín María (AHDV 61790) es el bisabuelo oral Martín Ochoa Antía. Fue ingeniero, según casa. Autia (Docutren) = Antía sigue como hipótesis.",
+      "summary": "Bisabuelo. Bautizado en San Pedro de Vitoria-Gasteiz el 12 de octubre de 1874. Ingeniero. Hijo de Juan José Ochoa de Eguiara y María Concepción Antia. En un catálogo de obras de Posadas de 1915 el apellido se lee Autia: esa lectura queda abierta.",
       "links": [
         {
           "label": "AHDV 61790",
@@ -514,7 +514,7 @@
       "id": "andres-erena",
       "displayName": "Andrés Erena",
       "marks": ["AEC"],
-      "summary": "Padre de Antonio Erena Liébana, según el árbol oral que firma Antonio Erena Camacho. Zapatero. Sin partida.",
+      "summary": "Padre de Antonio Erena Liébana. Zapatero. Sin partida.",
       "links": []
     },
     {
@@ -522,7 +522,7 @@
       "displayName": "Capilla Liébana",
       "marks": ["AEC"],
       "place": "Jamilena",
-      "summary": "Madre de Antonio Erena Liébana, según el árbol oral que firma Antonio Erena Camacho. De Jamilena. Sin partida.",
+      "summary": "Madre de Antonio Erena Liébana. De Jamilena. Sin partida.",
       "links": []
     },
     {
@@ -555,7 +555,7 @@
       "marks": ["H", "TO"],
       "birth": { "year": 1828, "approx": false, "text": "baut. 1828-10-27, Egino" },
       "place": "Egino, Aspárrena",
-      "summary": "Tatarabuelo. Entra porque Andrés confirma a Martín María como bisabuelo. El índice del bautismo escribe Gemelos; Padre desconocido; — se cita, no se reinterpreta.",
+      "summary": "Tatarabuelo. Bautizado el 27 de octubre de 1828 en San Esteban de Egino, en el valle de Aspárrena. El índice del bautismo escribe Gemelos y Padre desconocido. La casa toma el nombre Ochoa de Eguiara de ese valle, junto a Albéniz, Andoin y Zalduondo.",
       "links": [
         {
           "label": "AHDV 802997",
@@ -617,8 +617,33 @@
       "id": "juan-ochoa-de-eguiara",
       "displayName": "Juan Ochoa de Eguiara",
       "marks": ["H", "C"],
-      "summary": "Padre de Juan José en el índice AHDV. Bautismo cerrado: falta. Candidato Yaza 1786 → Eyaza 1812 → Eyara 1814. No cerrado. Folios no leídos.",
-      "links": []
+      "birth": { "year": 1786, "approx": true, "text": "candidato baut. 1786-02-09, Egino" },
+      "place": "Egino, Aspárrena",
+      "summary": "Padre de Juan José. El índice de Aspárrena lo nombra Juan Ochoa de Eguiara. No hay bautismo cerrado a ese nombre. Un Juan Ochoa de Yaza Ruiz de Gauna, bautizado en Egino el 9 de febrero de 1786, encaja por lugar y años; esa identidad no está cerrada. El nombre también nombra el Sel de Egiara, en Bergara. Ese solar es el paisaje del apellido. No es una filiación.",
+      "links": [
+        {
+          "label": "AHDV 802765",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802765"
+        },
+        {
+          "label": "AHDV 72355",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72355"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802765",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802765",
+          "kind": "ahdv",
+          "mark": "C"
+        },
+        {
+          "label": "AHDV 72355",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=72355",
+          "kind": "ahdv",
+          "mark": "C"
+        }
+      ]
     },
     {
       "id": "martina-martinez-de-ezcurra",
@@ -626,7 +651,7 @@
       "marks": ["H"],
       "birth": { "year": 1790, "approx": false, "text": "baut. 1790-02-26, Andoin" },
       "place": "Andoin, Aspárrena",
-      "summary": "Madre de Juan José. El índice le da el segundo apellido Ruiz de Savando. Encaje Savando / Sabando: hipótesis.",
+      "summary": "Madre de Juan José. Bautizada el 26 de febrero de 1790 en Santa María de Andoin, Aspárrena. El índice le da el segundo apellido Ruiz de Savando. Savando y Sabando se dejan abiertos.",
       "links": [
         {
           "label": "AHDV 29971",
@@ -762,7 +787,7 @@
       "marks": ["H"],
       "birth": { "year": 1743, "approx": false, "text": "baut. 1743-01-07, Egino" },
       "place": "Egino, Aspárrena",
-      "summary": "Madre de Bárbara Martínez de Albéniz Zufiaur. Quinta abuela en la rama Albéniz, según el índice AHDV.",
+      "summary": "Madre de Bárbara Martínez de Albéniz. Bautizada el 7 de enero de 1743 en Egino, Aspárrena. Hija de Martín Zufiaur y María Ruiz de Ibarreta.",
       "links": [
         {
           "label": "AHDV 802372",
@@ -1084,6 +1109,262 @@
           "mark": "H"
         }
       ]
+    },
+    {
+      "id": "manuel-ochoa-de-yara",
+      "displayName": "Manuel Estevan Ochoa de Yara López de Munain",
+      "marks": ["H"],
+      "birth": { "year": 1759, "approx": false, "text": "baut. 1759-11-04, Zalduondo" },
+      "place": "Zalduondo",
+      "summary": "Candidato a padre de Juan Ochoa de Eguiara. Bautizado el 4 de noviembre de 1759 en San Saturnino de Zalduondo. Se casa en Egino el 19 de mayo de 1785 con María Ruiz de Gauna. El índice escribe Ochoa de Yara. Esa casa y Ochoa de Eguiara se dejan distintas hasta el folio.",
+      "links": [
+        {
+          "label": "AHDV 680327",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=680327"
+        },
+        {
+          "label": "AHDV 167459",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=167459"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 680327",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=680327",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 167459",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=167459",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "maria-ruiz-de-gauna",
+      "displayName": "María Ruiz de Gauna Ervina",
+      "marks": ["H"],
+      "birth": { "year": 1748, "approx": false, "text": "baut. 1748-04-07, Egino" },
+      "place": "Egino, Aspárrena",
+      "summary": "Candidata a madre de Juan Ochoa de Eguiara. Bautizada el 7 de abril de 1748 en San Esteban de Egino, Aspárrena. Esposa de Manuel Ochoa de Yara. El índice escribe Ruiz de Gauna Ervina.",
+      "links": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400"
+        },
+        {
+          "label": "AHDV 167459",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=167459"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 167459",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=167459",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "martin-ochoa-lara",
+      "displayName": "Martín Ochoa Lara",
+      "marks": ["H"],
+      "death": { "year": 1794, "approx": false, "text": "def. 1794-12-28, Zalduondo" },
+      "place": "Zalduondo",
+      "summary": "Padre de Manuel Estevan Ochoa de Yara. Se casa en Zalduondo el 23 de diciembre de 1756 con Josepha López de Munain. El matrimonio escribe Ochoa Lara; el bautismo del hijo escribe Ochoa de Yara. Lara y Yara se dejan distintas. No hay bautismo cerrado de Martín.",
+      "links": [
+        {
+          "label": "AHDV 147634",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=147634"
+        },
+        {
+          "label": "AHDV 222064",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_difuntos.php?id_difunto=222064"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 147634",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=147634",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 222064",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_difuntos.php?id_difunto=222064",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "josepha-lopez-de-munain",
+      "displayName": "Josepha López de Munain",
+      "marks": ["H"],
+      "death": { "year": 1813, "approx": false, "text": "def. 1813-09-01, Zalduondo" },
+      "place": "Zalduondo",
+      "summary": "Madre de Manuel Estevan Ochoa de Yara. Esposa de Martín Ochoa Lara. El matrimonio de 1756 le da el segundo apellido Fros de Ylarduia. No hay bautismo cerrado de Josepha.",
+      "links": [
+        {
+          "label": "AHDV 147634",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=147634"
+        },
+        {
+          "label": "AHDV 222460",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_difuntos.php?id_difunto=222460"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 147634",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_matrimonios.php?id_matrimonio=147634",
+          "kind": "ahdv",
+          "mark": "H"
+        },
+        {
+          "label": "AHDV 222460",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_difuntos.php?id_difunto=222460",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "juan-antonio-ruiz-de-gauna",
+      "displayName": "Juan Antonio Ruiz de Gauna",
+      "marks": ["H"],
+      "place": "Egino, Aspárrena",
+      "summary": "Padre de María Ruiz de Gauna. El bautismo de 1748 en Egino lo nombra. No hay bautismo cerrado de Juan Antonio.",
+      "links": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "mariana-ervina",
+      "displayName": "Mariana Ervina",
+      "marks": ["H"],
+      "place": "Egino, Aspárrena",
+      "summary": "Madre de María Ruiz de Gauna. El bautismo de 1748 en Egino la nombra. No hay bautismo cerrado de Mariana.",
+      "links": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802400",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802400",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "manuela-yaza-ruiz-de-gauna",
+      "displayName": "Manuela Yaza Ruiz de Gauna",
+      "marks": ["H", "C"],
+      "birth": { "year": 1789, "approx": false, "text": "baut. 1789-05-11, Egino" },
+      "place": "Egino, Aspárrena",
+      "summary": "Hermana de índice de Juan Ochoa de Yaza. Bautizada el 11 de mayo de 1789 en San Esteban de Egino. Mismos padres que el candidato de 1786. El índice escribe Gemelos; no se mezcla con el bautismo de 1786 ni con el de Juan José.",
+      "links": [
+        {
+          "label": "AHDV 802777",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802777"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802777",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802777",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "jorge-antonio-eyara",
+      "displayName": "Jorge Antonio Eyara Martínez de Ezcurra",
+      "marks": ["H", "C"],
+      "birth": { "year": 1814, "approx": false, "text": "baut. 1814-04-23, Andoin" },
+      "place": "Andoin, Aspárrena",
+      "summary": "Candidato a hermano de Juan José. Bautizado el 23 de abril de 1814 en Santa María de Andoin. El índice nombra al padre Juan Eyara Ruiz Gauna y a la madre Martina Martínez de Ezcurra. Eyara y Eguiara se dejan distintas.",
+      "links": [
+        {
+          "label": "AHDV 29843",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29843"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 29843",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29843",
+          "kind": "ahdv",
+          "mark": "C"
+        }
+      ]
+    },
+    {
+      "id": "martin-zufiaur",
+      "displayName": "Martín Zufiaur",
+      "marks": ["H"],
+      "place": "Egino, Aspárrena",
+      "summary": "Padre de Felipa Zufiaur. El bautismo de 1743 en Egino lo nombra. No hay bautismo cerrado de Martín.",
+      "links": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
+    },
+    {
+      "id": "maria-ruiz-de-ibarreta",
+      "displayName": "María Ruiz de Ibarreta",
+      "marks": ["H"],
+      "place": "Egino, Aspárrena",
+      "summary": "Madre de Felipa Zufiaur. El bautismo de 1743 en Egino la nombra. No hay bautismo cerrado de María.",
+      "links": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372"
+        }
+      ],
+      "sources": [
+        {
+          "label": "AHDV 802372",
+          "href": "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802372",
+          "kind": "ahdv",
+          "mark": "H"
+        }
+      ]
     }
   ],
   "edges": [
@@ -1135,9 +1416,9 @@
     { "kind": "parent", "from": "antonio-erena-liebana", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "parent", "from": "dolores-lopez-martos", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "spouse", "from": "antonio-erena-liebana", "to": "dolores-lopez-martos", "certainty": "confirmed" },
-    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
-    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
-    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "confirmed" },
+    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "confirmed" },
 
     { "kind": "parent", "from": "antonio-camacho-liebana", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
     { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
@@ -1203,6 +1484,87 @@
 
     { "kind": "parent", "from": "manuel-camacho", "to": "antonio-camacho-ruiz", "certainty": "confirmed" },
     { "kind": "parent", "from": "andrea-ruiz", "to": "antonio-camacho-ruiz", "certainty": "confirmed" },
-    { "kind": "spouse", "from": "manuel-camacho", "to": "andrea-ruiz", "certainty": "confirmed" }
+    { "kind": "spouse", "from": "manuel-camacho", "to": "andrea-ruiz", "certainty": "confirmed" },
+
+    { "kind": "parent", "from": "manuel-ochoa-de-yara", "to": "juan-ochoa-de-eguiara", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "maria-ruiz-de-gauna", "to": "juan-ochoa-de-eguiara", "certainty": "hypothesis" },
+    { "kind": "spouse", "from": "manuel-ochoa-de-yara", "to": "maria-ruiz-de-gauna", "certainty": "confirmed" },
+    { "kind": "parent", "from": "martin-ochoa-lara", "to": "manuel-ochoa-de-yara", "certainty": "confirmed" },
+    { "kind": "parent", "from": "josepha-lopez-de-munain", "to": "manuel-ochoa-de-yara", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "martin-ochoa-lara", "to": "josepha-lopez-de-munain", "certainty": "confirmed" },
+    { "kind": "parent", "from": "juan-antonio-ruiz-de-gauna", "to": "maria-ruiz-de-gauna", "certainty": "confirmed" },
+    { "kind": "parent", "from": "mariana-ervina", "to": "maria-ruiz-de-gauna", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "juan-antonio-ruiz-de-gauna", "to": "mariana-ervina", "certainty": "confirmed" },
+    { "kind": "parent", "from": "manuel-ochoa-de-yara", "to": "manuela-yaza-ruiz-de-gauna", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-ruiz-de-gauna", "to": "manuela-yaza-ruiz-de-gauna", "certainty": "confirmed" },
+    { "kind": "sibling", "from": "juan-ochoa-de-eguiara", "to": "manuela-yaza-ruiz-de-gauna", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "juan-ochoa-de-eguiara", "to": "jorge-antonio-eyara", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "martina-martinez-de-ezcurra", "to": "jorge-antonio-eyara", "certainty": "hypothesis" },
+    { "kind": "sibling", "from": "juan-jose-ochoa-de-eguiara", "to": "jorge-antonio-eyara", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "martin-zufiaur", "to": "phelipa-zufiaur-ybarreta", "certainty": "confirmed" },
+    { "kind": "parent", "from": "maria-ruiz-de-ibarreta", "to": "phelipa-zufiaur-ybarreta", "certainty": "confirmed" },
+    { "kind": "spouse", "from": "martin-zufiaur", "to": "maria-ruiz-de-ibarreta", "certainty": "confirmed" }
+  ],
+  "contexts": [
+    {
+      "id": "sel-de-egiara",
+      "kind": "solar",
+      "displayName": "Sel de Egiara",
+      "place": "Elosua, Bergara",
+      "zone": "fog",
+      "branch": "lateral",
+      "todo": "tronco: paint a lateral fog/neblina zone on the juan-jose / juan-ochoa cluster; center label Sel de Egiara; tap opens the history panel (vinculaciones + historia 1444–1477). Do not draw parent lines.",
+      "summary": "Hay Ochoa de Eguiara en el siglo XV, pero las conexiones concretas no están definidas. Todo se vincula con el sel de Egiara.",
+      "history": "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.\n\nEn Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+      "anchors": ["juan-jose-ochoa-de-eguiara", "juan-ochoa-de-eguiara"],
+      "vinculaciones": [
+        {
+          "label": "Nombre compartido",
+          "note": "Hay Ochoa de Eguiara en el siglo XV y en Aspárrena. El nexo concreto es el nombre y el sel, no una filiación escrita."
+        },
+        {
+          "label": "Tronco Aspárrena",
+          "note": "El tronco documentado llega a Juan José Ochoa de Eguiara (1828). Más atrás el nexo es HIP / hipótesis, no una partida cerrada."
+        },
+        {
+          "label": "Sin filiación al siglo XV",
+          "note": "No hay aristas padre–hijo hacia 1444–1477. El sel no es un padre de Juan ni de Juan José."
+        }
+      ],
+      "links": [
+        {
+          "label": "Sancho el Sabio, Egiara Goitia 1444",
+          "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383"
+        },
+        {
+          "label": "Sancho el Sabio, pieza 1444",
+          "href": "https://artxiboa.sanchoelsabio.eus/fss-ud677383"
+        },
+        {
+          "label": "Sancho el Sabio, sentencia 1447",
+          "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131"
+        }
+      ],
+      "sources": [
+        {
+          "label": "Sancho el Sabio, Egiara Goitia 1444",
+          "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
+          "kind": "web",
+          "mark": "H"
+        },
+        {
+          "label": "Sancho el Sabio, pieza 1444",
+          "href": "https://artxiboa.sanchoelsabio.eus/fss-ud677383",
+          "kind": "web",
+          "mark": "H"
+        },
+        {
+          "label": "Sancho el Sabio, sentencia 1447",
+          "href": "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
+          "kind": "web",
+          "mark": "H"
+        }
+      ]
+    }
   ]
 }

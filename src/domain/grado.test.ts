@@ -33,10 +33,10 @@ const REQUIRED_EXAMPLES: ReadonlyArray<readonly [PersonId, PersonId, string]> = 
   [francisco, francisco, "Persona foco"],
   [francisco, matilde, "Hermana de Francisco Javier Ochoa Palop"],
   [francisco, jose, "Tío de Francisco Javier Ochoa Palop (hipótesis)"],
-  [andres, andresErena, "Tatarabuelo de Andrés (hipótesis)"],
-  [andres, capilla, "Tatarabuela de Andrés (hipótesis)"],
-  [francisco, andresErena, "Bisabuelo de Francisco Javier Ochoa Palop (hipótesis)"],
-  [francisco, capilla, "Bisabuela de Francisco Javier Ochoa Palop (hipótesis)"],
+  [andres, andresErena, "Tatarabuelo de Andrés"],
+  [andres, capilla, "Tatarabuela de Andrés"],
+  [francisco, andresErena, "Bisabuelo de Francisco Javier Ochoa Palop"],
+  [francisco, capilla, "Bisabuela de Francisco Javier Ochoa Palop"],
 ];
 
 const FOCUS_NAME = "Juan Foco Prueba";
@@ -130,6 +130,7 @@ describe("gradoLabel on the real family", () => {
     const misleading: FamilyGraph = {
       people: family.people.map((item) => ({ ...item, summary: "Primo de nadie." })),
       edges: family.edges,
+      contexts: family.contexts,
     };
     for (const [focusId, personId, expected] of REQUIRED_EXAMPLES) {
       expect(gradoLabel(misleading, focusId, personId)).toBe(expected);

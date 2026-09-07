@@ -46,9 +46,35 @@ export type Edge = {
   certainty: Certainty;
 };
 
+export type ContextKind = "solar";
+export type ContextZone = "fog";
+export type ContextBranch = "lateral";
+
+export type ContextVinculo = {
+  label: string;
+  note: string;
+};
+
+export type FamilyContext = {
+  id: string;
+  kind: ContextKind;
+  displayName: string;
+  place?: string;
+  zone: ContextZone;
+  branch: ContextBranch;
+  todo: string;
+  summary: string;
+  history: string;
+  anchors?: PersonId[];
+  vinculaciones: ContextVinculo[];
+  links: PersonLink[];
+  sources: PersonSource[];
+};
+
 export type FamilyGraph = {
   people: Person[];
   edges: Edge[];
+  contexts: FamilyContext[];
 };
 
 export type Vec = { x: number; y: number };

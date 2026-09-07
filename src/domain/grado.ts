@@ -143,6 +143,7 @@ export function gradoLabel(
   const confirmed: FamilyGraph = {
     people: graph.people,
     edges: graph.edges.filter((edge) => edge.certainty === "confirmed"),
+    contexts: graph.contexts,
   };
   const sure = shortestPath(confirmed, focusId, personId);
   const path = sure ?? shortestPath(graph, focusId, personId);
