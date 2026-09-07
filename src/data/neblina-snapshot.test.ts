@@ -120,18 +120,17 @@ describe("sel-de-egiara context payload", () => {
     const parsed = family.contexts.find((item) => item.id === "sel-de-egiara");
     expect(raw?.summary).toBe(NEBLINA_COPY);
     expect(parsed?.summary).toBe(NEBLINA_COPY);
-    expect(raw?.history).toMatch(/Yrízar/);
-    expect(raw?.history).toMatch(/1444/);
-    expect(raw?.history).toMatch(/1447/);
-    expect(raw?.history).toMatch(/1477/);
-    expect(raw?.history).toMatch(/Bergara/);
-    expect(raw?.history).toMatch(/no prueba/i);
-    const notes = (raw?.vinculaciones ?? [])
-      .map((item) => `${item.label} ${item.note}`)
-      .join(" ");
-    expect(notes).toMatch(/nombre compartido/i);
-    expect(notes).toMatch(/1828/);
-    expect(notes).toMatch(/filiaci|padre|siglo XV|s\.XV/i);
+    expect(raw?.history).toBe(
+      [
+        "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.",
+        "En Bergara se documenta el solar / caserío Egiara Gañekoa (Egiara Suso), historia de toponimia y casería ligada al mismo nombre. Eso es contexto del solar: no prueba, por sí sola, una cadena padre–hijo hasta los Ochoa de Eguiara de Aspárrena (Egino / Albéniz) documentados en los siglos XVIII–XIX.",
+      ].join("\n\n"),
+    );
+    expect((raw?.vinculaciones ?? []).map((item) => item.note)).toEqual([
+      "Nombre compartido Ochoa / Eguiara–Egiara entre el sel (s. XV) y el tronco de Aspárrena.",
+      "Tronco documentado con partidas hacia Juan José Ochoa de Eguiara (baut. 1828, Egino) y generaciones anteriores indexadas en AHDV (con tramos hipotéticos).",
+      "Las aristas concretas que unan el sel del s. XV con ese tronco no están definidas.",
+    ]);
     expect(JSON.stringify(raw)).not.toMatch(/fuente oral/i);
     expect(raw?.sources?.every((source) => Boolean(source.href))).toBe(true);
     expect(raw?.sources?.some((source) => source.mark === "TO")).toBe(false);

@@ -30,12 +30,13 @@ describe("neblina UI surfaces", () => {
 
   it("opens the sel ficha from data with lead, historia, vinculaciones, and links", () => {
     expect(app).toMatch(/contextById|ContextPanel/);
-    expect(contextPanel).toContain("NEBLINA_COPY");
+    expect(contextPanel).toMatch(/context\.summary/);
     expect(contextPanel).toContain("NEBLINA_LEAD_EMPHASIS");
     expect(contextPanel).toMatch(/Historia/);
     expect(contextPanel).toMatch(/Vinculaciones/);
     expect(contextPanel).toMatch(/context\.history/);
-    expect(contextPanel).toMatch(/context\.vinculaciones/);
+    expect(contextPanel).toMatch(/item\.note/);
+    expect(contextPanel).not.toMatch(/item\.label\}\.\s/);
     expect(contextPanel).toMatch(/useReducedMotion/);
     expect(contextPanel).not.toMatch(/fuente oral/i);
     expect(contextPanel).not.toMatch(/FICHA_KIN/);
