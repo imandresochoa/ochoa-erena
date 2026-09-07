@@ -615,8 +615,12 @@ describe("family snapshot", () => {
   it("keeps every person summary and source label free of oral jargon", () => {
     for (const person of rawPeople()) {
       expect(person.summary, person.id).not.toMatch(PRODUCT_JARGON);
-      expect(person.birth?.text, `${person.id} birth`).not.toMatch(PRODUCT_JARGON);
-      expect(person.death?.text, `${person.id} death`).not.toMatch(PRODUCT_JARGON);
+      if (person.birth?.text) {
+        expect(person.birth.text, `${person.id} birth`).not.toMatch(PRODUCT_JARGON);
+      }
+      if (person.death?.text) {
+        expect(person.death.text, `${person.id} death`).not.toMatch(PRODUCT_JARGON);
+      }
       for (const link of person.links ?? []) {
         expect(link.label, `${person.id} ${link.label}`).not.toMatch(PRODUCT_JARGON);
       }
