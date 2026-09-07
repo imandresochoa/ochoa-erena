@@ -712,6 +712,7 @@ describe("family snapshot", () => {
     const sel = family.contexts.find((item) => item.id === "sel-de-egiara");
     const raw = familyJson as {
       contexts?: Array<{
+        id?: string;
         history?: string;
         vinculaciones?: Array<{ label?: string; note?: string }>;
         links?: RawLink[];
