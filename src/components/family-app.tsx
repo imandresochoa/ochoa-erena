@@ -13,7 +13,7 @@ import { WelcomeScreen } from "@/components/welcome-screen";
 import { ZoomControls } from "@/components/zoom-controls";
 import { family } from "@/data/family";
 import { expansionsToReveal, personById, requirePerson } from "@/domain/graph";
-import { contextById } from "@/domain/neblina";
+import { contextById } from "@/domain/sel";
 import { DEFAULT_FOCUS_NAME, asPersonId, type Person } from "@/domain/types";
 import {
   closeFicha,
