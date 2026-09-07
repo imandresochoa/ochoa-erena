@@ -93,6 +93,40 @@ describe("placeContextNodes", () => {
     expect(placed[0]!.y).toBe(80);
     expect(placed[0]!.x + placed[0]!.width).toBeLessThanOrEqual(200);
   });
+
+  it("places a later data mention beside the sel without covering it", () => {
+    const sel = family.contexts.find((item) => item.id === SEL);
+    expect(sel).toBeDefined();
+    const graph = {
+      ...family,
+      contexts: [
+        sel!,
+        {
+          ...sel!,
+          id: "mention-extra",
+          displayName: "Mención extra",
+        },
+      ],
+    };
+    const placed = placeContextNodes(graph, [
+      { id: JUAN_JOSE, x: 400, y: 228, width: 180, height: 38, generation: -5 },
+    ]);
+    expect(placed.map((item) => item.id)).toEqual([SEL, "mention-extra"]);
+    const [first, second] = placed;
+    expect(first).toBeDefined();
+    expect(second).toBeDefined();
+    expect(first!.y).toBe(228);
+    expect(second!.y).toBe(228);
+    expect(first!.x + first!.width).toBeLessThanOrEqual(400);
+    expect(second!.x + second!.width).toBeLessThanOrEqual(first!.x);
+    const overlap = !(
+      first!.x + first!.width <= second!.x ||
+      second!.x + second!.width <= first!.x ||
+      first!.y + first!.height <= second!.y ||
+      second!.y + second!.height <= first!.y
+    );
+    expect(overlap).toBe(false);
+  });
 });
 
 describe("placeNeblina", () => {
