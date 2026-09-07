@@ -68,6 +68,7 @@ describe("neblina UI surfaces", () => {
       /(-webkit-)?mask-image:\s*linear-gradient|mask-image:\s*linear-gradient/,
     );
     expect(css).toMatch(/neblina-breathe\s+4s/);
+    expect(canvas).toMatch(/className="neblina pointer-events-none/);
     expect(css).toMatch(/prefers-reduced-motion:\s*reduce/);
     const reduce = css.match(
       /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{([\s\S]*)\}\s*$/,

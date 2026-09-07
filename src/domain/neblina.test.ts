@@ -154,7 +154,7 @@ describe("placeNeblina", () => {
     expect(placeNeblina([], [{ x: 0, width: 100 }])).toBeNull();
   });
 
-  it("spans the tree as a thin band and does not emit a connector", () => {
+  it("spans the tree as a thick mist band and does not emit a connector", () => {
     const labels = [{ id: SEL, x: 10, y: 80, width: 140, height: 38 }];
     const tree = [
       { x: -500, width: 100 },
@@ -164,8 +164,8 @@ describe("placeNeblina", () => {
     expect(zone).not.toBeNull();
     expect(zone!.x).toBeLessThanOrEqual(-500);
     expect(zone!.x + zone!.width).toBeGreaterThanOrEqual(1020);
+    expect(zone!.height).toBeGreaterThanOrEqual(160);
     expect(zone!.width).toBeGreaterThan(zone!.height * 6);
-    expect(zone!.y + zone!.height).toBeLessThanOrEqual(80 + 38);
     expect(zone).not.toHaveProperty("d");
     expect(zone).not.toHaveProperty("fromId");
     expect(zone).not.toHaveProperty("toId");
@@ -202,6 +202,7 @@ describe("house canvas neblina", () => {
     expect(withAndres.neblina!.x + withAndres.neblina!.width).toBeGreaterThanOrEqual(
       treeMax,
     );
+    expect(withAndres.neblina!.height).toBeGreaterThanOrEqual(160);
     expect(withAndres.neblina!.width).toBeGreaterThan(
       withAndres.neblina!.height * 6,
     );
@@ -222,15 +223,6 @@ describe("house canvas neblina", () => {
       .filter((node) => node.id === MARTIN_MARIA || node.id === JUAN_JOSE)
       .map((node) => node.id);
     expect(hipIds.length).toBeGreaterThan(0);
-    for (const node of withAndres.nodes) {
-      const hit = !(
-        withAndres.neblina!.x + withAndres.neblina!.width <= node.x ||
-        node.x + node.width <= withAndres.neblina!.x ||
-        withAndres.neblina!.y + withAndres.neblina!.height <= node.y ||
-        node.y + node.height <= withAndres.neblina!.y
-      );
-      expect(hit, `neblina covers person ${node.id}`).toBe(false);
-    }
   });
 
   it("shifts the zone and the sel label with the expand pin the same way as the crest", () => {
