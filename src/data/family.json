@@ -1416,9 +1416,9 @@
     { "kind": "parent", "from": "antonio-erena-liebana", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "parent", "from": "dolores-lopez-martos", "to": "antonio-erena-lopez", "certainty": "confirmed" },
     { "kind": "spouse", "from": "antonio-erena-liebana", "to": "dolores-lopez-martos", "certainty": "confirmed" },
-    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "confirmed" },
-    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "confirmed" },
-    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "confirmed" },
+    { "kind": "parent", "from": "andres-erena", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "parent", "from": "capilla-liebana", "to": "antonio-erena-liebana", "certainty": "hypothesis" },
+    { "kind": "spouse", "from": "andres-erena", "to": "capilla-liebana", "certainty": "hypothesis" },
 
     { "kind": "parent", "from": "antonio-camacho-liebana", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
     { "kind": "parent", "from": "mercedes-vinas-lopez", "to": "aurora-camacho-vinas", "certainty": "confirmed" },
