@@ -44,24 +44,21 @@ export function placeContextNodes(
 ): PlacedContext[] {
   const placed: PlacedContext[] = [];
   for (const context of fogContexts(graph)) {
-    const anchors = nodes.filter((node) => context.anchors?.includes(node.id));
-    if (anchors.length === 0) {
+    const anchor = (context.anchors ?? [])
+      .map((id) => nodes.find((node) => node.id === id))
+      .find((node): node is PlacedNode => node !== undefined);
+    if (!anchor) {
       continue;
     }
-    const cluster: PlacedNode[] = [];
-    for (const anchor of anchors) {
-      cluster.push(anchor);
-      const spouseId = spouseOf(graph, anchor.id);
-      const spouse = spouseId
-        ? nodes.find((node) => node.id === spouseId)
-        : undefined;
-      if (spouse) {
-        cluster.push(spouse);
-      }
+    const cluster: PlacedNode[] = [anchor];
+    const spouseId = spouseOf(graph, anchor.id);
+    const spouse = spouseId
+      ? nodes.find((node) => node.id === spouseId)
+      : undefined;
+    if (spouse) {
+      cluster.push(spouse);
     }
-    const oldestY = Math.min(...cluster.map((node) => node.y));
-    const row = cluster.filter((node) => node.y === oldestY);
-    const left = row.reduce((best, node) => (node.x < best.x ? node : best));
+    const left = cluster.reduce((best, node) => (node.x < best.x ? node : best));
     const width = measureChipWidth(context.displayName);
     placed.push({
       id: context.id,
