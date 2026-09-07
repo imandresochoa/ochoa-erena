@@ -180,12 +180,6 @@ describe("family snapshot", () => {
     );
     expect(father?.certainty).toBe("confirmed");
     expect(mother?.certainty).toBe("confirmed");
-    expect(rawPerson("francisco-javier-ochoa-palop").summary).toContain(
-      "[CONF Andrés 2026-09-06]",
-    );
-    expect(rawPerson("matilde-palop-fuentes").summary).toContain(
-      "[CONF Andrés 2026-09-06]",
-    );
     for (const id of [
       "francisco-javier-ochoa-palop",
       "martin-ochoa-hidalgo",
@@ -527,8 +521,10 @@ describe("family snapshot", () => {
     expect(hrefsOf("juan-ochoa-de-eguiara")).toEqual(
       expect.arrayContaining([
         "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=802765",
-        "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
       ]),
+    );
+    expect(hrefsOf("juan-ochoa-de-eguiara")).not.toContain(
+      "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
     );
     expect(hrefsOf("jorge-antonio-eyara")).toContain(
       "https://internet.ahdv-geah.org/paginas/indexacion/n_ficha_bautismos.php?id_bautismo=29843",
@@ -556,13 +552,73 @@ describe("family snapshot", () => {
       }
     }
     expect(rawPerson("juan-jose-ochoa-de-eguiara").summary).toMatch(/Aspárrena|Egino/);
-    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/1444/);
-    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/1477|1447/);
-    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/Egiara|Eguiara Goitia/);
+    expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(/Sel de Egiara/);
     expect(rawPerson("juan-ochoa-de-eguiara").summary).toMatch(
       /no (es|son) (una )?filiaci[oó]n|no (es|son) padres/i,
     );
     expect(rawPerson("martin-ochoa-lara").summary).toMatch(/Zalduondo|Lara|Munain/);
     expect(rawPerson("phelipa-zufiaur-ybarreta").summary).toMatch(/Zufiaur|Ibarreta/);
+  });
+
+  it("keeps every person summary and source label free of oral jargon", () => {
+    for (const person of rawPeople()) {
+      expect(person.summary, person.id).not.toMatch(PRODUCT_JARGON);
+      for (const source of person.sources ?? []) {
+        expect(source.label, `${person.id} ${source.label}`).not.toMatch(PRODUCT_JARGON);
+      }
+    }
+  });
+
+  it("stores Sel de Egiara as a lateral fog context, not as a person or parent", () => {
+    const raw = familyJson as {
+      contexts?: Array<{
+        id?: string;
+        kind?: string;
+        displayName?: string;
+        zone?: string;
+        branch?: string;
+        todo?: string;
+        summary?: string;
+        history?: string;
+        vinculaciones?: Array<{ label?: string; note?: string }>;
+        links?: RawLink[];
+        sources?: RawSource[];
+      }>;
+    };
+    const sel = family.contexts.find((item) => item.id === "sel-de-egiara");
+    const rawSel = raw.contexts?.find((item) => item.id === "sel-de-egiara");
+    expect(sel).toBeDefined();
+    expect(rawSel).toBeDefined();
+    expect(family.people.some((person) => person.id === "sel-de-egiara")).toBe(false);
+    expect(
+      family.edges.some(
+        (edge) => edge.from === "sel-de-egiara" || edge.to === "sel-de-egiara",
+      ),
+    ).toBe(false);
+    expect(sel?.displayName).toBe("Sel de Egiara");
+    expect(sel?.kind).toBe("solar");
+    expect(sel?.zone).toBe("fog");
+    expect(sel?.branch).toBe("lateral");
+    expect(sel?.todo).toMatch(/neblina|fog/i);
+    expect(sel?.todo).toMatch(/tronco/i);
+    expect(sel?.history).toMatch(/1444/);
+    expect(sel?.history).toMatch(/1447/);
+    expect(sel?.history).toMatch(/1477/);
+    expect(sel?.summary).not.toMatch(PRODUCT_JARGON);
+    expect(sel?.history).not.toMatch(PRODUCT_JARGON);
+    expect(sel?.vinculaciones.length).toBeGreaterThanOrEqual(3);
+    for (const item of sel?.vinculaciones ?? []) {
+      expect(item.label.length).toBeGreaterThan(0);
+      expect(item.note.length).toBeGreaterThan(0);
+      expect(item.note).not.toMatch(/undefined|por definir|tbd/i);
+      expect(item.note).not.toMatch(PRODUCT_JARGON);
+    }
+    expect((rawSel?.links ?? []).map((link) => link.href)).toEqual(
+      expect.arrayContaining([
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-677383",
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-673131",
+        "https://catalogo.sanchoelsabio.eus/Record/AtoM-673530",
+      ]),
+    );
   });
 });
