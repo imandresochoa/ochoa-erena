@@ -73,6 +73,13 @@ describe("title type scale", () => {
     expect(classOf(panel, ">Archivos<").split(/\s+/)).toContain("type-title");
   });
 
+  it("marks escudo-panel title with type-title", () => {
+    const escudo = read("../components/escudo-panel.tsx");
+    expect(classOf(escudo, ">{escudoOchoaFicha.title}<").split(/\s+/)).toContain(
+      "type-title",
+    );
+  });
+
   it("renders life prose as body copy, not a title dump", () => {
     expect(panel).not.toMatch(/lifeLine/);
     expect(panel).not.toContain("Resumen");

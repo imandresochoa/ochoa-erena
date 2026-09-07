@@ -61,6 +61,7 @@ describe("toggleExpand", () => {
     const view = {
       focusId: ANDRES,
       selectedId: null,
+      crestId: null,
       expandedIds: [] as ReturnType<typeof asPersonId>[],
       pan: { x: 0, y: 0 },
       entering: false,
