@@ -105,68 +105,24 @@ body {
   }
 }
 
-.neblina {
-  background:
-    linear-gradient(
-      to bottom,
-      transparent 6%,
-      rgb(192 184 165 / 0.42) 28%,
-      rgb(192 184 165 / 0.5) 50%,
-      rgb(192 184 165 / 0.42) 72%,
-      transparent 94%
-    ),
-    radial-gradient(ellipse 36% 80% at 22% 40%, rgb(192 184 165 / 0.5) 0%, transparent 70%),
-    radial-gradient(ellipse 30% 72% at 55% 68%, rgb(192 184 165 / 0.4) 0%, transparent 68%),
-    radial-gradient(ellipse 34% 76% at 82% 38%, rgb(192 184 165 / 0.46) 0%, transparent 70%);
-  animation: neblina-breathe 4s var(--ease-in-out) infinite alternate;
-}
-
-.neblina-left {
-  -webkit-mask-image: linear-gradient(
-    to right,
-    #000 0%,
-    #000 78%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(to right, #000 0%, #000 78%, transparent 100%);
-}
-
-.neblina-right {
-  -webkit-mask-image: linear-gradient(
-    to left,
-    #000 0%,
-    #000 78%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(to left, #000 0%, #000 78%, transparent 100%);
+.sel-image {
+  height: auto;
+  object-fit: contain;
+  margin-bottom: 6px;
 }
 
 .context-label {
-  background: transparent;
+  background: var(--color-node);
   color: var(--color-ink);
   border: 0;
-  padding: 0;
   font-weight: var(--font-weight-title);
   cursor: pointer;
+  transition: background-color 140ms var(--ease-out), color 140ms var(--ease-out);
 }
 
 .context-label[data-selected="true"] {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-@keyframes neblina-breathe {
-  from {
-    opacity: 0.72;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.neblina-swatch {
-  background: rgb(244 242 239);
-  box-shadow: inset 0 0 6px 3px rgb(192 184 165 / 0.45);
+  background: var(--color-ink);
+  color: var(--color-canvas);
 }
 
 .chrome-ctl {
@@ -376,8 +332,8 @@ button.ghost-btn.ficha-back {
     background: var(--color-node-hover);
   }
 
-  .context-label:hover {
-    color: var(--color-muted-ink);
+  .context-label:hover:not([data-selected="true"]) {
+    background: var(--color-node-hover);
   }
 
   .chrome-ctl:hover:not(:disabled) {
@@ -419,8 +375,7 @@ button.ghost-btn.ficha-back {
   .fog-edge[data-entering="true"],
   .legend-menu,
   .vinculo-tip,
-  .chrome-ctl-plain,
-  .neblina {
+  .chrome-ctl-plain {
     animation: none;
     transition: none;
   }

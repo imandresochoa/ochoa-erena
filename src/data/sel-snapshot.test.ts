@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import familyJson from "@/data/family.json";
 import { family } from "@/data/family";
 import { parentsOf } from "@/domain/graph";
-import { NEBLINA_COPY } from "@/domain/neblina";
+import { SEL_ID, SEL_SUMMARY } from "@/domain/sel";
 import { asPersonId } from "@/domain/types";
 
 type RawLife = { year?: number };
@@ -16,9 +16,6 @@ type RawEdge = {
   from?: string;
   to?: string;
 };
-type RawVinculo = { label?: string; note?: string };
-type RawLink = { label?: string; href?: string };
-type RawSource = RawLink & { kind?: string; mark?: string };
 type RawContext = {
   id?: string;
   kind?: string;
@@ -28,9 +25,9 @@ type RawContext = {
   summary?: string;
   history?: string;
   anchors?: string[];
-  vinculaciones?: RawVinculo[];
-  links?: RawLink[];
-  sources?: RawSource[];
+  vinculaciones?: { label?: string; note?: string }[];
+  links?: { label?: string; href?: string }[];
+  sources?: { label?: string; href?: string; kind?: string; mark?: string }[];
 };
 
 function rawPeople(): RawPerson[] {
@@ -49,7 +46,7 @@ function isSigloXvYear(year: number | undefined): boolean {
   return year !== undefined && year >= 1400 && year <= 1499;
 }
 
-describe("neblina does not invent siglo XV genealogy", () => {
+describe("sel node does not invent siglo XV genealogy", () => {
   it("keeps the snapshot size so this UI change adds no people or edges", () => {
     expect(rawPeople()).toHaveLength(73);
     expect(family.people).toHaveLength(73);
@@ -87,52 +84,44 @@ describe("neblina does not invent siglo XV genealogy", () => {
     ).toBe(false);
   });
 
-  it("does not attach the sel to Juan as a parent", () => {
+  it("does not attach the sel to Juan or Martín María as a parent", () => {
     expect(parentsOf(family, asPersonId("juan-ochoa-de-eguiara"))).not.toContain(
-      "sel-de-egiara",
+      SEL_ID,
     );
+    expect(
+      parentsOf(family, asPersonId("martin-maria-ochoa-de-eguiyara-antia")),
+    ).not.toContain(SEL_ID);
   });
 });
 
 describe("sel-de-egiara context payload", () => {
-  it("is a fog lateral context, not a person and not a parent edge", () => {
-    const raw = rawContexts().find((item) => item.id === "sel-de-egiara");
+  it("is the single lateral solar context, not a person and not a parent edge", () => {
+    const raw = rawContexts().find((item) => item.id === SEL_ID);
     expect(raw).toBeDefined();
     expect(raw?.kind).toBe("solar");
     expect(raw?.displayName).toBe("Sel de Egiara");
     expect(raw?.zone).toBe("fog");
     expect(raw?.branch).toBe("lateral");
-    expect(raw?.anchors).toEqual([
-      "juan-jose-ochoa-de-eguiara",
-      "juan-ochoa-de-eguiara",
-    ]);
-    expect(rawPeople().some((person) => person.id === "sel-de-egiara")).toBe(false);
+    expect(raw?.anchors).toEqual(["martin-maria-ochoa-de-eguiyara-antia"]);
+    expect(rawPeople().some((person) => person.id === SEL_ID)).toBe(false);
     expect(
-      rawEdges().some(
-        (edge) => edge.from === "sel-de-egiara" || edge.to === "sel-de-egiara",
-      ),
+      rawEdges().some((edge) => edge.from === SEL_ID || edge.to === SEL_ID),
     ).toBe(false);
+    expect(family.contexts.map((item) => item.id)).toEqual([SEL_ID]);
     for (const id of [
       "manuel-antonio-ochoa-de-eguiara",
       "juan-jose-de-eguiara-y-eguren",
     ]) {
+      expect(rawContexts().some((item) => item.id === id)).toBe(false);
       expect(rawPeople().some((person) => person.id === id)).toBe(false);
-      expect(
-        rawEdges().some((edge) => edge.from === id || edge.to === id),
-      ).toBe(false);
     }
-    expect(family.contexts.map((item) => item.id)).toEqual([
-      "sel-de-egiara",
-      "manuel-antonio-ochoa-de-eguiara",
-      "juan-jose-de-eguiara-y-eguren",
-    ]);
   });
 
   it("carries the canónico lead, historia, vinculaciones, and link-only sources", () => {
-    const raw = rawContexts().find((item) => item.id === "sel-de-egiara");
-    const parsed = family.contexts.find((item) => item.id === "sel-de-egiara");
-    expect(raw?.summary).toBe(NEBLINA_COPY);
-    expect(parsed?.summary).toBe(NEBLINA_COPY);
+    const raw = rawContexts().find((item) => item.id === SEL_ID);
+    const parsed = family.contexts.find((item) => item.id === SEL_ID);
+    expect(raw?.summary).toBe(SEL_SUMMARY);
+    expect(parsed?.summary).toBe(SEL_SUMMARY);
     expect(raw?.history).toBe(
       [
         "El sel de Eguiara (Egiara) aparece en el fondo Yrízar (Archivo de la Fundación Sancho el Sabio). El 31 de diciembre de 1444, García Ibáñez de Jáuregui vende el sel de Eguiara Goitia a Juan de Eguiara (también Juan Sendo de Eguiara); escribano Juan Pérez de Aróstegui. En septiembre de 1447 una sentencia confirma la posesión del sel a favor de Juan Sendoa de Eguiara. En 1477 hay informaciones de testigos sobre el mismo sel.",

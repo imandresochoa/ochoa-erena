@@ -1,5 +1,5 @@
 import { ochoaCrest, placeCrestAboveCluster } from "./crest";
-import { placeContextNodes, placeNeblina } from "./neblina";
+import { placeSelNode } from "./sel";
 import {
   canvasVisible,
   childrenOf,
@@ -908,12 +908,11 @@ export function layoutPedigree(
     height: ochoaCrest.height,
   });
 
-  const contextNodes = placeContextNodes(graph, nodes);
+  const contextNodes = placeSelNode(graph, nodes);
   return {
     nodes,
     connectors,
     crests: crest ? [crest] : [],
     contextNodes,
-    neblina: placeNeblina(contextNodes, nodes),
   };
 }

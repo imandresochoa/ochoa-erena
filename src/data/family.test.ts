@@ -676,12 +676,9 @@ describe("family snapshot", () => {
     expect(sel?.branch).toBe("lateral");
     expect(sel?.summary).toBe(SEL_LEAD);
     expect(sel?.history).toBe(SEL_BODY);
-    expect(sel?.todo).toMatch(/neblina|fog/i);
+    expect(sel?.todo).toMatch(/single node|Sel de Egiara/i);
     expect(sel?.todo).toMatch(/tronco/i);
-    expect(sel?.anchors).toEqual([
-      "juan-jose-ochoa-de-eguiara",
-      "juan-ochoa-de-eguiara",
-    ]);
+    expect(sel?.anchors).toEqual(["martin-maria-ochoa-de-eguiyara-antia"]);
     expect(sel?.summary).not.toMatch(PRODUCT_JARGON);
     expect(sel?.history).not.toMatch(PRODUCT_JARGON);
     expect(sel?.vinculaciones.length).toBeGreaterThanOrEqual(3);
@@ -769,139 +766,5 @@ describe("family snapshot", () => {
     ).toBe(false);
     expect(family.people).toHaveLength(73);
     expect(family.edges).toHaveLength(118);
-  });
-
-  it("stores Manuel Antonio and Juan José de Eguiara y Eguren as context nodes, not parents", () => {
-    const raw = familyJson as {
-      contexts?: Array<{
-        id?: string;
-        kind?: string;
-        displayName?: string;
-        place?: string;
-        zone?: string;
-        branch?: string;
-        summary?: string;
-        history?: string;
-        anchors?: string[];
-        vinculaciones?: Array<{ label?: string; note?: string }>;
-        links?: RawLink[];
-        sources?: RawSource[];
-      }>;
-    };
-
-    const manuel = family.contexts.find(
-      (item) => item.id === "manuel-antonio-ochoa-de-eguiara",
-    );
-    const juanJoseMx = family.contexts.find(
-      (item) => item.id === "juan-jose-de-eguiara-y-eguren",
-    );
-    const rawManuel = raw.contexts?.find(
-      (item) => item.id === "manuel-antonio-ochoa-de-eguiara",
-    );
-    const rawJuanJoseMx = raw.contexts?.find(
-      (item) => item.id === "juan-jose-de-eguiara-y-eguren",
-    );
-
-    expect(family.contexts.map((item) => item.id)).toEqual(
-      expect.arrayContaining([
-        "sel-de-egiara",
-        "manuel-antonio-ochoa-de-eguiara",
-        "juan-jose-de-eguiara-y-eguren",
-      ]),
-    );
-    expect(manuel).toBeDefined();
-    expect(juanJoseMx).toBeDefined();
-
-    for (const id of [
-      "manuel-antonio-ochoa-de-eguiara",
-      "juan-jose-de-eguiara-y-eguren",
-    ]) {
-      expect(family.people.some((person) => person.id === id)).toBe(false);
-      expect(
-        family.edges.some((edge) => edge.from === id || edge.to === id),
-      ).toBe(false);
-    }
-    expect(
-      family.people.some((person) => person.id === "nicolas-de-eguiara-y-eguren"),
-    ).toBe(false);
-    expect(juanJoseMx?.id).not.toBe("juan-jose-ochoa-de-eguiara");
-    expect(family.people).toHaveLength(73);
-    expect(family.edges).toHaveLength(118);
-
-    expect(manuel?.kind).toBe("solar");
-    expect(manuel?.zone).toBe("fog");
-    expect(manuel?.branch).toBe("lateral");
-    expect(manuel?.displayName).toBe("Manuel Antonio Ochoa de Eguiara");
-    expect(manuel?.place).toMatch(/Ozaeta|Barrundia|Zalduondo/);
-    expect(manuel?.anchors).toEqual([
-      "juan-jose-ochoa-de-eguiara",
-      "juan-ochoa-de-eguiara",
-    ]);
-
-    const manuelCopy = [
-      manuel?.summary,
-      manuel?.history,
-      ...(manuel?.vinculaciones ?? []).map((item) => `${item.label} ${item.note}`),
-    ].join("\n");
-    expect(manuelCopy).toMatch(/Zalduondo 1740|baut\. Zalduondo/);
-    expect(manuelCopy).toMatch(/hidalgu[ií]a 1793/);
-    expect(manuelCopy).toMatch(/Ozaeta/);
-    expect(manuelCopy).toMatch(/Barrundia/);
-    expect(manuelCopy).toMatch(/posibilidad|rama a Álava/i);
-    expect(manuelCopy).toMatch(/Sel de Egiara|sel de Egiara/);
-    expect(manuelCopy).toMatch(/contexto/);
-    expect(manuelCopy).toMatch(/no (es )?(una )?(filiaci[oó]n|padre)/i);
-    expect(manuelCopy).not.toMatch(PRODUCT_JARGON);
-    expect((manuel?.vinculaciones ?? []).length).toBeGreaterThanOrEqual(2);
-    for (const item of manuel?.vinculaciones ?? []) {
-      expect(item.note).not.toMatch(PRODUCT_JARGON);
-    }
-    expect((rawManuel?.links ?? []).map((link) => link.href)).toContain(
-      BERGARA_BASERRIAK_HREF,
-    );
-    expect((rawManuel?.sources ?? []).map((source) => source.href)).toContain(
-      BERGARA_BASERRIAK_HREF,
-    );
-    expect((rawManuel?.sources ?? []).every((source) => source.mark === "H")).toBe(
-      true,
-    );
-
-    expect(juanJoseMx?.kind).toBe("solar");
-    expect(juanJoseMx?.zone).toBe("fog");
-    expect(juanJoseMx?.branch).toBe("lateral");
-    expect(juanJoseMx?.displayName).toBe("Juan José de Eguiara y Eguren");
-    expect(juanJoseMx?.place).toMatch(/M[eé]xico/);
-    expect(juanJoseMx?.anchors).toEqual([
-      "juan-jose-ochoa-de-eguiara",
-      "juan-ochoa-de-eguiara",
-    ]);
-
-    const juanJoseCopy = [
-      juanJoseMx?.summary,
-      juanJoseMx?.history,
-      ...(juanJoseMx?.vinculaciones ?? []).map(
-        (item) => `${item.label} ${item.note}`,
-      ),
-    ].join("\n");
-    expect(juanJoseCopy).toMatch(/pol[ií]grafo/i);
-    expect(juanJoseCopy).toMatch(/Nicol[aá]s de Eguiara y Eguren/);
-    expect(juanJoseCopy).toMatch(/Bergara|solar/);
-    expect(juanJoseCopy).toMatch(/no (se )?funde|no es el Juan José Ochoa/i);
-    expect(juanJoseCopy).toMatch(/Aspárrena/);
-    expect(juanJoseCopy).toMatch(/no (hay )?filiaci[oó]n|sin filiaci[oó]n/i);
-    expect(juanJoseCopy).not.toMatch(PRODUCT_JARGON);
-    expect((juanJoseMx?.vinculaciones ?? []).length).toBeGreaterThanOrEqual(2);
-    for (const item of juanJoseMx?.vinculaciones ?? []) {
-      expect(item.note).not.toMatch(PRODUCT_JARGON);
-    }
-    expect((rawJuanJoseMx?.links ?? []).map((link) => link.href)).toContain(
-      BERGARA_BASERRIAK_HREF,
-    );
-    expect((rawJuanJoseMx?.sources ?? []).map((source) => source.href)).toContain(
-      BERGARA_BASERRIAK_HREF,
-    );
-    expect(
-      (rawJuanJoseMx?.sources ?? []).every((source) => source.mark === "H"),
-    ).toBe(true);
   });
 });

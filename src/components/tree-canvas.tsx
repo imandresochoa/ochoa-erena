@@ -11,7 +11,7 @@ import {
   paintConnectors,
 } from "@/domain/connector-paint";
 import { ochoaCrest } from "@/domain/crest";
-import { contextById } from "@/domain/neblina";
+import { contextById, selImage } from "@/domain/sel";
 import {
   collapsePath,
   expandPinId,
@@ -109,7 +109,6 @@ export function TreeCanvas({
       ...layout.nodes,
       ...layout.crests,
       ...layout.contextNodes,
-      ...(layout.neblina ? [layout.neblina] : []),
     ];
     if (boxes.length === 0) {
       return { x: 0, y: 0, w: 1, h: 1 };
@@ -443,58 +442,6 @@ export function TreeCanvas({
             </motion.div>
           ) : null}
 
-          {layout.neblina
-            ? (() => {
-                const lead = layout.contextNodes[0];
-                const gap = lead ? 20 : 0;
-                const leftWidth = lead
-                  ? Math.max(0, lead.x - gap - layout.neblina.x)
-                  : layout.neblina.width;
-                const rightLeft = lead
-                  ? lead.x + lead.width + gap
-                  : layout.neblina.x;
-                const rightWidth = lead
-                  ? Math.max(
-                      0,
-                      layout.neblina.x + layout.neblina.width - rightLeft,
-                    )
-                  : 0;
-                const fade = {
-                  initial: { opacity: reduce ? 1 : 0 },
-                  animate: { opacity: 1 },
-                  transition: {
-                    duration: reduce ? 0 : 0.24,
-                    ease: [0.23, 1, 0.32, 1] as const,
-                  },
-                };
-                return (
-                  <>
-                    <motion.div
-                      className="neblina pointer-events-none absolute neblina-left"
-                      style={{
-                        left: layout.neblina.x,
-                        top: layout.neblina.y,
-                        width: leftWidth,
-                        height: layout.neblina.height,
-                      }}
-                      {...fade}
-                    />
-                    {rightWidth > 0 ? (
-                      <motion.div
-                        className="neblina pointer-events-none absolute neblina-right"
-                        style={{
-                          left: rightLeft,
-                          top: layout.neblina.y,
-                          width: rightWidth,
-                          height: layout.neblina.height,
-                        }}
-                        {...fade}
-                      />
-                    ) : null}
-                  </>
-                );
-              })()
-            : null}
           {layout.contextNodes.map((placed) => {
             const context = contextById(family, placed.id);
             const label = context?.displayName || "Sel de Egiara";
@@ -516,6 +463,15 @@ export function TreeCanvas({
                   ease: [0.23, 1, 0.32, 1],
                 }}
               >
+                <Image
+                  src={selImage.src}
+                  alt={selImage.alt}
+                  width={selImage.width}
+                  height={selImage.height}
+                  sizes={`${selImage.width}px`}
+                  className="sel-image pointer-events-none absolute left-1/2 bottom-full -translate-x-1/2"
+                  priority
+                />
                 <button
                   type="button"
                   data-selected={placed.id === selectedId}

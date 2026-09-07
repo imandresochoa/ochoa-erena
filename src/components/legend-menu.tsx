@@ -7,7 +7,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { LEGEND_ITEMS } from "@/domain/legend";
-import { NEBLINA_LEGEND_ID } from "@/domain/neblina";
 
 function Sample({ id }: { id: (typeof LEGEND_ITEMS)[number]["id"] }) {
   if (id === "line-solid") {
@@ -16,14 +15,6 @@ function Sample({ id }: { id: (typeof LEGEND_ITEMS)[number]["id"] }) {
   if (id === "line-dotted") {
     return (
       <span className="inline-block h-px w-5 border-t border-dotted border-[var(--color-line)]" />
-    );
-  }
-  if (id === NEBLINA_LEGEND_ID) {
-    return (
-      <span
-        className="neblina-swatch inline-block h-2 w-5"
-        data-neblina={isNeblinaLegend(id) ? "true" : "false"}
-      />
     );
   }
   return (
@@ -51,8 +42,4 @@ export function LegendMenu() {
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
-
-function isNeblinaLegend(id: (typeof LEGEND_ITEMS)[number]["id"]) {
-  return id === "neblina";
 }

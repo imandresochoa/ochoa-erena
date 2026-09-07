@@ -3,7 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 import { ChevronLeftIcon } from "@/components/chevron-left-icon";
 import { leftoverLinks } from "@/domain/ficha";
-import { NEBLINA_LEAD_EMPHASIS } from "@/domain/neblina";
+import { SEL_LEAD_EMPHASIS } from "@/domain/sel";
 import type { FamilyContext } from "@/domain/types";
 
 type Props = {
@@ -17,7 +17,7 @@ const EASE_OUT = [0.23, 1, 0.32, 1] as const;
 export function ContextPanel({ context, narrow, onBack }: Props) {
   const reduce = useReducedMotion();
   const leftover = leftoverLinks(context.links, context.sources);
-  const [leadBefore, leadAfter] = context.summary.split(NEBLINA_LEAD_EMPHASIS);
+  const [leadBefore, leadAfter] = context.summary.split(SEL_LEAD_EMPHASIS);
   const history = context.history
     .split(/\n{2,}/)
     .map((part) => part.trim())
@@ -67,7 +67,7 @@ export function ContextPanel({ context, narrow, onBack }: Props) {
           <p className="type-title text-[var(--color-ink)]">{context.displayName}</p>
           <motion.p className="text-[var(--color-muted-ink)]" {...riseIn}>
             {leadBefore}
-            <strong>{NEBLINA_LEAD_EMPHASIS}</strong>
+            <strong>{SEL_LEAD_EMPHASIS}</strong>
             {leadAfter}
           </motion.p>
         </div>
