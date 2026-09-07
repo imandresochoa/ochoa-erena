@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { parseFamily } from "@/domain/parse";
 import { foldAccents, findExactName, suggestPeople } from "@/domain/search";
 import { LEGEND_ITEMS } from "@/domain/legend";
+import { NEBLINA_LEGEND_ID, NEBLINA_LEGEND_LABEL } from "@/domain/neblina";
 import { hasExpandableSiblings, siblingsOf, visiblePeople } from "@/domain/graph";
 import { family } from "@/data/family";
 import { pinExpandedLayout, plusOrigin } from "@/domain/expand-motion";
@@ -383,11 +384,12 @@ describe("zoom", () => {
 });
 
 describe("legend", () => {
-  it("lists confirmed, hypothesis, and temporal gap vínculos", () => {
+  it("lists confirmed, hypothesis, temporal gap, and neblina", () => {
     expect(LEGEND_ITEMS).toEqual([
       { id: "line-solid", label: "vínculo confirmado" },
       { id: "line-dashed", label: "hipótesis" },
       { id: "line-dotted", label: "salto temporal" },
+      { id: NEBLINA_LEGEND_ID, label: NEBLINA_LEGEND_LABEL },
     ]);
   });
 });

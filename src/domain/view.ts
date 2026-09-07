@@ -12,7 +12,7 @@ import {
 
 export type TreeView = {
   focusId: PersonId;
-  selectedId: PersonId | null;
+  selectedId: string | null;
   expandedIds: PersonId[];
   pan: Vec;
   entering: boolean;
@@ -71,8 +71,8 @@ export function classifyPointer(delta: Vec): PointerKind {
 
 export function fichaPersonAfterPointer(
   moved: boolean,
-  personId: PersonId | null,
-): PersonId | null {
+  personId: string | null,
+): string | null {
   return moved ? null : personId;
 }
 
@@ -155,7 +155,7 @@ export function restoreFocusView(view: TreeView, graph: FamilyGraph): TreeView {
   };
 }
 
-export function openFicha(view: TreeView, id: PersonId): TreeView {
+export function openFicha(view: TreeView, id: string): TreeView {
   return { ...view, selectedId: id };
 }
 

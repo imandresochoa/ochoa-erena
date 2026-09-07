@@ -117,10 +117,27 @@ export type PlacedCrest = {
   height: number;
 };
 
+export type PlacedNeblina = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
+export type PlacedContext = {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 export type PedigreeLayout = {
   nodes: PlacedNode[];
   connectors: Connector[];
   crests: PlacedCrest[];
+  neblina: PlacedNeblina | null;
+  contextNodes: PlacedContext[];
 };
 
 export type PointerKind = "tap" | "pan";
