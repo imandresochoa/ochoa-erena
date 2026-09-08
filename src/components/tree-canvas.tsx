@@ -25,6 +25,7 @@ import { layoutHouseCanvas } from "@/domain/layout";
 import {
   addPan,
   classifyPointer,
+  fichaCrestAfterPointer,
   fichaPersonAfterPointer,
   pinchZoom,
   startPinch,
@@ -33,6 +34,7 @@ import {
 } from "@/domain/view";
 import {
   NODE_HEIGHT,
+  type CrestId,
   type PedigreeLayout,
   type PersonId,
   type Vec,
@@ -49,6 +51,7 @@ type Props = {
   onPan: (next: Vec) => void;
   onZoom: (zoom: number) => void;
   onSelect: (id: string) => void;
+  onSelectCrest: (id: CrestId) => void;
   onExpand: (id: PersonId) => void;
 };
 
@@ -67,6 +70,7 @@ export function TreeCanvas({
   onPan,
   onZoom,
   onSelect,
+  onSelectCrest,
   onExpand,
 }: Props) {
   const reduce = useReducedMotion();
@@ -141,6 +145,7 @@ export function TreeCanvas({
     pan: Vec;
     moved: boolean;
     fichaId: string | null;
+    crestId: CrestId | null;
   } | null>(null);
   const pinch = useRef<PinchSession | null>(null);
   const panned = useRef(false);
@@ -148,12 +153,14 @@ export function TreeCanvas({
   const onPanRef = useRef(onPan);
   const onZoomRef = useRef(onZoom);
   const onSelectRef = useRef(onSelect);
+  const onSelectCrestRef = useRef(onSelectCrest);
   const panRef = useRef(pan);
   const zoomRef = useRef(zoom);
   const frame = useRef<HTMLDivElement>(null);
   onPanRef.current = onPan;
   onZoomRef.current = onZoom;
   onSelectRef.current = onSelect;
+  onSelectCrestRef.current = onSelectCrest;
   panRef.current = pan;
   zoomRef.current = zoom;
 
@@ -208,6 +215,10 @@ export function TreeCanvas({
         const id = fichaPersonAfterPointer(active.moved, active.fichaId);
         if (id) {
           onSelectRef.current(id);
+        }
+        const crestId = fichaCrestAfterPointer(active.moved, active.crestId);
+        if (crestId) {
+          onSelectCrestRef.current(crestId);
         }
       }
       window.setTimeout(() => {
@@ -301,6 +312,8 @@ export function TreeCanvas({
         const raw =
           host?.getAttribute("data-person-id") ??
           host?.getAttribute("data-context-id");
+        const crestHost = target?.closest("[data-crest-id]");
+        const crestRaw = crestHost?.getAttribute("data-crest-id");
         drag.current = {
           pointerId: event.pointerId,
           x: event.clientX,
@@ -308,6 +321,7 @@ export function TreeCanvas({
           pan,
           moved: false,
           fichaId: raw ?? null,
+          crestId: crestRaw === "ochoa" ? crestRaw : null,
         };
         if (event.pointerType !== "touch") {
           event.currentTarget.setPointerCapture(event.pointerId);
@@ -490,14 +504,16 @@ export function TreeCanvas({
           })}
 
           {layout.crests.map((crest) => (
-            <div
+            <button
               key={crest.id}
-              className="pointer-events-none absolute"
-              style={{
-                left: crest.x,
-                top: crest.y,
-                width: crest.width,
-                height: crest.height,
+              type="button"
+              data-crest-id={crest.id}
+              aria-label="Abrir la ficha del escudo Ochoa de Eguiara"
+              className="crest-btn absolute"
+              style={{ left: crest.x, top: crest.y, width: crest.width, height: crest.height }}
+              onClick={() => {
+                if (panned.current) return;
+                onSelectCrest(crest.id);
               }}
             >
               <Image
@@ -507,9 +523,10 @@ export function TreeCanvas({
                 height={crest.height}
                 sizes={`${crest.width}px`}
                 className="h-full w-full object-contain"
+                draggable={false}
                 priority
               />
-            </div>
+            </button>
           ))}
           <AnimatePresence initial={false}>
             {layout.nodes.map((placed) => {

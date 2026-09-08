@@ -33,6 +33,7 @@ import {
   ZOOM_STEP,
   zoomPercentText,
 } from "@/domain/view";
+import * as viewApi from "@/domain/view";
 import { WELCOME_INTRODUCTION, WELCOME_TITLE } from "@/domain/welcome";
 
 const fixture = parseFamily({
@@ -221,6 +222,18 @@ describe("view", () => {
   it("keeps the ficha closed when tapping with no person", () => {
     expect(fichaPersonAfterPointer(false, null)).toBeNull();
   });
+
+  it("opens the crest ficha when tapping a crest", () => {
+    expect(viewApi.fichaCrestAfterPointer(false, "ochoa")).toBe("ochoa");
+  });
+
+  it("keeps the crest ficha closed after a pan", () => {
+    expect(viewApi.fichaCrestAfterPointer(true, "ochoa")).toBeNull();
+  });
+
+  it("keeps the crest ficha closed when tapping with no crest", () => {
+    expect(viewApi.fichaCrestAfterPointer(false, null)).toBeNull();
+  });
 });
 
 describe("focus", () => {
@@ -229,6 +242,7 @@ describe("focus", () => {
   const view = {
     focusId: andres,
     selectedId: andres,
+    crestId: null,
     expandedIds: [francisco],
     pan: { x: 120, y: -40 },
     entering: true,
@@ -239,6 +253,7 @@ describe("focus", () => {
     const next = focusPerson(view, francisco, fixture);
     expect(next.focusId).toBe(francisco);
     expect(next.selectedId).toBeNull();
+    expect(next.crestId).toBeNull();
     expect(next.expandedIds).toEqual([francisco]);
     expect(next.entering).toBe(false);
     expect(next.zoom).toBe(0.8);
@@ -252,6 +267,7 @@ describe("focus", () => {
     expect(next).toEqual({
       focusId: andres,
       selectedId: andres,
+      crestId: null,
       expandedIds: [francisco],
       pan: { x: expect.any(Number), y: expect.any(Number) },
       entering: false,
@@ -267,6 +283,16 @@ describe("focus", () => {
     expect(focusPerson(closed, francisco, fixture).selectedId).toBeNull();
     expect(focusPerson(closed, andres, fixture).selectedId).toBeNull();
   });
+
+  it("focusing another person clears crestId", () => {
+    const withCrest = { ...view, crestId: "ochoa" as const };
+    expect(focusPerson(withCrest, francisco, fixture).crestId).toBeNull();
+  });
+
+  it("focusing the same person keeps crestId", () => {
+    const withCrest = { ...view, crestId: "ochoa" as const };
+    expect(focusPerson(withCrest, andres, fixture).crestId).toBe("ochoa");
+  });
 });
 
 describe("ficha", () => {
@@ -275,6 +301,7 @@ describe("ficha", () => {
   const view = {
     focusId: andres,
     selectedId: andres,
+    crestId: null,
     expandedIds: [francisco],
     pan: { x: 120, y: -40 },
     entering: true,
@@ -285,6 +312,7 @@ describe("ficha", () => {
     expect(openFicha(view, francisco)).toEqual({
       focusId: andres,
       selectedId: francisco,
+      crestId: null,
       expandedIds: [francisco],
       pan: { x: 120, y: -40 },
       entering: true,
@@ -297,6 +325,7 @@ describe("ficha", () => {
     expect(openFicha(closed, andres)).toEqual({
       focusId: andres,
       selectedId: andres,
+      crestId: null,
       expandedIds: [francisco],
       pan: { x: 120, y: -40 },
       entering: true,
@@ -308,6 +337,7 @@ describe("ficha", () => {
     expect(closeFicha(view)).toEqual({
       focusId: andres,
       selectedId: null,
+      crestId: null,
       expandedIds: [francisco],
       pan: { x: 120, y: -40 },
       entering: true,
@@ -320,6 +350,45 @@ describe("ficha", () => {
     expect(closeFicha(opened)).toEqual({
       focusId: andres,
       selectedId: null,
+      crestId: null,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("opening the crest writes crestId, clears selectedId, and keeps the camera", () => {
+    expect(viewApi.openCrestFicha(view, "ochoa")).toEqual({
+      focusId: andres,
+      selectedId: null,
+      crestId: "ochoa",
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("opening a person clears crestId", () => {
+    const withCrest = { ...view, selectedId: null, crestId: "ochoa" as const };
+    expect(openFicha(withCrest, francisco)).toEqual({
+      focusId: andres,
+      selectedId: francisco,
+      crestId: null,
+      expandedIds: [francisco],
+      pan: { x: 120, y: -40 },
+      entering: true,
+      zoom: 0.8,
+    });
+  });
+
+  it("closing clears selectedId and crestId", () => {
+    const both = { ...view, selectedId: andres, crestId: "ochoa" as const };
+    expect(closeFicha(both)).toEqual({
+      focusId: andres,
+      selectedId: null,
+      crestId: null,
       expandedIds: [francisco],
       pan: { x: 120, y: -40 },
       entering: true,

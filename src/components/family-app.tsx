@@ -6,6 +6,7 @@ import { FocusPicker } from "@/components/focus-picker";
 import { LandingScreen } from "@/components/landing-screen";
 import { LegendMenu } from "@/components/legend-menu";
 import { ContextPanel } from "@/components/context-panel";
+import { EscudoPanel } from "@/components/escudo-panel";
 import { PersonPanel } from "@/components/person-panel";
 import { RestaurarButton } from "@/components/restaurar-button";
 import { TreeCanvas } from "@/components/tree-canvas";
@@ -20,6 +21,7 @@ import {
   DEFAULT_ZOOM,
   focusPerson,
   needsRestaurar,
+  openCrestFicha,
   openFicha,
   restoreFocusView,
   toggleExpand,
@@ -57,6 +59,7 @@ export function FamilyApp() {
       {
         focusId: person.id,
         selectedId: null,
+        crestId: null,
         expandedIds: [],
         pan: { x: 0, y: 0 },
         entering: true,
@@ -145,6 +148,13 @@ export function FamilyApp() {
               : current,
           )
         }
+        onSelectCrest={(id) =>
+          setScreen((current) =>
+            current.kind === "tree"
+              ? { ...current, ...openCrestFicha(current, id) }
+              : current,
+          )
+        }
         onExpand={(id) =>
           setScreen((current) =>
             current.kind === "tree" ? { ...current, ...toggleExpand(current, id) } : current,
@@ -207,6 +217,18 @@ export function FamilyApp() {
             key="ficha"
             person={selectedPerson}
             focusId={screen.focusId}
+            narrow={narrow}
+            onBack={() =>
+              setScreen((current) =>
+                current.kind === "tree"
+                  ? { ...current, ...closeFicha(current) }
+                  : current,
+              )
+            }
+          />
+        ) : screen.crestId ? (
+          <EscudoPanel
+            key="escudo"
             narrow={narrow}
             onBack={() =>
               setScreen((current) =>

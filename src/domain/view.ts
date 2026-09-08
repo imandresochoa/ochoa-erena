@@ -3,6 +3,7 @@ import { layoutHouseCanvas } from "./layout";
 import {
   NODE_HEIGHT,
   PAN_TAP_PX,
+  type CrestId,
   type FamilyGraph,
   type PedigreeLayout,
   type PersonId,
@@ -13,6 +14,7 @@ import {
 export type TreeView = {
   focusId: PersonId;
   selectedId: string | null;
+  crestId: CrestId | null;
   expandedIds: PersonId[];
   pan: Vec;
   entering: boolean;
@@ -74,6 +76,13 @@ export function fichaPersonAfterPointer(
   personId: string | null,
 ): string | null {
   return moved ? null : personId;
+}
+
+export function fichaCrestAfterPointer(
+  moved: boolean,
+  crestId: CrestId | null,
+): CrestId | null {
+  return moved ? null : crestId;
 }
 
 export function addPan(pan: Vec, delta: Vec): Vec {
@@ -138,6 +147,7 @@ export function focusPerson(
   return {
     focusId: id,
     selectedId: same ? view.selectedId : null,
+    crestId: same ? view.crestId : null,
     expandedIds,
     pan: framePerson(layout, id, view.zoom),
     entering: false,
@@ -156,11 +166,15 @@ export function restoreFocusView(view: TreeView, graph: FamilyGraph): TreeView {
 }
 
 export function openFicha(view: TreeView, id: string): TreeView {
-  return { ...view, selectedId: id };
+  return { ...view, selectedId: id, crestId: null };
+}
+
+export function openCrestFicha(view: TreeView, id: CrestId): TreeView {
+  return { ...view, selectedId: null, crestId: id };
 }
 
 export function closeFicha(view: TreeView): TreeView {
-  return { ...view, selectedId: null };
+  return { ...view, selectedId: null, crestId: null };
 }
 
 export function toggleExpand(view: TreeView, id: PersonId): TreeView {

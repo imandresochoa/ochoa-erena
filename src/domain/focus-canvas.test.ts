@@ -42,6 +42,7 @@ const ANTONIO_ERENA = asPersonId("antonio-erena-liebana");
 const andresView: TreeView = {
   focusId: ANDRES,
   selectedId: null,
+  crestId: null,
   expandedIds: [],
   pan: { x: 0, y: 0 },
   entering: false,
