@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { family } from "@/data/family";
+import { parentsOf } from "@/domain/graph";
 import { layoutPedigree } from "@/domain/layout";
 import {
   asPersonId,
@@ -83,6 +84,19 @@ describe("layout geometry", () => {
       const connector = connectorFor(layout, edge.from, edge.to);
       const points = pathPoints(connector.d);
       expect(points.length).toBeGreaterThanOrEqual(2);
+      const oneParent =
+        parentsOf(family, edge.to).filter((id) => placed.has(id)).length === 1;
+      if (oneParent) {
+        expectPoint(points[0], {
+          x: parent.x + parent.width / 2,
+          y: parent.y + parent.height,
+        });
+        expectPoint(points[points.length - 1], {
+          x: child.x + child.width / 2,
+          y: child.y,
+        });
+        continue;
+      }
       expectPoint(points[0], nodeCenter(parent));
       expectPoint(points[points.length - 1], nodeCenter(child));
     }
